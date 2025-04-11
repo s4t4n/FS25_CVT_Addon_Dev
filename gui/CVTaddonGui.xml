@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<GUI onOpen="onOpen" onClose="onClose" onCreate="onCreate">
+
+	<GuiElement profile="newLayer" />
+	<Bitmap profile="dialogFullscreenBg"/>
+	<!--Bitmap profile="bgVignette"/-->
+	<GuiElement profile="fs25_dialogBg" id="dialogElement" size="1800px 900px">
+		<ThreePartBitmap profile="fs25_dialogBgMiddleSmall"/>
+		<ThreePartBitmap profile="fs25_dialogBgTopSmall"/>
+		<ThreePartBitmap profile="fs25_dialogBgBottom"/>
+
+		<!-- <GuiElement profile="fs25_menuContainer" id="settingsContainer"> -->
+		<GuiElement profile="fs25_dialogContentContainer" id="settingsContainer">
+			<Bitmap profile="fs25_settingsTooltipSeparator"/>
+			<Bitmap profile="fs25_startClipper" name="topClipper" />
+			<Bitmap profile="fs25_stopClipper" name="bottomClipper" />
+			
+			<!-- header -->
+			<GuiElement profile="fs25_menuHeaderPanel">
+				<!-- <Text typeClass="TEXT" profile="fs25_dialogTitle" textAutoSize="true" id="guiTitle" /> -->
+				<!-- <Text profile="fs25_dialogTitle" id="guiTitle" textAutoSize="true" position="0px -20px"/> -->
+				<Text typeClass="TEXT" profile="dialogHeaderText" textAutoSize="true" id="guiTitle" position="0px -20px" />
+			</GuiElement>
+			
+			
+			<!-- <ThreePartBitmap profile="fs25_lineSeparatorTop" absoluteSizeOffset="100px 0px" position="0px -80px"/> -->
+			
+			<!-- <GuiElement profile="fs25_dialogContentContainer"> -->
+			<!-- settings -->
+			<!-- <ScrollingLayout profile="fs25_settingsLayout" id="fs25_settingsLayout" topClipperElementName="topClipper" bottomClipperElementName="bottomClipper" position="10px -110px" width="1560px" height="680px"> -->
+			<ScrollingLayout profile="fs25_settingsLayout" topClipperElementName="topClipper" bottomClipperElementName="bottomClipper">
+				<!-- cvt config variant -->
+				<Text profile="fs25_settingsSectionHeader" name="sectionVariant" id="variant"/>
+				<GuiElement profile="fs25_multiTextOptionContainer">
+					<Text profile="multiTextOptionSettingsTitle" id="variantTitle" text="$l10n_CVTAgui_Variant"/>
+					<MultiTextOption profile="fs25_settingsMultiTextOption" id="variantSetting">
+						<!-- <Text profile="fs25_settingsMultiTextOptionTooltip" name="ignore" id="variantTT"/> -->
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="variantTT" position="700px 0px"/>
+					</MultiTextOption>	
+				</GuiElement>
+				
+				<!-- IPM -->
+				<!-- <Text profile="fs25_settingsSectionHeader" name="sectionIPM" id="ipm"/> -->
+				<GuiElement profile="fs25_multiTextOptionContainer">
+					<Text profile="multiTextOptionSettingsTitle" id="ipmTitle"/>
+					<MultiTextOption profile="fs25_settingsMultiTextOption" id="ipmSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="ipmTT" position="700px 0px"/>
+					</MultiTextOption>	
+				</GuiElement>
+			
+				<!-- DL -->
+				<!-- <Text profile="fs25_settingsSectionHeader" name="sectionIPM" id="ipm"/> -->
+				<GuiElement profile="fs25_multiTextOptionContainer">
+					<Text profile="multiTextOptionSettingsTitle" id="drivinglevelTitle"/>
+					<MultiTextOption profile="fs25_settingsMultiTextOption" id="drivinglevelSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="drivinglevelTT" position="700px 0px"/>
+					</MultiTextOption>	
+				</GuiElement>
+			
+				<!-- AR -->
+				<GuiElement profile="fs25_multiTextOptionContainer">
+					<Text profile="multiTextOptionSettingsTitle" id="accRampTitle"/>
+					<MultiTextOption profile="fs25_settingsMultiTextOption" id="accRampSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="accRampTT" position="700px 0px"/>
+					</MultiTextOption>	
+				</GuiElement>
+			
+				<!-- AS -->
+				<GuiElement profile="fs25_multiTextOptionContainer">
+					<Text profile="multiTextOptionSettingsTitle" id="antiSlipTitle"/>
+					<BinaryOption profile="fs25_settingsBinaryOption" id="antiSlipSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="antiSlipTT" position="700px 0px"/>
+					</BinaryOption>	
+				</GuiElement>
+				<!-- PIT -->
+				<GuiElement profile="fs25_multiTextOptionContainer">
+					<Text profile="multiTextOptionSettingsTitle" id="pitTitle"/>
+					<BinaryOption profile="fs25_settingsBinaryOption" id="pitSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="pitTT" position="700px 0px"/>
+					</BinaryOption>	
+				</GuiElement>
+			
+				<!-- HST -->
+				<GuiElement profile="fs25_multiTextOptionContainer">
+					<Text profile="multiTextOptionSettingsTitle" id="HSTTitle"/>
+					<BinaryOption profile="fs25_settingsBinaryOption" id="HSTSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="HSTTT" position="700px 0px"/>
+					</BinaryOption>
+				</GuiElement>
+				
+				<!-- inching -->
+				<GuiElement profile="fs25_multiTextOptionContainer">
+					<Text profile="multiTextOptionSettingsTitle" id="inchingTitle"/>
+					<BinaryOption profile="fs25_settingsBinaryOption" id="inchingSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="inchingTT" position="700px 0px"/>
+					</BinaryOption>
+				</GuiElement>
+				
+				<!-- HUD show or not -->
+				<Text profile="fs25_settingsSectionHeader" name="sectionCvtHud" id="Cvthud"/>
+				
+				<GuiElement profile="fs25_multiTextOptionContainer">
+					<Text profile="multiTextOptionSettingsTitle" id="CvthudTitle" text="$l10n_cvtgui_Cvthud"/>
+					<BinaryOption profile="fs25_settingsBinaryOption" id="CvtHUDSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="CvthudTT" position="700px 0px"/>
+					</BinaryOption>	
+				</GuiElement>
+				<GuiElement profile="fs25_multiTextOptionContainer">
+					<Text profile="multiTextOptionSettingsTitle" id="CvthudPos" text="$l10n_CVTAgui_CvthudPos"/>
+					<BinaryOption profile="fs25_settingsBinaryOption" id="CvthudPosSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="CvthudPOSTT" position="700px 0px"/>
+						<!-- <Text profile="multiTextOptionSettingsTooltip" name="ignore" id="CvthudPOSTT"/> -->
+					</BinaryOption>	
+				</GuiElement>
+				<Text profile="dialogHeaderText"/>
+			</ScrollingLayout>
+
+<!-- footer -->
+			<BoxLayout profile="fs25_dialogButtonBox">
+				<Button profile="buttonBack" id="noButton" text="$l10n_button_back" onClick="onClickBack"/>
+				<Bitmap profile="fs25_dialogButtonBoxSeparator"/>
+				<Button profile="buttonOK" id="yesButton" text="$l10n_button_ok" onClick="onClickOk"/>
+				<Bitmap profile="fs25_dialogButtonBoxSeparator"/>
+				<Button profile="buttonBack" id="resetButton" text="Load" onClick="onButtonLoad"/>
+			</BoxLayout>
+
+			<!-- <Bitmap profile="fs25_settingsTooltipSeparator" height="580px" position="1000px -110px"/> -->
+		</GuiElement>
+	</GuiElement>
+	
+	<!-- <ThreePartBitmap profile="fs25_sliderDockedBg">
+		<ThreePartBitmap profile="fs25_sliderDockedBox">
+			<Slider profile="fs25_sliderDocked" dataElementId="boxLayout"/>
+		</ThreePartBitmap>
+	</ThreePartBitmap> -->
+	
+</GUI>
