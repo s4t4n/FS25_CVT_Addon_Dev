@@ -279,6 +279,7 @@ function CVTaddon:onRegisterActionEvents()
 			CVTaddon.actionEventsV7 = {}
 			CVTaddon.actionEventsV12 = {}
 			CVTaddon.actionEventsV13 = {}
+			CVTaddon.actionEventsVL = {}
 			CVTaddon.actionEventsV8 = {}
 			CVTaddon.actionEventsV9 = {}
 			CVTaddon.actionEventsV10 = {}
@@ -375,6 +376,11 @@ function CVTaddon:onRegisterActionEvents()
 				g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdV13, GS_PRIO_NORMAL)
 				g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdV13, false)
 			end
+			-- Fernlicht / Lichthupe
+			_, CVTaddon.eventIdVL = self:addActionEvent(CVTaddon.actionEventsVL, 'SIGNAL_HIGH_BEAM_LIGHT', self, CVTaddon.HighbeamSignal, false, true, true, true, nil)
+			g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdVL, GS_PRIO_NORMAL)
+			g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdVL, false)
+			
 			-- CC axis
 			-- if spec.isVarioTM == true then
 				-- _, CVTaddon.eventIdV13 = self:addActionEvent(CVTaddon.actionEventsV13, 'AXIS_CRUISE_CONTROL', self, CVTaddon.VarioClutchAxis, false, false, true, true)
@@ -667,6 +673,7 @@ function CVTaddon:onLoad(savegame)
 	CVTaddon.eventIdV7 = nil
 	CVTaddon.eventIdV12 = nil
 	CVTaddon.eventIdV13 = nil
+	CVTaddon.eventIdVL = nil
 	CVTaddon.eventIdV8 = nil
 	CVTaddon.eventIdV9 = nil
 	CVTaddon.eventIdV10 = nil
@@ -1396,6 +1403,14 @@ function CVTaddon:VarioRpmAxis(actionName, inputValue)
 		-- end
 	end
 end
+
+function CVTaddon.HighbeamSignal(self, actionName)
+	-- if self:getCanToggleLight() then
+		self:setLightsTypesMask((bitXOR(self.spec_lights.lightsTypesMask, 2 ^ 3)))
+		-- self:setLightsTypesMask((bitXOR(0, 2 ^ 3)))
+	-- end
+end
+
 function CVTaddon:VarioClutchAxis(actionName, inputValue)	
 	local spec = self.spec_CVTaddon
 	if g_client ~= nil then
@@ -2123,7 +2138,10 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 		-- self.spec_motorized.battery = (12 + (math.random() * 0.5 - 0.15))
 	-- end
 				-- .motorized.dashboards
-	-- print("Batterie: " .. tostring(self.spec_motorized.battery))
+	-- print("Light: " .. tostring(self.spec_lights.currentLightState))
+	-- print("Light: " .. tostring( (bitXOR(self.spec_lights.lightsTypesMask, 2 ^ 3)) ))
+
+	-- print("Light: " .. tostring(self.spec_lights.maxLightState))
 	-- if self:SETPREGLOW() == false then
 	spec.forDBL_preglowing = 0
 	-- end

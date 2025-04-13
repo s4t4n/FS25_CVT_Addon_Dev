@@ -2,7 +2,7 @@
 <modDesc descVersion="94">
     <author>SbSh</author>
 	<contributor>Glowin, frvetz</contributor>
-	<version>0.9.5.8</version>
+	<version>1.9.0.1</version>
 	<title>
         <en>CVT Addon</en>
     </title>
@@ -257,6 +257,7 @@ Ideen und Feedback sowie Reports gerne unter <a href="https://github.com/s4t4n/F
         <!-- <action name="SETVARIORPMDMAX" /> -->
         <action name="SETPEDALTMS" />
         <action name="SETPREGLOW" />
+        <action name="SIGNAL_HIGH_BEAM_LIGHT" />
     </actions>
 	<inputBinding>
 		<actionBinding action="SETVARIOONE">
@@ -317,6 +318,9 @@ Ideen und Feedback sowie Reports gerne unter <a href="https://github.com/s4t4n/F
 			<binding device="KB_MOUSE_DEFAULT" input="" />
 		</actionBinding>
 		<actionBinding action="SETPREGLOW">
+			<binding device="KB_MOUSE_DEFAULT" input="" />
+		</actionBinding>
+        <actionBinding action="SIGNAL_HIGH_BEAM_LIGHT">
 			<binding device="KB_MOUSE_DEFAULT" input="" />
 		</actionBinding>
 	</inputBinding>
