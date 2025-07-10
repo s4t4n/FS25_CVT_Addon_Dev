@@ -561,7 +561,7 @@ function CVTaddon:onLoad(savegame)
 	
 	spec.forDBL_cvtclutch = 0.0
 	spec.forDBL_handthrottle = 0.0
-	spec.forDBL_vmaxfoward = 0.0
+	spec.forDBL_vmaxforward = 0.0
 	spec.forDBL_vmaxbackward = 0.0
 	spec.forDBL_preglowing = 0
 	spec.forDBL_glowingstate = 0
@@ -1081,8 +1081,8 @@ function CVTaddon:AccRampsToggle() -- BESCHLEUNIGUNGSRAMPEN
 		else
 			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists))
 		end
-		spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed
-		spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed
+		spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed * math.pi
+		spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed * math.pi
 	end -- g_client
 end -- AccRamps Toggle
 
@@ -1110,8 +1110,8 @@ function CVTaddon:AccRampsSet1() -- BESCHLEUNIGUNGSRAMPEN I
 			else
 				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists))
 			end
-			spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed
-			spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed
+			spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed * math.pi
+		spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed * math.pi
 		end -- g_client
 	end
 end -- AccRamps set1
@@ -1140,8 +1140,8 @@ function CVTaddon:AccRampsSet2() -- BESCHLEUNIGUNGSRAMPEN II
 			else
 				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists))
 			end
-			spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed
-			spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed
+			spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed * math.pi
+		spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed * math.pi
 		end -- g_client
 	end
 end -- AccRamps set2
@@ -1170,8 +1170,8 @@ function CVTaddon:AccRampsSet3() -- BESCHLEUNIGUNGSRAMPEN III
 			else
 				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists))
 			end
-			spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed
-			spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed
+			spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed * math.pi
+		spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed * math.pi
 		end -- g_client
 	end
 end -- AccRamps set3
@@ -1200,8 +1200,8 @@ function CVTaddon:AccRampsSet4() -- BESCHLEUNIGUNGSRAMPEN IV
 			else
 				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists))
 			end
-			spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed
-			spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed
+			spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed * math.pi
+		spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed * math.pi
 		end -- g_client
 	end
 end -- AccRamps set4
@@ -1230,8 +1230,8 @@ function CVTaddon:AccRampsSet5() -- BESCHLEUNIGUNGSRAMPEN V
 			else
 				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists))
 			end
-			spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed
-			spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed
+			spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed * math.pi
+		spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed * math.pi
 		end -- g_client
 	end
 end -- AccRamps set5
@@ -1307,8 +1307,8 @@ function CVTaddon:AccRamps() -- BESCHLEUNIGUNGSRAMPEN - Motorbremswirkung wird k
 		else
 			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists))
 		end
-		spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed
-		spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed
+		spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed * math.pi
+		spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed * math.pi
 	end -- g_client
 end -- AccRamps
 function CVTaddon:AccRampsD()
@@ -1380,8 +1380,8 @@ function CVTaddon:AccRampsD()
 		else
 			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists))
 		end
-		spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed
-		spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed
+		spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed * math.pi
+		spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed * math.pi
 	end -- g_client
 end -- AccRamps Down
 
@@ -1504,8 +1504,8 @@ function CVTaddon:VarioOne() -- FAHRSTUFE 1 field
 	end
 	-- DBL convert
 	spec.forDBL_drivinglevel = tostring(1)
-	spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed
-	spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed
+	spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed * math.pi
+		spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed * math.pi
 end -- VarioOne
 
 function CVTaddon:VarioTwo() -- FAHRSTUFE 2
@@ -1586,8 +1586,8 @@ function CVTaddon:VarioTwo() -- FAHRSTUFE 2
 	end
 	-- DBL convert
 	spec.forDBL_drivinglevel = tostring(2)
-	spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed
-	spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed
+	spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed * math.pi
+	spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed * math.pi
 end -- VarioTwo
 
 function CVTaddon:Vario3() -- FAHRSTUFE 3
@@ -1668,8 +1668,8 @@ function CVTaddon:Vario3() -- FAHRSTUFE 3
 	end
 	-- DBL convert
 	spec.forDBL_drivinglevel = tostring(3)
-	spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed
-	spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed
+	spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed * math.pi
+	spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed * math.pi
 end -- Vario3
 
 function CVTaddon:Vario4() -- FAHRSTUFE 4
@@ -1750,8 +1750,8 @@ function CVTaddon:Vario4() -- FAHRSTUFE 4
 	end
 	-- DBL convert
 	spec.forDBL_drivinglevel = tostring(4)
-	spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed
-	spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed
+	spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed * math.pi
+	spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed * math.pi
 end -- Vario4
 
 function CVTaddon:VarioToggle() -- FAHRSTUFEN WECHSELN
@@ -1856,8 +1856,8 @@ function CVTaddon:VarioToggle() -- FAHRSTUFEN WECHSELN
 		-- spec.forDBL_drivinglevel = tostring(1)
 	-- end
 	spec.forDBL_drivinglevel = tostring(spec.vOne)
-	spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed
-	spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed
+	spec.forDBL_vmaxforward = self.spec_motorized.motor.maxForwardSpeed * math.pi
+	spec.forDBL_vmaxbackward = self.spec_motorized.motor.maxBackwardSpeed * math.pi
 end -- VarioToggle
 
 function CVTaddon:VarioADiffs() -- autoDiffs
@@ -2127,15 +2127,15 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 	end
 	
 	-- if self:getMotorState() > 2 then
-		-- if isPKW or isTractorS or isTractorM then
-			-- self.spec_motorized.battery = math.random(13.8, 14.2)
-		-- elseif isLKW or isTractorL or isErnter or isWoodWorker then
-			-- self.spec_motorized.battery = math.random(27.6, 28.7)
-		-- elseif isFFF then
-			-- self.spec_motorized.battery = math.random(51.4, 52.8)
-		-- end
+	-- 	if isPKW or isTractorS or isTractorM then
+	-- 		self.spec_motorized.battery = math.random(13.8, 14.2)
+	-- 	elseif isLKW or isTractorL or isErnter or isWoodWorker then
+	-- 		self.spec_motorized.battery = math.random(27.6, 28.7)
+	-- 	elseif isFFF then
+	-- 		self.spec_motorized.battery = math.random(51.4, 52.8)
+	-- 	end
 	-- else
-		-- self.spec_motorized.battery = (12 + (math.random() * 0.5 - 0.15))
+	-- 	self.spec_motorized.battery = (12 + (math.random() * 0.5 - 0.15))
 	-- end
 				-- .motorized.dashboards
 	-- print("Light: " .. tostring(self.spec_lights.currentLightState))
@@ -2881,6 +2881,9 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					-- Vehicle Control Addon
 					if spec.autoDiffs == 1 and self.spec_vca ~= nil then
 						self:vcaSetState("diffManual", true)
+					end
+					if spec.cvtDL == nil then
+						spec.cvtDL = 2;
 					end
 					if spec.vOne < spec.cvtDL and spec.autoDiffs == 1 then
 						-- classic
@@ -5250,7 +5253,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 		self.FStelemetryAddonData.CVT_preAutoDiffs 	= spec.forDBL_preautodiffs;		-- Automatische Diff-Sperre vorgewählt
 		self.FStelemetryAddonData.CVT_Clutch 		= spec.forDBL_cvtclutch;		-- Position des Kupplungspedals
 		self.FStelemetryAddonData.CVT_brakeRamp 	= spec.forDBL_brakeramp;		-- Bremsrampe
-		self.FStelemetryAddonData.CVT_vmaxFw 		= spec.forDBL_vmaxforward;		-- Aktuelle maximale Geschwindigkeit Vorwärts
+		self.FStelemetryAddonData.CVT_vmaxFw 		= spec.fandDBL_vmaxfandward;		-- Aktuelle maximale Geschwindigkeit Vorwärts
 		self.FStelemetryAddonData.CVT_vmaxBw 		= spec.forDBL_vmaxbackward;		-- Aktuelle maximale Geschwindigkeit Rückwärts
 		self.FStelemetryAddonData.CVT_IMPisActive 	= spec.forDBL_ipmactive;		-- Intelligent Power Management greift ein
 		self.FStelemetryAddonData.CVT_TMSpadelMode 	= spec.forDBL_tmspedal;			-- TMS Pedal Modus aktiv
@@ -5259,7 +5262,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 		self.FStelemetryAddonData.CVT_HighPressure 	= spec.forDBL_highpressure;		-- Hoher Druck im Getriebe Warnung
 		-- self.FStelemetryAddonData.CVT_ 		= spec.forDBL; 			--
 	end
-	
+
 	-- print("Telemetry Table aR: ".. tostring(self.FStelemetryAddonData.accRamp))
 	-- print("Telemetry Table DL: ".. tostring(self.FStelemetryAddonData.drivinglevel))
 	

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="94">
+<modDesc descVersion="100">
     <author>SbSh</author>
 	<contributor>Glowin, frvetz</contributor>
-	<version>1.9.0.1</version>
+	<version>1.9.0.3</version>
 	<title>
         <en>CVT Addon</en>
     </title>

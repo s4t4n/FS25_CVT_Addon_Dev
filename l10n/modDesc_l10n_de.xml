@@ -97,6 +97,7 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="input_SETVARIORPMDMAX" 			text="CVTa: RPM Begrenzng (experiment)"/>
 		<text name="input_SETPEDALTMS" 				text="CVTa: TMS Pedal Modus"/>
 		<text name="input_SETPREGLOW" 				text="CVTa: Kerzen Vorglühen"/>
+		<text name="input_SIGNAL_HIGH_BEAM_LIGHT" 	text="CVTa: Fernlicht Lichthupe"/>
 		<text name="input_LMBF_TOGGLE_RAMP" 		text="CVTa: Beschleunigungsrampe erhöhen"/>
 		<text name="input_LMBF_TOGGLE_RAMPT" 		text="CVTa: Beschleunigungsrampe wechseln"/>
 		<text name="input_LMBF_TOGGLE_RAMPS1" 		text="CVTa: Beschleunigungsrampe 1 schalten"/>
