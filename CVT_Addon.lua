@@ -2079,7 +2079,7 @@ end
 
 function CVTaddon:SETPREGLOW()
 	local spec = self.spec_CVTaddon
-	if self:getMotorState() == 1 then
+	if (g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 2) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState == 1) then
 		spec.preGlow = math.min(spec.preGlow + 1, 500)
 		spec.forDBL_preglowing = 1
 		
@@ -2097,7 +2097,7 @@ function CVTaddon:SETPREGLOW()
 			spec.forDBL_glowingstate = 0
 		end
 		print("spec.preGlow: " .. tostring(spec.preGlow))
-	elseif self:getMotorState() > 1 then
+	elseif self:getMotorState() == 1 then
 		spec.forDBL_glowingstate = 0
 	end
 	return true
@@ -2308,7 +2308,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							-- end
 						end
 					end
-					if self:getMotorState() == 2 and spec.preGlow ~= 0 then
+					if g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1 and spec.preGlow ~= 0 then
 						spec.preGlow = 0
 						spec.forDBL_glowingstate = 0
 					end
@@ -2435,7 +2435,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						end
 					end
 				end
-				if self:getMotorState() == 2 and spec.preGlow ~= 0 then
+				if g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1 and spec.preGlow ~= 0 then
 					spec.preGlow = 0
 					spec.forDBL_glowingstate = 0
 				end
@@ -2562,7 +2562,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							end
 						end
 					end
-					if self:getMotorState() == 2 and spec.preGlow ~= 0 then
+					if g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1 and spec.preGlow ~= 0 then
 						spec.preGlow = 0
 						spec.forDBL_glowingstate = 0
 					end
@@ -2689,7 +2689,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						end
 					end
 				end
-				if self:getMotorState() == 2 and spec.preGlow ~= 0 then
+				if g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1 and spec.preGlow ~= 0 then
 					spec.preGlow = 0
 					spec.forDBL_glowingstate = 0
 				end
