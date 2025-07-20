@@ -48,7 +48,7 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.8.2.0";
+local scrversion = "0.8.3.0";
 local modversion = CVTaddon.modversion; -- moddesc
 local lastupdate = "20.07.2025"
 local timestamp = "1744381426566";
@@ -2079,7 +2079,7 @@ end
 
 function CVTaddon:SETPREGLOW()
 	local spec = self.spec_CVTaddon
-	if (g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 2) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) then
+	if (g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 2) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() < 3) then
 		spec.preGlow = math.min(spec.preGlow + 1, 500)
 		spec.forDBL_preglowing = 1
 		
@@ -2308,7 +2308,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							-- end
 						end
 					end
-					if g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1 and spec.preGlow ~= 0 then
+					if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
 						spec.preGlow = 0
 						spec.forDBL_glowingstate = 0
 					end
@@ -2435,7 +2435,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						end
 					end
 				end
-				if g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1 and spec.preGlow ~= 0 then
+				if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
 					spec.preGlow = 0
 					spec.forDBL_glowingstate = 0
 				end
@@ -2562,7 +2562,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							end
 						end
 					end
-					if g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1 and spec.preGlow ~= 0 then
+					if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
 						spec.preGlow = 0
 						spec.forDBL_glowingstate = 0
 					end
@@ -2689,7 +2689,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						end
 					end
 				end
-				if g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1 and spec.preGlow ~= 0 then
+				if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
 					spec.preGlow = 0
 					spec.forDBL_glowingstate = 0
 				end
