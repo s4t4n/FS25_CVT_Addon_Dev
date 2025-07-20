@@ -122,6 +122,8 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="txt_needClutch2start" 			text="Kupplung treten zum Motor starten."/>
 		<text name="txt_needBrake2start" 			text="Handbremse anziehen zum Motor starten."/>
 		<text name="txt_needNoHG2start" 			text="Handgas raus zum Motor starten."/>
+		<text name="txt_needpreGlow" 				text="Vorglühen für Motorstart notwendig!"/>
+		<text name="txt_preGlow" 					text="Vorglühen..."/>
 		<text name="txt_attCVTpressure" 			text="Achtung, Zu hoher Druck im Triebsatz. Temp. beobachten."/>
 		<text name="txt_warn_tofastDn" 				text="Zu schnell! Fahrstufenwechsel maximal mit 10 km/h durchführen, sonst nimmt das Getriebe schaden."/>
 		<text name="txt_warn_tofastUp" 				text="Vorsicht! Fahrstufen maximal mit 10 km/h wechseln, am besten kurz stehen bleiben."/>

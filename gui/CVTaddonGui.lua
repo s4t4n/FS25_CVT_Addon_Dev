@@ -444,8 +444,8 @@ function CVTaddonGui:onClickOk()
 	
 	if self.spec.CVTconfig >= 3 then
 		cvtDLset = 2
-	else
-		cvtDLset = self.drivinglevelSetting:getState()
+--	else
+--		cvtDLset = self.drivinglevelSetting:getState()
 	end
 	
 	-- set states
