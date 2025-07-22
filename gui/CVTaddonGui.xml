@@ -95,6 +95,21 @@
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="inchingTT" position="700px 0px"/>
 					</BinaryOption>
 				</GuiElement>
+
+				<!-- reverse lights -->
+				<GuiElement profile="fs25_multiTextOptionContainer">
+					<Text profile="multiTextOptionSettingsTitle" id="reverseLightsTitle"/>
+					<BinaryOption profile="fs25_settingsBinaryOption" id="reverseLightsSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="reverseLightsTT" position="700px 0px"/>
+					</BinaryOption>
+				</GuiElement>
+				<GuiElement profile="fs25_multiTextOptionContainer">
+					<Text profile="multiTextOptionSettingsTitle" id="reverseLightsDurationTitle"/>
+					<!-- nachleuchten -->
+					<MultiTextOption profile="fs25_settingsMultiTextOption" id="reverseLightsDurationSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="reverseLightsDurationTT" position="700px 0px"/>
+					</MultiTextOption>
+				</GuiElement>
 				
 				<!-- HUD show or not -->
 				<Text profile="fs25_settingsSectionHeader" name="sectionCvtHud" id="Cvthud"/>
