@@ -42,6 +42,9 @@ Es wird ein entsprechender Leistungszuwachs bei überschreibten von 14 km/h und/
 Dies ist eine relativ moderne Version, um die Emmisionswerte niedriger zu halten und bei Bedarf trotzdem mehr Power zur Verfügung stehen zu haben."/>
 		<text name="inchingTT" 							text="Das Kupplungspedal wird als Inchingpedal verwendet.
 Beim betätigen wird das Fahrzeug schneller oder langsamer, auch bei aktiviertem Tempomat."/>
+		<text name="reverseLightsTT" 					text="Beim Rückwärts fahren schaltet sich automatisch das hintere Arbeitslicht ein.
+oft bei großen Maschinen wie Ernter und modernen Mschinen zu finden."/>
+<text name="reverseLightsDurationTT" 					text="Zeit in Sekunden, wie lange das Licht nach Rückwärtsfahren eingeschalten bleiben soll."/>
 <text name="hstTT" 							text="HST oder Hydrastat Hydraulikgetriebe?
 HST legt keine automatische Motordrehzahl, außer die Leerlaufregelung, fest.
 Hydrostat ist dabei auf verschiedenen Varianten automatisierter und hat meistens Allrad-Antrieb und besitzen,
@@ -58,6 +61,8 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="CVTAgui_pitT" 					text="Pull-In-Turn (vca)"/>
 		<text name="CVTAgui_HstTitle" 				text="Hydro-Antrieb"/>
 		<text name="CVTAgui_inchingTitle" 			text="Inching"/>
+		<text name="CVTAgui_reverseLightsTitle" 	text="Auto Licht beim Rückwärtsfahren"/>
+		<text name="CVTAgui_reverseLightsDurationTitle" text="Nachleucht-Dauer"/>
 		<text name="selection_drivinglevel_1"		text="Vario"/>
 		<text name="selection_drivinglevel_2"		text="2"/>
 		<text name="selection_drivinglevel_3"		text="3"/>
@@ -67,6 +72,12 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="selection_accRamp_3"			text="3"/>
 		<text name="selection_accRamp_4"			text="4"/>
 		<text name="selection_accRamp_5"			text="5"/>
+		<text name="selection_accRamp_6"			text="6"/>
+		<text name="selection_accRamp_7"			text="7"/>
+		<text name="selection_accRamp_8"			text="8"/>
+		<text name="selection_accRamp_9"			text="9"/>
+		<text name="selection_accRamp_10"			text="10"/>
+		<text name="selection_accRamp_01"			text="1"/>
 		<text name="selection_active"	    		text="Aktiviert"/>
 		<text name="selection_deactive"	    		text="Deakiviert"/>
 		
@@ -97,7 +108,7 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="input_SETVARIORPMDMAX" 			text="CVTa: RPM Begrenzng (experiment)"/>
 		<text name="input_SETPEDALTMS" 				text="CVTa: TMS Pedal Modus"/>
 		<text name="input_SETPREGLOW" 				text="CVTa: Kerzen Vorglühen"/>
-		<text name="input_SIGNAL_HIGH_BEAM_LIGHT" 	text="CVTa: Fernlicht Lichthupe"/>
+		<text name="input_SIGNAL_HIGH_BEAM" 		text="CVTa: Fernlicht Lichthupe"/>
 		<text name="input_LMBF_TOGGLE_RAMP" 		text="CVTa: Beschleunigungsrampe erhöhen"/>
 		<text name="input_LMBF_TOGGLE_RAMPT" 		text="CVTa: Beschleunigungsrampe wechseln"/>
 		<text name="input_LMBF_TOGGLE_RAMPS1" 		text="CVTa: Beschleunigungsrampe 1 schalten"/>
@@ -118,10 +129,14 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="txt_bRamp4" 					text="BR 15"/>
 		<text name="txt_bRamp5" 					text="BR 17"/>
 		
+		<text name="txt_bRamp5" 					text="BR 17"/>
+		
 		<text name="txt_vcaInfo" 					text="Die Niedrige Bremskraft wurde in VCA auf 100% eingestellt und die Motormodifikationen deaktiviert. Letzteres kannst du belieben wieder aktivieren, je nach Fahrzeug funktioniert es mehr oder weniger."/>
 		<text name="txt_needClutch2start" 			text="Kupplung treten zum Motor starten."/>
 		<text name="txt_needBrake2start" 			text="Handbremse anziehen zum Motor starten."/>
 		<text name="txt_needNoHG2start" 			text="Handgas raus zum Motor starten."/>
+		<text name="txt_needpreGlow" 				text="Vorglühen für Motorstart notwendig!"/>
+		<text name="txt_preGlow" 					text="Vorglühen..."/>
 		<text name="txt_attCVTpressure" 			text="Achtung, Zu hoher Druck im Triebsatz. Temp. beobachten."/>
 		<text name="txt_warn_tofastDn" 				text="Zu schnell! Fahrstufenwechsel maximal mit 10 km/h durchführen, sonst nimmt das Getriebe schaden."/>
 		<text name="txt_warn_tofastUp" 				text="Vorsicht! Fahrstufen maximal mit 10 km/h wechseln, am besten kurz stehen bleiben."/>

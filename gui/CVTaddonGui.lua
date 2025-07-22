@@ -50,6 +50,9 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.HSTSetting.onClickCallback 			= CVTaddonGui.logicalCheck
 	self.inchingSetting.onClickCallback 		= CVTaddonGui.logicalCheck
 	self.inchingSetting.onHighlightCallback 	= CVTaddonGui.logicalCheck
+	self.reverseLightsSetting.onHighlightCallback 	= CVTaddonGui.logicalCheck
+	self.reverseLightsSetting.onClickCallback 	= CVTaddonGui.logicalCheck
+	self.reverseLightsDurationSetting.onHighlightCallback = CVTaddonGui.logicalCheck
 		-- end
 	-- end
 	
@@ -65,6 +68,8 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.pitTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("pitTT"))
 	self.HSTTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("hstTT"))
 	self.inchingTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("inchingTT"))
+	self.reverseLightsTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("reverseLightsTT"))
+	self.reverseLightsDurationTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("reverseLightsDurationTT"))
 
 	
 	-- Main Header Titel
@@ -81,6 +86,8 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.pitTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_pitT"))	-- XsubHeader
 	self.HSTTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_HstTitle"))	-- XsubHeader
 	self.inchingTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_inchingTitle"))	-- Inching
+	self.reverseLightsTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_reverseLightsTitle"))	-- rl
+	self.reverseLightsDurationTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_reverseLightsDurationTitle"))	-- rld
 
 	-- Settings Texte
 		-- CVT Variante
@@ -155,6 +162,23 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_inching_dn"),
 		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_inching_up")
 	}
+		-- reverseLights
+	local reverseLightsv15 = {																-- Options
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_deactive"),
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_active")
+	}
+	local reverseLightsDurationv15 = {																-- Options
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_accRamp_01"), -- used for seconds 
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_accRamp_2"), -- used for seconds 
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_accRamp_3"), -- used for seconds 
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_accRamp_4"), -- used for seconds 
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_accRamp_5"), -- used for seconds 
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_accRamp_6"), -- used for seconds 
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_accRamp_7"), -- used for seconds 
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_accRamp_8"), -- used for seconds 
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_accRamp_9"), -- used for seconds 
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_accRamp_10") -- used for seconds 
+	}
 	
 	-- Set Settings Texte
 	if self.spec.isVarioTM then
@@ -171,6 +195,8 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.pitSetting:setTexts(PITv15)
 	self.HSTSetting:setTexts(HSTv15)
 	self.inchingSetting:setTexts(inchingv15)
+	self.reverseLightsSetting:setTexts(reverseLightsv15)
+	self.reverseLightsDurationSetting:setTexts(reverseLightsDurationv15)
 	
 	-- States Abfragen
 		-- Configs
@@ -184,6 +210,10 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.reverseLightsTitle:setDisabled(false)
+			self.reverseLightsDurationTitle:setDisabled(false)
+			self.reverseLightsSetting:setDisabled(false)
+			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivinglevelSetting:setDisabled(false)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(false)
@@ -200,6 +230,10 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.reverseLightsTitle:setDisabled(false)
+			self.reverseLightsDurationTitle:setDisabled(false)
+			self.reverseLightsSetting:setDisabled(false)
+			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(false)
@@ -216,6 +250,10 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.HSTSetting:setDisabled(false)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.reverseLightsTitle:setDisabled(false)
+			self.reverseLightsDurationTitle:setDisabled(false)
+			self.reverseLightsSetting:setDisabled(false)
+			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -232,6 +270,10 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.reverseLightsTitle:setDisabled(false)
+			self.reverseLightsDurationTitle:setDisabled(false)
+			self.reverseLightsSetting:setDisabled(false)
+			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -248,6 +290,10 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.reverseLightsTitle:setDisabled(false)
+			self.reverseLightsDurationTitle:setDisabled(false)
+			self.reverseLightsSetting:setDisabled(false)
+			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -264,6 +310,10 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(true)
 			self.inchingSetting:setDisabled(false)
+			self.reverseLightsTitle:setDisabled(false)
+			self.reverseLightsDurationTitle:setDisabled(false)
+			self.reverseLightsSetting:setDisabled(false)
+			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -283,6 +333,10 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.reverseLightsTitle:setDisabled(false)
+			self.reverseLightsDurationTitle:setDisabled(false)
+			self.reverseLightsSetting:setDisabled(false)
+			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -299,6 +353,10 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.reverseLightsTitle:setDisabled(false)
+			self.reverseLightsDurationTitle:setDisabled(false)
+			self.reverseLightsSetting:setDisabled(false)
+			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -325,6 +383,8 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.accRampSetting:setState(arCount)
 	self.HSTSetting:setState(self.spec.HSTstate)
 	self.inchingSetting:setState(self.spec.inchingState)
+	self.reverseLightsSetting:setState(self.spec.reverseLightsState)
+	self.reverseLightsDurationSetting:setState(self.spec.reverseLightsDurationState)
 
 	-- require logged in as admin
 	if g_currentMission.isMasterUser ~= nil then if g_currentMission.isMasterUser == false then
@@ -352,9 +412,10 @@ function CVTaddonGui:logicalCheck()
 	local couldAR = false
 	local hasAS = false
 	local hasPIT = false
+	local reverseLightsDuration = false
 	
-	print("GUI logical spec HUDpos: " .. tostring(self.spec.HUDpos))
-	print("GUI logical state CvthudPosSetting: " .. tostring(self.CvthudPosSetting:getState()))
+	-- print("GUI logical spec HUDpos: " .. tostring(self.spec.HUDpos))
+	-- print("GUI logical state CvthudPosSetting: " .. tostring(self.CvthudPosSetting:getState()))
 	
 	if self.spec.isVarioTM == true then
 		hasIPM = self.variantSetting:getState() == 1 or self.variantSetting:getState() == 2
@@ -383,6 +444,12 @@ function CVTaddonGui:logicalCheck()
 	else
 		inching = false
 	end
+
+	if self.reverseLightsSetting:getState() == 2 then
+		reverseLightsDuration = true
+	else
+		reverseLightsDuration = false
+	end
 	
 	self.CvthudPos:setDisabled(not useHUDvis)
 	self.CvthudPosSetting:setDisabled(not useHUDvis)
@@ -407,6 +474,11 @@ function CVTaddonGui:logicalCheck()
 	
 	self.inchingTitle:setVisible(inching)
 	self.inchingSetting:setDisabled(not inching)
+	
+	self.reverseLightsTitle:setVisible(true)
+	self.reverseLightsSetting:setDisabled(false)
+	self.reverseLightsDurationTitle:setVisible(true)
+	self.reverseLightsDurationSetting:setDisabled(not reverseLightsDuration)
 	
 	-- print("GUI logical E: " .. tostring(self.spec.HUDpos))
 
@@ -444,8 +516,8 @@ function CVTaddonGui:onClickOk()
 	
 	if self.spec.CVTconfig >= 3 then
 		cvtDLset = 2
-	else
-		cvtDLset = self.drivinglevelSetting:getState()
+--	else
+--		cvtDLset = self.drivinglevelSetting:getState()
 	end
 	
 	-- set states
@@ -458,6 +530,8 @@ function CVTaddonGui:onClickOk()
 	
 	self.spec.HSTstate 		= self.HSTSetting:getState()
 	self.spec.inchingState	= self.inchingSetting:getState()
+	self.spec.reverseLightsState			= self.reverseLightsSetting:getState()
+	self.spec.reverseLightsDurationState	= self.reverseLightsDurationSetting:getState()
 	
 	
 	
@@ -496,6 +570,10 @@ function CVTaddonGui:onButtonLoad()
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.reverseLightsTitle:setDisabled(true)
+			self.reverseLightsDurationTitle:setDisabled(true)
+			self.reverseLightsSetting:setDisabled(true)
+			self.reverseLightsDurationSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(false)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(false)
@@ -512,6 +590,10 @@ function CVTaddonGui:onButtonLoad()
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.reverseLightsTitle:setDisabled(true)
+			self.reverseLightsDurationTitle:setDisabled(true)
+			self.reverseLightsSetting:setDisabled(true)
+			self.reverseLightsDurationSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(false)
@@ -528,6 +610,10 @@ function CVTaddonGui:onButtonLoad()
 			self.HSTSetting:setDisabled(false)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.reverseLightsTitle:setDisabled(true)
+			self.reverseLightsDurationTitle:setDisabled(true)
+			self.reverseLightsSetting:setDisabled(true)
+			self.reverseLightsDurationSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -544,6 +630,10 @@ function CVTaddonGui:onButtonLoad()
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.reverseLightsTitle:setDisabled(true)
+			self.reverseLightsDurationTitle:setDisabled(true)
+			self.reverseLightsSetting:setDisabled(true)
+			self.reverseLightsDurationSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -560,6 +650,10 @@ function CVTaddonGui:onButtonLoad()
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.reverseLightsTitle:setDisabled(true)
+			self.reverseLightsDurationTitle:setDisabled(true)
+			self.reverseLightsSetting:setDisabled(true)
+			self.reverseLightsDurationSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -576,6 +670,10 @@ function CVTaddonGui:onButtonLoad()
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(true)
 			self.inchingSetting:setDisabled(false)
+			self.reverseLightsTitle:setDisabled(true)
+			self.reverseLightsDurationTitle:setDisabled(true)
+			self.reverseLightsSetting:setDisabled(true)
+			self.reverseLightsDurationSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -595,6 +693,10 @@ function CVTaddonGui:onButtonLoad()
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.reverseLightsTitle:setDisabled(true)
+			self.reverseLightsDurationTitle:setDisabled(true)
+			self.reverseLightsSetting:setDisabled(true)
+			self.reverseLightsDurationSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -611,6 +713,10 @@ function CVTaddonGui:onButtonLoad()
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.reverseLightsTitle:setDisabled(true)
+			self.reverseLightsDurationTitle:setDisabled(true)
+			self.reverseLightsSetting:setDisabled(true)
+			self.reverseLightsDurationSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -637,4 +743,6 @@ function CVTaddonGui:onButtonLoad()
 	self.accRampSetting:setState(arCount)
 	self.HSTSetting:setState(self.spec.HSTstate)
 	self.inchingSetting:setState(self.spec.inchingState)
+	self.reverseLightsSetting:setState(self.spec.reverseLightsState)
+	self.reverseLightsDurationSetting:setState(self.spec.reverseLightsDurationState)
 end

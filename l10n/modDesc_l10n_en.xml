@@ -103,6 +103,8 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="txt_needClutch2start" 			text="Press clutch to start the engine."/>
 		<text name="txt_needBrake2start" 			text="Pull handbrake to start the engine."/>
 		<text name="txt_needNoHG2start" 			text="Turn off Handgas to start the engine."/>
+		<text name="txt_needpreGlow" 				text="Needs pre-heating to start the engine"/>
+		<text name="txt_preGlow" 					text="Pre-heating..."/>
 		<text name="txt_attCVTpressure" 			text="Caution, too much pressure in the powertrain. Watch temp."/>
 		<text name="txt_warn_tofastDn" 				text="Too fast! Change gears at a maximum of 10 km/h, otherwise the transmission will be damaged."/>
 		<text name="txt_warn_tofastUp" 				text="Caution! Change gears at a maximum of 10 km/h, preferably stop for a moment."/>
