@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <l10n>
 	<texts>
 		<text name="txt_VarioOne" 					text=". "/>
@@ -9,8 +9,9 @@
 
 		<text name="txt_VarioRpmPlus" 				text="UPM +"/>
 		<text name="txt_VarioRpmMinus" 				text="UPM -"/>
-		<text name="CVTAgui_title" 					text="CVT-Addon Transmission settings"/>
-		<text name="CVTAgui_Variant" 				text="Getriebe variation"/>
+
+		<text name="CVTAgui_title" 					text="CVT-Addon Getriebeeinstellungen"/>
+		<text name="CVTAgui_Variant" 				text="Getriebe Variante"/>
 		<text name="CVTAgui_Hud" 					text="HUD"/>
 		<text name="cvtgui_Cvthud" 					text="Visability"/>
 		<text name="CVTAgui_CvthudPos" 				text="Position"/>
@@ -45,9 +46,14 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="text_IPMboost22" 				text="IPM 22ps Boost"/>
 		<text name="text_IPMboost27" 				text="IPM 27ps Boost"/>
 		<text name="text_IPMboost34"			 	text="IPM 34ps Boost"/>
-		<text name="CVTAgui_drivinglevelT" 			text="Fahrbereiche"/>
-		<text name="CVTAgui_accRampT" 				text="Beschleunigungsrampen"/>
-		<text name="CVTAgui_HstTitle" 				text="Hydro-Drive"/>
+		<text name="CVTAgui_drivinglevelT" 			text="Driving areas"/>
+		<text name="CVTAgui_accRampT" 				text="Acceleration ramps"/>
+		<text name="CVTAgui_antiSlipT" 				text="Auto Anti-slip (vca)"/>
+		<text name="CVTAgui_pitT" 					text="Pull-In-Turn (vca)"/>
+		<text name="CVTAgui_HstTitle" 				text="Hydro-drive"/>
+		<text name="CVTAgui_inchingTitle" 			text="Inching"/>
+		<text name="CVTAgui_reverseLightsTitle" 	text="Auto worklight when reversing"/>
+		<text name="CVTAgui_reverseLightsDurationTitle" text="Duration"/>
 		<text name="selection_drivinglevel_1"		text="Vario"/>
 		<text name="selection_drivinglevel_2"		text="2"/>
 		<text name="selection_drivinglevel_3"		text="3"/>
@@ -57,10 +63,23 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="selection_accRamp_3"			text="3"/>
 		<text name="selection_accRamp_4"			text="4"/>
 		<text name="selection_accRamp_5"			text="5"/>
+		<text name="selection_accRamp_6"			text="6"/>
+		<text name="selection_accRamp_7"			text="7"/>
+		<text name="selection_accRamp_8"			text="8"/>
+		<text name="selection_accRamp_9"			text="9"/>
+		<text name="selection_accRamp_10"			text="10"/>
+		<text name="selection_accRamp_01"			text="1"/>
+		<text name="selection_active"	    		text="activated"/>
+		<text name="selection_deactive"	    		text="deaching"/>
+		
+		<text name="selection_inching_dn"			text="Slower"/>
+		<text name="selection_inching_up"			text="Faster"/>
 		<text name="selection_hst_hst"				text="HST"/>
-		<text name="selection_hst_hydrostat"		text="Hydrostat"/>
+		<text name="selection_hst_hydrostat"		text="hydrostat"/>
 		<text name="selection_hst_brake"			text="Single pedal"/>
 		<text name="text_HST_installed_short" 		text="HST Hydrostate"/>
+		<text name="text_CVT_Installed_short" 		text="Active"/>
+		<text name="text_CVT_Installed_desc" 		text="CVTaddon active and configurable in the GUI."/>
 		<text name="text_CVT_manuInstalled_short" 	text="Is manual"/>													 
 		<text name="text_CVT_ElektroInstalled_short" 	text="Electric (e.g. forklift)"/>
 		<text name="text_CVT_HarvesterInstalled_short" 	text="Harvester"/>
@@ -70,7 +89,7 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="input_SETVARIO3" 				text="CVTa: Drivinglevel 3"/>
 		<text name="input_SETVARIO4" 				text="CVTa: Drivinglevel 4"/>
 		<text name="input_SETVARIOTOGGLE" 			text="CVTa: Toggle Drivinglevel"/>
-		<text name="input_SETVARION" 				text="CVTa: Neutral"/>
+		<text name="input_SETVARION" 				text="CVTa: neutral"/>
 		<text name="input_SETVARIOADIFFS" 			text="CVTa: AWD and DIFF automatic"/>
 		<text name="input_CVT_SHOWGUI" 				text="CVTa: Open settings menu"/>
 		<text name="input_SETVARIORPM_AXIS"			text="CVTa: Handthrottle axis"/>
@@ -79,6 +98,8 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="input_SETVARIORPMM" 			text="CVTa: Decrease engine rpm"/>
 		<text name="input_SETVARIORPMDMAX" 			text="CVTa: RPM Limiter"/>
 		<text name="input_SETPEDALTMS" 				text="CVTa: TMS Pedalmode"/>
+		<text name="input_SETPREGLOW" 				text="CVTa: Preheat candles"/>
+		<text name="input_SIGNAL_HIGH_BEAM" 		text="CVTa: Highlight of the light"/>
 		<text name="input_LMBF_TOGGLE_RAMP" 		text="CVTa: Accelerationramp Increase"/>
 		<text name="input_LMBF_TOGGLE_RAMPT" 		text="CVTa: Toggle acceleration ramp"/>
 		<text name="input_LMBF_TOGGLE_RAMPS1" 		text="CVTa: Set Accelerationramp 1"/>
@@ -103,8 +124,8 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="txt_needClutch2start" 			text="Press clutch to start the engine."/>
 		<text name="txt_needBrake2start" 			text="Pull handbrake to start the engine."/>
 		<text name="txt_needNoHG2start" 			text="Turn off Handgas to start the engine."/>
-		<text name="txt_needpreGlow" 				text="Needs pre-heating to start the engine"/>
-		<text name="txt_preGlow" 					text="Pre-heating..."/>
+		<text name="txt_needpreGlow" 				text="Pullet necessary for motor start!"/>
+		<text name="txt_preGlow" 					text="Preheat..."/>
 		<text name="txt_attCVTpressure" 			text="Caution, too much pressure in the powertrain. Watch temp."/>
 		<text name="txt_warn_tofastDn" 				text="Too fast! Change gears at a maximum of 10 km/h, otherwise the transmission will be damaged."/>
 		<text name="txt_warn_tofastUp" 				text="Caution! Change gears at a maximum of 10 km/h, preferably stop for a moment."/>

@@ -2,226 +2,247 @@
 <modDesc descVersion="100">
     <author>SbSh</author>
 	<contributor>Glowin</contributor>
-	<version>1.9.0.6F2</version>
+	<version>1.9.0.8</version>
 	<title>
         <en>CVT Addon</en>
     </title>
 
     <description>
         <en>
-<![CDATA[This script adds all vehicles with continuously variable transmissions
-a genuine CVT transmission or hydrostatic transmission.
-This can be configured in the shop. You can also choose between a classic
-or modern variant.
-- Realistically, it is always selected to match the vehicle.
+<![CDATA[This script adds a real CVT, hydrostatic, or HST transmission to all vehicles with continuously variable transmissions.
+Configuration is done in the shop via a simple yes/no selection.
+If you select "Yes," you can open a graphical user interface (GUI) in the game
+to select the desired transmission variants and additional functions.
+
+- Automatic rear work light when reversing and afterglow duration.
+- High beam/high beam flasher can be controlled via a dedicated button.
+- Drivetrains completely redesigned.
+- Percentage-based accelerator pedals for HST, hydrostatic, electric, and continuously variable transmissions.
+- HST and hydrostatic now with 2 pedals – the clutch is used to shift to reverse.
+- Engine preheating depends on the outside temperature – the colder it is, the longer the preheating time.
+Compatible with the Giants ignition switch – only works when the ignition is on.
+- Engine start depends on temperature – influenced by the environment or weather.
+- New harvester configuration with optimized handling
+for field and road modes.
+In fieldmode you can use the clutchpedal as inching function.
 
 Important:
- The key bindings for the CVT add-on must first be assigned.
- All settings in the LS should be set to manual.
- Manual shifting and clutch.
- No automatic control systems may be active.
- If you want to drive realistically, you will do this anyway.
- The CVT addon should be actively used and not just a "it runs in the background" mod
- (customise for the respective application)
- The vehicle XML value "rotInertia" (flywheel) must not be specified,
- or it must be precisely coordinated.
- And as a reminder, the engines have to warm up first.
- If in doubt, please take a look at the tutorials.
+The keys for the CVT add-on must first be assigned.
+The GUI is pre-assigned to [lShift + lAlt + C].
+All settings in the LS should be set to manual.
+Manual gearshift and clutch.
+No automatic controls should be active.
+If you want to drive realistically, you're already doing that.
+The CVT add-on should be actively played
+and not just a "running in the background" mod.
+(Adapt for the respective application)
+The vehicle XML value "rotInertia" (flywheel) must not be specified
+or must be precisely adjusted.
+And remember: the engines must warm up first.
+If in doubt, please watch the tutorials.
 
 Setting options:
- General CVT:
- -4 acceleration ramps can be set.
- -Braking ramps can also be set.
- -TMS pedal mode can be activated.
- -Automatic differential lock can be activated or preselected. This requires the mod
-  FS25_VehicleControlAddon or FS25_EnhancedVehicle is required.
- -Efficient working with the machine at maximum power.
- -To be able to start the engine, the clutch must be actuated.
- Classic CVT:
- -2 driving ranges can be shifted here.
- Modern CVT:
- -The driving ranges shift automatically.
- -The parking brake is activated as soon as you move away from the driver's seat.
-  FS25_VehicleControlAddon or FS25_EnhancedVehicle required.
- -Low-speed concept, enables even more eficient working.
- -Convenient operation thanks to fewer required setting parameters.
- Hydrostat and HST drive:
- -The 2 basic variants are selected by switching the drive ranges.
- -In this configuration, the single acceleration ramps are declared as speed levels.
- -Both hydraulic drive types can be set in motion by a percentage accelerator pedal.
-  With the hydrostat (the older or simple variant), the hand throttle must be used to
-  A. reach the final speed,
-  B. increase the hydraulic pump capacity, e.g. to increase the speed and lifting power
-  of the frontloader on the yard or wheelloader
-  to achieve more speed and lifting power.
- -In the newer version, this is largely regulated automatically,
-  but the hand throttle can still be used to
-  to carry out front loader work more agilely.
- -If FS25_VehicleControlAddon is active,
-  the parking brake must be applied to start the engine.
- Heat, overheating and wear:
- -Engines must first run warm enough to avoid generating increased wear under load.
- -Improper use and incorrect adjustment when driving, especially under load,
-  can cause the gearbox to wear out more quickly.
- -If the pressure is too high, the gearbox can overheat and thus cause wear.
- -The engine temperatures are only synchronised with FS25_DashboardLive in Multiplayer!
-  DBL must be active at least with .
 
-Influence on the functions and functions that create influence:
- The engine braking effect:
- -Is calculated dynamically by various factors. Among other things, weight, speed, wind,
-  incline or decline play a role, engine power (unfortunately not cubic capacity),
-  engine speed range and speed, etc. play a role.
-  Also depending on which acceleration ramp is selected.
+General CVT:
+- 0 to 5 acceleration ramps can be set.
+- Braking ramps can also be set.
+- TMS pedal mode can be deactivated.
+- Automatic differential lock can be activated or preselected.
+(FS25_VehicleControlAddon or FS25_EnhancedVehicle required)
+- Efficient operation of the machine at maximum performance.
+- The clutch must be engaged to start the engine.
 
- Starting the engine:
-  For continuously variable vehicles, the clutch must be depressed,
-  which is also the normal clutch. In hydrostatic configuration, if VCA is active
-  the handbrake must be applied in order to start the engine.
-  In addition, the hand throttle must not be pulled up, it must be set to 0.
+Classic CVT:
+- Number of drive ranges can be configured.
+- Drive ranges are shifted manually.
 
- Driving ranges:
-  There are 2 driving ranges, II. is intended for road travel, transport and light work.
-  Stage I. is more for heavy field work and heavy transport.
-  Here the maximum speed is also reduced and the torque provides more thrust,
-  especially when starting off.
-  A button assignment must be assigned for each level.
-  The driving ranges should be changed when the machine is stationary,
-  as this can also cause damage. *A little tip, if you use the group shift buttons for up/down,
-  you can use the same buttons for the speed steps.
-  A special feature of the "modern" configuration is that the driving ranges are regulated.
+Modern CVT:
+- Two drive ranges shift automatically – you hardly notice it.
+- The parking brake is activated as soon as you leave the driver's seat.
+(FS25_VehicleControlAddon or FS25_EnhancedVehicle required)
+- Low-speed concept for efficient operation.
+- Convenient operation thanks to fewer settings required.
+- Pull-in turn possible.
 
- Acceleration ramps:
-  Furthermore, there is now an acceleration ramp in 4 stages, which can be switched through with one button.
-  This influences the acceleration behaviour when accelerating and reducing the driving speed.
-  Smooth and with feeling or full power and rough. With heavy implements or trailers,
-  can cause high pressure in the planetary gearbox and damage it!
-  In this case, the acceleration ramp should be set to 3 or less.
-  Level 4 is more suitable for empty runs.
-  For light field work, you can easily pull at speed level 1 in acceleration ramp 4 - for example, disc harrow, flat cultivator.
+Hydrostatic and HST drive:
+- Two basic variants can be selected via the GUI.
+- In this configuration, acceleration ramps are used as speed steps.
+- Both drives use a percentage-based accelerator pedal.
+- With the hydrostatic drive (older version):
+Hand throttle required for
+A. Top speed
+B. Increased pump power (e.g., for front loaders)
+- The newer version regulates many things automatically,
+but hand throttle remains helpful.
+- If FS25_VehicleControlAddon is active:
+Parking brake must be applied to start the engine.
 
-Further detailed explanations of the details
-can be found in the Escape help menu and
-in the Wiki on Github, as well as tutorial videos.
+Heat, overheating, and wear:
+- Engines must warm up, otherwise increased wear occurs.
+- Improper use/incorrect adjustment can cause transmission damage.
+- High oil pressure can trigger overheating and wear.
+- Engine temperatures are only synchronized with FS25_DashboardLive in multiplayer.
+(DBL must be active)
 
-Almost all values and settings can be used with FS25_DashboardLive.
-More detailed informations about it at the wiki on Github.
+Influence on functions and influencing factors:
 
-Feel free to provide ideas, feedback and reports at <a href="https://github.com/s4t4n/FS25_CVT_Addon" target="_blank">Github: FS25_CVT_Addon</a> please.
+Engine braking effect:
+- Dynamically calculated based on:
+
+Weight, speed, wind,
+
+Incline, decline, engine speed, power, ramp selection, etc.
+
+Starting the engine:
+- Continuously variable: Clutch must be depressed.
+- Hydrostatic:
+- Parking brake active (with VCA)
+- Hand throttle to 0
+
+Drive ranges:
+- Two standard ranges (I / II), expandable for classic mode.
+- Level II: Road, light work
+- Level I: Field work, heavy load
+- Torque and maximum speed adjusted
+- Key assignment per level or switchable possible.
+- Only change when stationary (to avoid damage)
+- Modern configuration: automatic control
+
+Acceleration ramps:
+- 0 to 5 levels
+- Influence acceleration and deceleration
+- High pressure for heavy equipment - at high ramps
+- Ramps 4–5 are more suitable for empty runs
+- For light field work: ramp selection depends on the equipment
+
+Further detailed explanations and tutorials:
+in the Wiki on GitHub.
+
+Virtually all values/settings are available and usable with FS25_DashboardLive.
+Likewise, telemetry output for telemetry from Upsidedown.
+e.g., automatic work lights currently active.
+Further information in the Wiki.
+
+Feedback and bug reports (and Wiki) are welcome at: <a href="https://github.com/s4t4n/FS25_CVT_Addon" target="_blank">Github: FS25_CVT_Addon</a> please.
 ]]></en>
         <de>
-<![CDATA[Dieses Skript fügt allen Fahrzeugen mit stufenlosen Getrieben
-ein echtes CVT Getriebe oder auch Hydrostat Getriebe hinzu.
-Dies ist im Shop konfigurierbar. Es kann zudem zwischen klassischer
-oder moderner Variante gewählt werden.
-- Realistisch betrachtet wählt man es immer passend zum Fahrzeug aus.
+<![CDATA[
+Dieses Skript fügt allen Fahrzeugen mit stufenlosen Getrieben
+ein echtes CVT-, Hydrostat- oder HST-Getriebe hinzu.
+Die Konfiguration erfolgt im Shop über eine einfache Ja/Nein-Auswahl.
+Bei „Ja“ kann man im Spiel eine grafische Benutzeroberfläche (GUI)
+zur Auswahl der gewünschten Getriebevarianten sowie Zusatzfunktionen öffnen.
+
+- Automatisches Arbeitslicht hinten beim Rückwärtsfahren und Nachleuchtdauer.
+- Fernlicht / Lichthupe über eigene Taste steuerbar.
+- Fahrantriebe vollständig überarbeitet.
+- Prozentuale Fahrpedale für HST, Hydrostat, Elektro und stufenlose Getriebe.
+- HST und Hydrostat nun mit 2 Pedalen – Kupplung dient zum Umschalten auf Rückwärtsgang.
+- Motor vorglühen abhängig von der Außentemperatur – je kälter, desto länger die Glühzeit.
+  Kompatibel mit dem Giants-Zündschloss - Funktioniert dann nur wenndie Zündung ein ist.
+- Motorstart temperaturabhängig – beeinflusst durch Umgebung bzw. Wetter.
+- Neue Erntemaschinen-Konfiguration mit optimiertem Fahrverhalten
+  für Feld- und Straßenmodus.
+  Im Feldmodus kann das Kupplungspedal als Inchingpedal genutzt werden.
 
 Wichtiges:
- Die Tasten für das CVT-Addon müssen erst Belegt werden.
- Alle Einstellungen im LS sollten auf manuell gesetzt sein.
- Manuelle Schaltung und Kupplung.
- Es dürfen keine Automatiken für die Steuerung aktiv sein.
- Wenn man realistisch fahren möchte, macht man das sowieso.
- Das CVT-Addon sollte aktiv benutzt werden und nicht nur ein "es läuft im Hintergund" Mod
- ( für die jeweilige Anwendung anpassen )
- Der Fahrzeug-XML-Wert "rotInertia" (Schwungscheibe) darf nicht angegeben sein,
- oder es muß exakt abgestimmt werden.
- Und zur Erinnerung, die Motoren müßen erst warmlaufen.
- Guckt euch im Zweifel bitte die Tutorials an.
+Die Tasten für das CVT-Addon müssen erst belegt werden.
+Das GUI ist mit [lShift + lAlt + C] vorbelegt.
+Alle Einstellungen im LS sollten auf manuell gesetzt sein.
+Manuelle Schaltung und Kupplung.
+Es dürfen keine Automatiken für die Steuerung aktiv sein.
+Wenn man realistisch fahren möchte, macht man das ohnehin schon.
+Das CVT-Addon sollte aktiv gespielt werden
+und nicht nur ein "es läuft im Hintergrund"-Mod.
+(für die jeweilige Anwendung anpassen)
+Der Fahrzeug-XML-Wert "rotInertia" (Schwungscheibe) darf nicht angegeben sein
+oder muss exakt abgestimmt werden.
+Und zur Erinnerung: die Motoren müssen erst warmlaufen.
+Guckt euch im Zweifel bitte die Tutorials an.
 
 Einstellungsmöglichkeiten:
- Allgemein CVT:
- -Es können 4 Beschleunigungsrampen eingestellt werden.
- -Ebenso sind Bremsrampen einstellbar.
- -TMS Pedalmodus ist aktivierbar.
- -Automatische Differentialsperre kann aktiviert oder oder vorgewählt werden.
-  Hierzu ist der Mod FS25_VehicleControlAddon oder FS25_EnhancedVehicle nötig.
- -Effizientes Arbeiten mit der Maschine, bei maximaler Leistung.
- -Um den Motor starten zu können, muß die Kupplung betätigt werden.
- 
- Klassisches CVT:
- -Hier können 2 Fahrbereiche umgeschalten werden.
- 
- Modernes CVT:
- -Die Fahrbereiche schalten automatisch.
- -Die Parkbremse wird aktiviert, sobald man sich vom Fahrersitz entfernt.
-  FS25_VehicleControlAddon oder FS25_EnhancedVehicle benötigt.
- -Niedrigdrehzahl-Konzept, ermöglicht ein noch effizienteres Arbeiten.
- -Komfortable Arbeitsweise durch weniger notwendige Einstellungsparameter.
- 
- Hydrostat und HST Antrieb:
- -Die 2 Grundvarianten werden durch umschalten der Fahrbereiche gewählt.
- -In dieser Konfiguration werden die einst Beschleunigungsrampen als Geschwinigkeits-Stufen deklariert.
- -Beide hydraulischen Fahrantriebsarten lassen sich durch ein Prozentuales Fahrpedal in Bewegung setzen.
-  Beim Hydrostat (die ältere oder einfache Variante),
-  muß man das Handgas benutzen um
-  A. die Endgeschwindigkeit zu erreichen,
-  B. die Hydraulikpumpleistung zu erhöhen, um z.B. den Frontlader am Hof- oder Radlader
-  auf mehr Tempo und Hubkraft zu bringen.
- -Bei der neueren Variante wird diese weitgehen automatisch geregelt, dennoch kann man mit dem Handgas
-  die Frontladerarbeiten agiler durchführen.
- -Wenn FS25_VehicleControlAddon aktiv ist, muß hier zum Motorstarten die Parkbremse gezogen sein.
- 
- Hitze, Überhitzung und Verschleiß:
- -Motoren müssen erst einmal warm genug laufen,
-  um nicht unter Last erhöhten Verschleiß zu generieren.
- -Bei unsachgemäßer Benutzung und Falscheinstellung beim fahren,
-  vor allem unter Last, kann das Getriebe schneller Verschleißen.
- -Das Getriebe kann bei zu hohem Druck eine Überhitzung erleiden
-  und damit den Verschleiß antreiben.
- -Die Motortemperaturen werden nur mit FS25_DashboardLive im Multiplayer syncronisiert!
-  Dazu muß DBL mindestens nur mit aktiv sein.
 
-Einfluß auf die Funktionen und Funktionen die Einfluß schaffen:
- Die Motorbremswirkung:
- -Wird durch verschiedene Faktoren dynamisch berechnet.
-  U.a. spielen Gewicht, Geschwindigkeit, Wind,
-  Steigung oder Gefälle, Motorleistung(Leider kein Hubraum),
-  Motordrehzahlband und Drehzahl, uvm. eine Rolle.
-  Auch je nachdem welche Beschleunigunsrampe gewählt ist.
+Allgemein CVT:
+- Es können 0 bis 5 Beschleunigungsrampen eingestellt werden.
+- Ebenso sind Bremsrampen einstellbar.
+- TMS-Pedalmodus ist deaktivierbar.
+- Automatische Differentialsperre kann aktiviert oder vorgewählt werden.
+  (FS25_VehicleControlAddon oder FS25_EnhancedVehicle notwendig)
+- Effizientes Arbeiten mit der Maschine bei maximaler Leistung.
+- Um den Motor starten zu können, muss die Kupplung betätigt werden.
 
- Motor Starten:
-  Bei Stufenlosen Fahrzeugen muß die Kupplung getreten werden,
-  die separat belegt werden muß - also die selbe Eingabe,
-  welche auch die normale Kupplung ist.
-  Bei Hydrostatischer Konfiguration muß, wenn VCA aktiv ist,
-  die Handbremse gezogen sein um den Motor starten zu können.
-  Außerdem darf das Handgas nicht hochgezogen sein, diese muß auf 0 sein.
+Klassisches CVT:
+- Anzahl der Fahrbereiche konfigurierbar.
+- Fahrbereiche werden manuell geschaltet.
 
- Fahrbereiche:
-  Es gibt 2 Fahrstufen, II. ist für Straßenfahrten, Transport und leichte Arbeiten gedacht.
-  Stufe I. eher für schwere Feldarbeiten und schwere Transporte.
-  Hierbei wird auch die Maximalgeschwindigkeit reduziert und
-  das Drehmoment sorgt vorallem beim anfahren für mehr Schub.
-  Für jede Stufe ist eine Tastenbelegung zu vergeben.
-  Das wechseln der Fahrbereiche sollte im Stillstand geschehen,
-  da auch hier Schäden entstehen können. *Kleiner Tipp,
-  wenn ihr die Gruppenschaltungs-Tasten für hoch/runter nutzt,
-  könnt ihr die selben Tasten für die Fahrstufen verwenden.
-  Besonderheit bei der "modernen" Konfiguration ist,
-  daß die Fahrbereiche geregelt werden.
+Modernes CVT:
+- 2 Fahrbereiche schalten automatisch - man bemerkt es kaum bis gar nicht.
+- Die Parkbremse wird aktiviert, sobald man sich vom Fahrersitz entfernt.
+  (FS25_VehicleControlAddon oder FS25_EnhancedVehicle notwendig)
+- Niedrigdrehzahl-Konzept für effizientes Arbeiten.
+- Komfortable Bedienung durch weniger nötige Einstellungen.
+- Pull-In-Turnmöglich.
 
- Beschleunigungs-Rampen:
-  Desweiteren gibt es nun eine Beschleunigungsrampe in 4 Stufen,
-  die mit einer Taste durchgeschaltet werden können.
-  Hier werden das Anzugverhalten beim Beschleunigen
-  und reduzieren der Fahrgeschwindigkeit beeinflusst.
-  Sanft und mit Gefühl oder volle Power und ruppig.
-  Mit schweren Geräten oder Anhänger,
-  kann es zu hohen Drücken im Planetengetriebe kommen und es kann Schaden nehmen!
-  Hier sollte die Beschleunigungsrampe auf 3 oder weniger eingestellt werden.
-  Stufe 4 ist eher für Leerfahrten geeignet.
-  In der leichten Feldarbeit kann man ruhig auf Fahrstufe 1
-  in der Beschleunigungsrampe 4 ziehen - Beispielsweise Scheibenegge, Flachgrubber.
+Hydrostat und HST Antrieb:
+- Zwei Grundvarianten über das GUI wählbar.
+- In dieser Konfiguration werden Beschleunigungsrampen
+  als Geschwindigkeits-Stufen verwendet.
+- Beide Antriebe nutzen ein prozentuales Fahrpedal.
+- Beim Hydrostat (ältere Variante):
+  Handgas notwendig für
+  A. Endgeschwindigkeit
+  B. Erhöhte Pumpleistung (z.B. für Frontlader)
+- Neuere Variante regelt vieles automatisch,
+  aber Handgas bleibt hilfreich.
+- Wenn FS25_VehicleControlAddon aktiv ist:
+  Parkbremse muss gezogen sein für Motorstart.
 
-Weitere detaillierte Erklärungen der Einzelheiten
-gibt es im Escape Hilfemenü und
-im Wiki auf Github, sowie Tutorial Videos.
+Hitze, Überhitzung und Verschleiß:
+- Motoren müssen warmlaufen, sonst erhöhter Verschleiß.
+- Unsachgemäße Nutzung/Falscheinstellung kann Getriebeschäden verursachen.
+- Hoher Öldruck kann Überhitzung und Verschleiß auslösen.
+- Motortemperaturen werden im Multiplayer nur mit FS25_DashboardLive synchronisiert.
+  (DBL muss aktiv sein)
 
-So gut wie alle Werte und Einstellungen können mit FS25_DashboardLive verwendet werden.
-Genauere Informationen dazu im Wiki auf Github.
+Einfluss auf Funktionen und Faktoren mit Einfluss:
 
-Ideen und Feedback sowie Reports gerne unter <a href="https://github.com/s4t4n/FS25_CVT_Addon" target="_blank">Github: FS25_CVT_Addon</a> bereitstellen.
+Motorbremswirkung:
+- Dynamisch berechnet durch:
+  Gewicht, Geschwindigkeit, Wind,
+  Steigung, Gefälle, Motordrehzahl, Leistung, Rampenwahl usw.
+
+Motor starten:
+- Stufenlos: Kupplung muss getreten sein.
+- Hydrostat:
+  - Parkbremse aktiv (bei VCA)
+ - Handgas auf 0
+
+Fahrbereiche:
+- Zwei Standardbereiche (I / II), erweiterbar bei klassisch.
+- Stufe II: Straße, leichte Arbeit
+- Stufe I: Feldarbeit, schwere Last
+- Drehmoment und Maximalgeschwindigkeit angepasst
+- Tastenbelegung pro Stufe oder durchschaltbar möglich.
+- Wechsel nur im Stand empfohlen (Schadensvermeidung)
+- Moderne Konfiguration: automatische Regelung
+
+Beschleunigungsrampen:
+- 0 bis 5 Stufen
+- Beeinflussen Anzugverhalten und Verzögerung
+- Hoher Druck bei schweren Geräten - in hoher Rampe
+- Rampen 4–5 eher für Leerfahrten
+- Für leichte Feldarbeit: Rampenwahl je nach Gerät
+
+Weitere detaillierte Erklärungen und Tutorials:
+ im Wiki auf GitHub.
+
+Sogut wie alle Werte/Einstellungen verfügbar und verwendbar mit FS25_DashboardLive.
+Ebenso Telemetrie Ausgabe für Telemetrie von Upsidedown.
+z.B. Automatische Arbeitsscheinwerfer gerade aktiv.
+Weitere Infos im Wiki.
+
+Feedback und Fehlerberichte (und Wiki) gerne unter:
+<a href="https://github.com/s4t4n/FS25_CVT_Addon" target="_blank">GitHub: FS25_CVT_Addon</a>
 ]]></de>
     </description> 
 

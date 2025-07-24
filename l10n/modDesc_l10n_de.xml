@@ -45,7 +45,7 @@ Beim betätigen wird das Fahrzeug schneller oder langsamer, auch bei aktiviertem
 		<text name="reverseLightsTT" 					text="Beim Rückwärts fahren schaltet sich automatisch das hintere Arbeitslicht ein.
 oft bei großen Maschinen wie Ernter und modernen Mschinen zu finden."/>
 <text name="reverseLightsDurationTT" 					text="Zeit in Sekunden, wie lange das Licht nach Rückwärtsfahren eingeschalten bleiben soll."/>
-<text name="hstTT" 							text="HST oder Hydrastat Hydraulikgetriebe?
+<text name="hstTT" 							text="HST oder Hydrostat Hydraulikgetriebe?
 HST legt keine automatische Motordrehzahl, außer die Leerlaufregelung, fest.
 Hydrostat ist dabei auf verschiedenen Varianten automatisierter und hat meistens Allrad-Antrieb und besitzen,
 je nach Hersteller sogar Einzelrad-Hydromotoren."/>
@@ -102,8 +102,7 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="input_SETVARIOADIFFS" 			text="CVTa: AWD und DIFF Automatik"/>
 		<text name="input_CVT_SHOWGUI" 				text="CVTa: Einstellungen Menü öffnen"/>
 		<text name="input_SETVARIORPM_AXIS"			text="CVTa: Handgas Achse"/>
-		<text name="input_SETVARIOCLUTCH_AXIS"		text="CVTa: Kupplung (Doppelbelegung)"/>
-		<text name="input_SETVARIORPMP" 			text="CVTa: Motordrehzahl erhöhen"/>
+				<text name="input_SETVARIORPMP" 			text="CVTa: Motordrehzahl erhöhen"/>
 		<text name="input_SETVARIORPMM" 			text="CVTa: Motordrehzahl verringern"/>
 		<text name="input_SETVARIORPMDMAX" 			text="CVTa: RPM Begrenzng (experiment)"/>
 		<text name="input_SETPEDALTMS" 				text="CVTa: TMS Pedal Modus"/>
@@ -127,8 +126,6 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="txt_bRamp2" 					text="BR  4"/>
 		<text name="txt_bRamp3" 					text="BR  8"/>
 		<text name="txt_bRamp4" 					text="BR 15"/>
-		<text name="txt_bRamp5" 					text="BR 17"/>
-		
 		<text name="txt_bRamp5" 					text="BR 17"/>
 		
 		<text name="txt_vcaInfo" 					text="Die Niedrige Bremskraft wurde in VCA auf 100% eingestellt und die Motormodifikationen deaktiviert. Letzteres kannst du belieben wieder aktivieren, je nach Fahrzeug funktioniert es mehr oder weniger."/>
