@@ -9,7 +9,7 @@
 -- 19.11.2024	starting build for fs25
 
 --ToDo's
-	-- last changes	
+	-- last changes
 		-- DONE - renew hud, new store cfg
 		-- DONE -  shop config mp loadable
 		-- DONE - inching pedal gui setup
@@ -48,11 +48,11 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.9.0.7";
+local scrversion = "0.9.0.8";
 local modversion = CVTaddon.modversion; -- moddesc
 local lastupdate = "24.07.2025"
-local timestamp = "1753374565113";
-local savetime = "18:29:29";
+local timestamp = "1753393527672";
+local savetime = "23:45:32";
 
 -- _______________________
 cvtaDebugCVTon = false	 -- \
@@ -2031,7 +2031,7 @@ end
 
 function CVTaddon:onLeaveVehicle()
 	local spec = self.spec_CVTaddon
-	print("DEBUG: onLeaveVehicle aufgerufen")
+	-- print("DEBUG: onLeaveVehicle aufgerufen")
 	if spec.CVTconfig ~= 8 then
 		if self.spec_vca ~= nil then
 			if spec.CVTconfig == 4 or spec.CVTconfig == 5 or spec.CVTconfig == 6 or spec.CVTconfig == 7 then
@@ -2173,7 +2173,7 @@ function CVTaddon:SETPREGLOW()
 		else
 			spec.forDBL_glowingstate = 0
 		end
-		print("spec.preGlow: " .. tostring(spec.preGlow))
+		-- print("spec.preGlow: " .. tostring(spec.preGlow))
 	elseif self:getMotorState() == 1 then
 		spec.forDBL_glowingstate = 0
 	end
@@ -2209,13 +2209,13 @@ function CVTaddon.setReverseWorkLight(self, active)
     local mask = self.spec_lights.lightsTypesMask or 0
 
     if active then
-        print("Rückwärts-Arbeitslicht AN")
+        -- print("Rückwärts-Arbeitslicht AN")
 		spec.forDBL_autoreverselight = 1
         if (bitAND(mask, bitReverseWorkLight) == 0) then
             self:setLightsTypesMask(bitOR(mask, bitReverseWorkLight))
 		end
     else
-        print("Rückwärts-Arbeitslicht AUS")
+        -- print("Rückwärts-Arbeitslicht AUS")
 		spec.forDBL_autoreverselight = 0
         if (bitAND(mask, bitReverseWorkLight) ~= 0) then
             self:setLightsTypesMask(bitAND(mask, bitNOT(bitReverseWorkLight)))
@@ -3307,8 +3307,6 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 				if FS25_EngineBrakeforceCompensation ~= nil then
 					if printLMBF == false then
 						print("CVT-Addon: FS25_EngineBrakeforceCompensation found, this will change something calculation with the motorbrake force !")
-						print("CVT-Addon: FS25_EngineBrakeforceCompensation found, this will change something calculation with the motorbrake force !")
-						print("CVT-Addon: FS25_EngineBrakeforceCompensation found, this will change something calculation with the motorbrake force !")
 						printLMBF = true
 					end
 				end
@@ -3709,6 +3707,9 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 								self.spec_motorized.lastFuelUsage = self.spec_motorized.lastFuelUsage * 1.2
 								self.spec_motorized.lastDefUsage = self.spec_motorized.lastDefUsage * 1.2
 							end
+						end
+						if printLMBF == true then
+							self.spec_motorized.motor.lowBrakeForceScale = math.man(self.spec_motorized.motor.lowBrakeForceScale * 0.8, 0.01) 
 						end
 					end
 					-- g_currentMission:addExtraPrintText(tostring(self.spec_motorized.motor.maxForwardSpeed))
@@ -5340,7 +5341,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 								else
 									self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin * (1.1 - spec.ClutchInputValue)
 									self.spec_motorized.motor.maxBackwardSpeed=self.spec_motorized.motor.maxBackwardSpeedOrigin * (1.1 - spec.ClutchInputValue)
-									print("else 2")
+									-- print("else 2")
 								end
 							end
 						end
@@ -5552,7 +5553,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 			end
 			
 			-- if spec.CVTconfig ~= 8 then
-			-- 	-- Anti-Roll: richtungsabhängig bremsen
+			-- 	-- Anti-Rollback: richtungsabhängig bremsen..... 
 			-- 	local wheels = self.spec_wheels.wheels
 			-- 	local motor = self.spec_motorized.motor
 			-- 	local direction = motor.currentDirection or 1
