@@ -50,9 +50,9 @@ g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTad
 
 local scrversion = "0.9.0.8";
 local modversion = CVTaddon.modversion; -- moddesc
-local lastupdate = "24.07.2025"
-local timestamp = "1753393527672";
-local savetime = "23:45:32";
+local lastupdate = "27.07.2025"
+local timestamp = "1753624894194";
+local savetime = "16:01:39";
 
 -- _______________________
 cvtaDebugCVTon = false	 -- \
@@ -2086,7 +2086,6 @@ function CVTaddon:getCanMotorRun(superFunc)
 				
 			elseif spec.isVarioTM == false and spec.CVTconfig == 9 then
 				local airTemp = g_currentMission.environment.weather:getCurrentTemperature()
-				
 				if 	   airTemp <= 6  and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow >= 100 then
 					return superFunc(self)
 				elseif airTemp <= 2  and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow >= 250 then
@@ -2159,6 +2158,7 @@ function CVTaddon:SETPREGLOW()
 	if (g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 2) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() < 3) then
 		spec.preGlow = math.min(spec.preGlow + 1, 500)
 		spec.forDBL_preglowing = 1
+		g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
 		
 		local airTemp = g_currentMission.environment.weather:getCurrentTemperature()
 				
@@ -2370,7 +2370,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 											-- if g_client ~= nil and isActiveForInputIgnoreSelection and self:getCanMotorRun() == false then
 											if g_client ~= nil and isActiveForInputIgnoreSelection == false then
 												if not self.spec_RealisticDamageSystemEngineDied.EngineDied then
-													g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needNoHG2start"), 4096)
+													g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needNoHG2start"), 75)
 												end
 											end
 											if cvtaDebugCVTcanStartOn then print("CVTa Hgas [E]: " .. tostring(spec.HandgasPercent)) end
@@ -2441,41 +2441,26 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							if spec.CVTCanStart == true and airTemp <= 6 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 100 then
 								if spec.preGlow == 0 then 
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and airTemp <= 2 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 250 then
 								if spec.preGlow == 0 then 
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and airTemp <= -1 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 350 then
 								if spec.preGlow == 0 then 
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and airTemp <= -4 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 480 then
 								if spec.preGlow == 0 then 
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
 								spec.CVTCanStart = true
 							end
-							
-							
-							-- if spec.CVTCanStart == true and spec.preGlow < 250 then
-								-- spec.CVTCanStart = false
-							-- elseif spec.CVTCanStart == true and spec.preGlow >= 250 then
-								-- spec.CVTCanStart = true
-							-- end
 						end
 					end
 					if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
@@ -2494,10 +2479,9 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							
 								if spec.ClutchInputValue < 0.6 then
 									spec.CVTCanStart = false
-									if g_client ~= nil and isActiveForInputIgnoreSelection and self:getCanMotorRun() == false then
-										if not self.spec_RealisticDamageSystemEngineDied.EngineDied then
-											g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needClutch2start"), 75)
-										end
+									
+									if g_client ~= nil and self:getCanMotorRun() == false then
+										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needClutch2start"), 75)
 									end
 									if cvtaDebugCVTcanStartOn then print("CVTa Clutch/Config [A]: " .. tostring(spec.ClutchInputValue .."/" .. spec.CVTconfig)) end
 								end
@@ -2507,7 +2491,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 									-- if g_client ~= nil and isActiveForInputIgnoreSelection and self:getCanMotorRun() == false then
 									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
 										if not self.spec_RealisticDamageSystemEngineDied.EngineDied then
-											g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needNoHG2start"), 4096)
+											g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needNoHG2start"), 75)
 										end
 									end
 									if cvtaDebugCVTcanStartOn then print("CVTa Hgas [E]: " .. tostring(spec.HandgasPercent)) end
@@ -2574,31 +2558,23 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 				
 						if spec.CVTCanStart == true and airTemp <= 6 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 100 then
 							if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
-								end
+								g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+							end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= 2 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 250 then
 							if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
-								end
+								g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+							end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= -1 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 350 then
 							if spec.preGlow == 0 then 
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
 								end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= -4 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 480 then
 							if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
-								end
+								g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+							end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
 							spec.CVTCanStart = true
@@ -2702,29 +2678,21 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							if spec.CVTCanStart == true and airTemp <= 6 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 100 then
 								if spec.preGlow == 0 then 
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and airTemp <= 2 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 250 then
 								if spec.preGlow == 0 then 
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and airTemp <= -1 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 350 then
 								if spec.preGlow == 0 then 
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and airTemp <= -4 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 480 then
 								if spec.preGlow == 0 then 
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
@@ -2829,29 +2797,21 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						if spec.CVTCanStart == true and airTemp <= 6 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 100 then
 							if spec.preGlow == 0 then 
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
 								end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= 2 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 250 then
 							if spec.preGlow == 0 then 
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
 								end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= -1 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 350 then
 							if spec.preGlow == 0 then 
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
 								end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= -4 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 480 then
 							if spec.preGlow == 0 then 
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-								else
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
 								end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
@@ -2866,13 +2826,13 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 			end -- secure AD
 		end
 		-- rebuild hst, hvst can starting
-		-- if spec.CVTconfig == 8 or spec.CVTconfig == 0 or spec.CVTconfig == 10 or spec.CVTconfig == 11 or spec.CVTconfig == 9 or spec.CVTcfgExists ~= true then
 		if spec.CVTconfig == 8 or spec.CVTconfig == 0 or spec.CVTconfig == 10 or spec.CVTconfig == 11 or spec.CVTcfgExists ~= true then
 			spec.CVTCanStart = true
 		end
 		if spec.CVTcfgExists == false then
 			spec.CVTCanStart = true
 		end
+
 		-- print(spec.CVTCanStart)
 		local changeFlag = false
 		local motor = nil
@@ -3101,7 +3061,26 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					self.spec_motorized.motorTemperature.value = (math.floor(tonumber(g_currentMission.environment.weather:getCurrentTemperature()) * 100)/100)
 				end
 			end
-
+			if not spec.isVarioTM then
+				if self:getMotorState() > 3 then
+					spec.forDBL_glowingstate = 0
+				end
+				if airTemp <= 6  and self.spec_motorized.motorTemperature.value <= 40 and self:getMotorState() < 3 then
+					if spec.preGlow == 0 then 
+						if g_ignitionLockManager:getIsAvailable() then
+							if self:getMotorState() > 1 and spec.forDBL_glowingstate == 0 then
+								g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+							end
+						elseif not g_ignitionLockManager:getIsAvailable() then
+							g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+						end
+					end
+				end
+			end
+			-- print("preGlow: " .. tostring(spec.preGlow) )
+			-- print("getMotorState: " .. tostring(self:getMotorState()) )
+			-- print("forDBL_glowingstate: " .. tostring(spec.forDBL_glowingstate) )
+			
 			if spec.isVarioTM then
 				if self.CVTaddon == nil then
 					self.CVTaddon = true
@@ -3380,7 +3359,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 				if self:getMotorState() > 2 and self.spec_motorized.motor.lastMotorRpm >= self.spec_motorized.motor.minRpm - 1 then
 					spec.forDBL_glowingstate = 0
 				end
-				
+
 				if not self:getIsMotorStarted() then
 					if self.getIsEntered ~= nil and self:getIsEntered() then
 					-- Verschleiß Info
@@ -3620,7 +3599,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 								if (self:getTotalMass() - self:getTotalMass(true)) ~= 0 then -- 25 98 																								-- BR 2/3
 									self.spec_motorized.motor.lowBrakeForceScale = ( math.max(math.min((0.5-((self:getTotalMass() - self:getTotalMass(true)) /98 ))*(0.8-(self:getLastSpeed()/100)), 0.1*( 1-(self:getTotalMass() - self:getTotalMass(true))/100 ) ), 0.01) )*(1-spec.ClutchInputValue)
 								else
-									self.spec_motorized.motor.lowBrakeForceScale = ( math.max( math.abs( math.max( math.min( (1-(self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm))*(1-(self:getLastSpeed()/(self.spec_motorized.motor.maxForwardSpeed*3.6)) * 0.75) ,0.15),0.6) ), 0.05 ) )*(1.001-spec.ClutchInputValue)
+									self.spec_motorized.motor.lowBrakeForceScale = ( math.max( math.abs( math.max( math.min( (1-(self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm))*(1-(self:getLastSpeed()/(self.spec_motorized.motor.maxForwardSpeed*3.6)) * 0.75) ,0.14),0.06) ), 0.03 ) )*(1.001-spec.ClutchInputValue)
 								end
 								self.spec_motorized.lastFuelUsage = self.spec_motorized.lastFuelUsage * 0.95
 								self.spec_motorized.lastDefUsage = self.spec_motorized.lastDefUsage * 0.95
@@ -3639,7 +3618,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 									self.spec_motorized.motor.lowBrakeForceScale = ( math.abs( math.max(math.min( (1-(self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm))*(1-(self:getLastSpeed()/(self.spec_motorized.motor.maxForwardSpeed*3.6) * 0.75) ),0.22 *  (1-(self:getTotalMass() - self:getTotalMass(true)) / self:getTotalMass())   ), (0.02 ) )) )*(1.001-spec.ClutchInputValue)
 								else
 									-- bei Schlepper Leermasse
-									self.spec_motorized.motor.lowBrakeForceScale = ( math.max( math.abs( math.max( math.min( (1-(self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm))*(1-(self:getLastSpeed()/(self.spec_motorized.motor.maxForwardSpeed*3.6)) * 0.75) ,0.22),0.1) ), 0.05 ) )*(1.001-spec.ClutchInputValue)
+									self.spec_motorized.motor.lowBrakeForceScale = ( math.max( math.abs( math.max( math.min( (1-(self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm))*(1-(self:getLastSpeed()/(self.spec_motorized.motor.maxForwardSpeed*3.6)) * 0.75) ,0.18),0.1) ), 0.05 ) )*(1.001-spec.ClutchInputValue)
 									-- start at ca. 0.16
 								end
 								-- Sprit-Verbrauch anpassen
