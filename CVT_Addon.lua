@@ -48,11 +48,11 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.9.0.8";
+local scrversion = "0.9.0.9";
 local modversion = CVTaddon.modversion; -- moddesc
-local lastupdate = "27.07.2025"
-local timestamp = "1753624894194";
-local savetime = "16:01:39";
+local lastupdate = "30.07.2025"
+local timestamp = "1753899467515";
+local savetime = "20:17:52";
 
 -- _______________________
 cvtaDebugCVTon = false	 -- \
@@ -3688,7 +3688,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							end
 						end
 						if printLMBF == true then
-							self.spec_motorized.motor.lowBrakeForceScale = math.man(self.spec_motorized.motor.lowBrakeForceScale * 0.8, 0.01) 
+							self.spec_motorized.motor.lowBrakeForceScale = math.max(self.spec_motorized.motor.lowBrakeForceScale * 0.8, 0.01) 
 						end
 					end
 					-- g_currentMission:addExtraPrintText(tostring(self.spec_motorized.motor.maxForwardSpeed))
