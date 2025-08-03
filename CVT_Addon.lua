@@ -2076,49 +2076,39 @@ end
 function CVTaddon:getCanMotorRun(superFunc)
 	if self.spec_CVTaddon ~= nil then
 		local spec = self.spec_CVTaddon
-		if spec.CVTcfgExists then
-			if spec.isVarioTM == true and spec.CVTconfig ~= 8 then
+		if spec.CVTcfgExists then -- if shopconfig on
+			-- print("CHECKPOINT 6a ###############")
+			if spec.CVTconfig ~= 8 then -- Vario and not disabled
+			-- if spec.isVarioTM == true and spec.CVTconfig ~= 8 then -- Vario and not disabled
 				if spec.CVTCanStart == true then
 				  return superFunc(self)
 				else
 					return false
 				end
 				
-			elseif spec.isVarioTM == false and spec.CVTconfig == 9 then
-				local airTemp = g_currentMission.environment.weather:getCurrentTemperature()
-				if spec.CVTCanStart == true then
-				  return superFunc(self)
-				else
-					-- print("CHECKPOINT 6 ###############")
-					return false
-				end
-				-- if 	   airTemp <= 6  and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow >= 100 then
-				-- 	return superFunc(self)
-				-- elseif airTemp <= 2  and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow >= 250 then
-				-- 	return superFunc(self)
-				-- elseif airTemp <= -1 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow >= 350 then
-				-- 	return superFunc(self)
-				-- elseif airTemp <= -4 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow >= 480 then
-				-- 	return superFunc(self)
-				-- elseif airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 then
-				-- 	return superFunc(self)
-				-- else
-					-- print("set false ###########")
-					-- return superFunc(self)
-					-- if self:getMotorState() < 4 then
-					-- 	return false
-					-- end
-				-- end
+			-- elseif spec.isVarioTM == false and spec.CVTconfig == 9 then -- not Vario and is manual config
+			-- 	local airTemp = g_currentMission.environment.weather:getCurrentTemperature()
+			-- 		print("CHECKPOINT 6m ###############")
+			-- 	if 	   airTemp <= 6  and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow >= 100 then
+			-- 		return superFunc(self)
+			-- 	elseif airTemp <= 2  and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow >= 250 then
+			-- 		return superFunc(self)
+			-- 	elseif airTemp <= -1 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow >= 350 then
+			-- 		return superFunc(self)
+			-- 	elseif airTemp <= -4 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow >= 480 then
+			-- 		return superFunc(self)
+			-- 	elseif airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 then
+			-- 		return superFunc(self)
+			-- 	else
+			-- 		print("set false ###########")
+			-- 		return false
+			-- 	end
 			end
-			if spec.CVTconfig == 8 then
+			if spec.CVTconfig == 8 then -- if shopconfig on but disabled in gui
+				spec.CVTCanStart = true
 				return superFunc(self)
-				-- spec.CVTCanStart == true
-			-- else
-				-- if spec.CVTCanStart == true then
-					-- return superFunc(self)
-				-- end
 			end
-		elseif not spec.CVTcfgExists then
+		elseif not spec.CVTcfgExists then -- if shopconfig off
 			return superFunc(self)
 		end
 	end
@@ -2179,13 +2169,13 @@ function CVTaddon:SETPREGLOW()
 		elseif airTemp <= -1 and self.spec_motorized.motorTemperature.value <= 40 and spec.preGlow > 350 then
 			spec.forDBL_glowingstate = 1
 		elseif airTemp <= -4 and self.spec_motorized.motorTemperature.value <= 40 and spec.preGlow > 480 then
-			spec.forDBL_glowingstate = 1
+			spec.forDBL_glowingstate = 1 -- read to start
 		else
-			spec.forDBL_glowingstate = 0
+			spec.forDBL_glowingstate = 0 -- need more glue to start
 		end
 		-- print("spec.preGlow: " .. tostring(spec.preGlow))
 		-- print("g_ignitionLockManager:getIsAvailable(): " .. tostring(g_ignitionLockManager:getIsAvailable()))
-	elseif self:getMotorState() == 1 then
+	elseif self:getMotorState() < 2 then
 		spec.forDBL_glowingstate = 0
 	end
 	return true
@@ -2475,9 +2465,11 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						end
 					end
 					if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
-						spec.preGlow = 0
+						if self.spec_motorized.motor.lastMotorRpm >= ( self.spec_motorized.motor.minRpm - 1 ) then
+							spec.preGlow = 0
+						end
 						spec.forDBL_glowingstate = 0
-						print("CHECKPOINT 4 ###############")
+						-- print("CHECKPOINT 4 ###############")
 					end
 				elseif self.rootVehicle:getIsCpActive() == true then
 					-- print("CVTa: CP aktiv")
@@ -2588,15 +2580,17 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 								g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
 							end
 							spec.CVTCanStart = false
-						elseif (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
+						elseif spec.CVTCanStart == true and (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
 							spec.CVTCanStart = true
 						end
 					end
 				end
 				if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
-					spec.preGlow = 0
+					if self.spec_motorized.motor.lastMotorRpm >= ( self.spec_motorized.motor.minRpm - 1 ) then
+						spec.preGlow = 0
+					end
 					spec.forDBL_glowingstate = 0
-					print("CHECKPOINT 1 ###############")
+					-- print("CHECKPOINT 1 ###############")
 				end
 			end -- norm - without CP or AD
 				
@@ -2708,15 +2702,17 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
 								end
 								spec.CVTCanStart = false
-							elseif (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
+							elseif spec.CVTCanStart == true and (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
 								spec.CVTCanStart = true
 							end
 						end
 					end
 					if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
-						spec.preGlow = 0
+						if self.spec_motorized.motor.lastMotorRpm >= ( self.spec_motorized.motor.minRpm - 1 ) then
+							spec.preGlow = 0
+						end
 						spec.forDBL_glowingstate = 0
-						print("CHECKPOINT 2 ###############")
+						-- print("CHECKPOINT 2 ###############")
 					end
 				elseif self.ad.stateModule:isActive() == true then
 					-- print("CVTa: AD active")
@@ -2807,7 +2803,8 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					if ( spec.CVTconfig ~= 4 and spec.CVTconfig ~= 5 and spec.CVTconfig ~= 6 ) then
 						-- cold need to preGlow     250 (1-(°C:40))
 						-- local airTemp = g_currentMission.environment.weather:getCurrentTemperature()
-				
+						
+
 						if spec.CVTCanStart == true and airTemp <= 6 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 100 then
 							if spec.preGlow == 0 then 
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
@@ -2828,19 +2825,21 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
 								end
 							spec.CVTCanStart = false
-						elseif (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
+						elseif spec.CVTCanStart == true and (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
 							spec.CVTCanStart = true
-							print("CHECKPOINT 3b ###############")
+							-- print("CHECKPOINT 3b ###############")
 						else
-							spec.CVTCanStart = true
-							print("CHECKPOINT 3a ###############")
+							-- spec.CVTCanStart = true
+							-- print("CHECKPOINT 3a ###############")
 						end
 					end
 				end
 				if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
-					spec.preGlow = 0
+					if self.spec_motorized.motor.lastMotorRpm >= ( self.spec_motorized.motor.minRpm - 1 ) and spec.CVTconfig ~= 9 then
+						spec.preGlow = 0
+					end
 					spec.forDBL_glowingstate = 0
-					print("CHECKPOINT 3 ###############")
+					-- print("CHECKPOINT 3 ###############")
 				end
 			end -- secure AD
 		end
@@ -3101,7 +3100,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 
 				if self:getMotorState() > 3 then
 					spec.forDBL_glowingstate = 0
-					print("CHECKPOINT 5b ###############")
+					-- print("CHECKPOINT 5 ###############")
 				end
 
 
@@ -3117,9 +3116,9 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					end
 				end
 			end
-			-- print("preGlow: " .. tostring(spec.preGlow) )
-			print("getMotorState: " .. tostring(self:getMotorState()) )
-			-- print("forDBL_glowingstate: " .. tostring(spec.forDBL_glowingstate) )
+			print("preGlow: " .. tostring(spec.preGlow) )
+			-- print("getMotorState: " .. tostring(self:getMotorState()) )
+			print("forDBL_glowingstate: " .. tostring(spec.forDBL_glowingstate) )
 			
 			if spec.isVarioTM then
 				if self.CVTaddon == nil then
