@@ -2835,7 +2835,15 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					end
 				end
 				if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
-					if self.spec_motorized.motor.lastMotorRpm >= ( self.spec_motorized.motor.minRpm - 1 ) and spec.CVTconfig ~= 9 then
+					if self.spec_motorized.motor.lastMotorRpm >= ( self.spec_motorized.motor.minRpm - 10 ) and spec.CVTconfig ~= 9 then
+						spec.preGlow = 0
+					end
+					if self.spec_motorized.motor.lastMotorRpm >= ( self.spec_motorized.motor.minRpm + 100 ) and spec.CVTconfig == 9 and self.spec_motorized.motorTemperature.value > 40 then
+						spec.preGlow = 0
+					end
+					if spec.CVTconfig == 9 and self.spec_motorized.motorTemperature.value <= 21 and math.random() < 0.1 then
+						-- local breakColdStarting = false
+						-- need to make a marker
 						spec.preGlow = 0
 					end
 					spec.forDBL_glowingstate = 0
@@ -3085,12 +3093,16 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 			if not spec.isVarioTM and spec.CVTconfig == 9 then
 				if 	   airTemp <= 6  and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow >= 100 then
 					spec.CVTCanStart = true
+					spec.forDBL_glowingstate = 1
 				elseif airTemp <= 2  and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow >= 250 then
 					spec.CVTCanStart = true
+					spec.forDBL_glowingstate = 1
 				elseif airTemp <= -1 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow >= 350 then
 					spec.CVTCanStart = true
+					spec.forDBL_glowingstate = 1
 				elseif airTemp <= -4 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow >= 480 then
 					spec.CVTCanStart = true
+					spec.forDBL_glowingstate = 1
 				elseif airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 then
 					spec.CVTCanStart = true
 				else
@@ -3116,9 +3128,9 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					end
 				end
 			end
-			print("preGlow: " .. tostring(spec.preGlow) )
+			-- print("preGlow: " .. tostring(spec.preGlow) )
 			-- print("getMotorState: " .. tostring(self:getMotorState()) )
-			print("forDBL_glowingstate: " .. tostring(spec.forDBL_glowingstate) )
+			-- print("forDBL_glowingstate: " .. tostring(spec.forDBL_glowingstate) )
 			
 			if spec.isVarioTM then
 				if self.CVTaddon == nil then
