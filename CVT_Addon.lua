@@ -48,11 +48,11 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.9.1.0";
+local scrversion = "0.9.1.1";
 local modversion = CVTaddon.modversion; -- moddesc
 local lastupdate = "02.08.2025"
-local timestamp = "1754142230372";
-local savetime = "15:43:54";
+local timestamp = "1754334838119";
+local savetime = "21:14:03";
 
 -- _______________________
 cvtaDebugCVTon = false	 -- \
@@ -572,6 +572,7 @@ function CVTaddon:onLoad(savegame)
 	spec.forDBL_vmaxbackward = 0.0
 	spec.forDBL_preglowing = 0
 	spec.forDBL_glowingstate = 0
+	spec.forDBL_pregluefinished = false
 	spec.forDBL_cvtaccrange = 4
 	spec.forDBL_cvtdlrange = 2
 	spec.forDBL_autoantislip = 0
@@ -2836,7 +2837,9 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 				end
 				if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
 					if self.spec_motorized.motor.lastMotorRpm >= ( self.spec_motorized.motor.minRpm - 10 ) and spec.CVTconfig ~= 9 then
+						-- if spec.forDBL_pregluefinished then -- new gluefinish fail!
 						spec.preGlow = 0
+						-- end
 					end
 					if self.spec_motorized.motor.lastMotorRpm >= ( self.spec_motorized.motor.minRpm + 100 ) and spec.CVTconfig == 9 and self.spec_motorized.motorTemperature.value > 40 then
 						spec.preGlow = 0
@@ -2851,6 +2854,18 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 				end
 			end -- secure AD
 		end
+
+		-- new gluefinish
+		if spec.forDBL_pregluefinished and spec.preGlow > 99 and self:getMotorState() == 1 then -- motor off
+			spec.preGlow = 0
+			spec.forDBL_pregluefinished = false
+		end
+		if not spec.forDBL_pregluefinished and spec.preGlow > 99 and spec.forDBL_glowingstate == 1 and self:getMotorState() >= 3 then -- motor on
+			-- spec.preGlow = 0
+			spec.forDBL_pregluefinished = true
+		end
+		
+
 		-- rebuild hst, hvst can starting
 		if spec.CVTconfig == 8 or spec.CVTconfig == 0 or spec.CVTconfig == 10 or spec.CVTconfig == 11 or spec.CVTcfgExists ~= true then
 			spec.CVTCanStart = true
