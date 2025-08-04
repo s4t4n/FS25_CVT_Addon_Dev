@@ -100,6 +100,7 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="input_SETPEDALTMS" 				text="CVTa: TMS Pedalmode"/>
 		<text name="input_SETPREGLOW" 				text="CVTa: Preheat candles"/>
 		<text name="input_SIGNAL_HIGH_BEAM" 		text="CVTa: Highlight of the light"/>
+		<text name="input_SIGNAL_HOLD_BEAM" 		text="CVTa: Highlight of the light"/>
 		<text name="input_LMBF_TOGGLE_RAMP" 		text="CVTa: Accelerationramp Increase"/>
 		<text name="input_LMBF_TOGGLE_RAMPT" 		text="CVTa: Toggle acceleration ramp"/>
 		<text name="input_LMBF_TOGGLE_RAMPS1" 		text="CVTa: Set Accelerationramp 1"/>
