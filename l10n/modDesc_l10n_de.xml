@@ -11,7 +11,10 @@
 		<text name="txt_VarioRpmMinus" 				text="UPM -"/>
 
 		<text name="CVTAgui_title" 					text="CVT-Addon Getriebeeinstellungen"/>
+		<text name="CVTAgui_underTitle"				text="Im Multiplayer wird die Motortemperatur nicht gesynct. Nutze dafür bitte DashboardLive"/>
+		<text name="CVTAgui_underTitle2"			text=" "/>
 		<text name="CVTAgui_Variant" 				text="Getriebe Variante"/>
+		<text name="CVTAgui_additionalFuncs" 		text="Extra Funktionen"/>
 		<text name="CVTAgui_Hud" 					text="HUD"/>
 		<text name="cvtgui_Cvthud" 					text="Sichtbarkeit"/>
 		<text name="CVTAgui_CvthudPos" 				text="Position"/>
@@ -57,8 +60,10 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="text_IPMboost34"			 	text="IPM 34ps Boost"/>
 		<text name="CVTAgui_drivinglevelT" 			text="Fahrbereiche"/>
 		<text name="CVTAgui_accRampT" 				text="Beschleunigungsrampen"/>
-		<text name="CVTAgui_antiSlipT" 				text="Auto Anti-Schlupf (vca)"/>
-		<text name="CVTAgui_pitT" 					text="Pull-In-Turn (vca)"/>
+		<text name="CVTAgui_antiSlipT2" 			text="Auto Anti-Schlupf (vca nötig)"/>
+		<text name="CVTAgui_antiSlipT" 				text="Auto Anti-Schlupf"/>
+		<text name="CVTAgui_pitT2" 					text="Pull-In-Turn (vca nötig)"/>
+		<text name="CVTAgui_pitT" 					text="Pull-In-Turn"/>
 		<text name="CVTAgui_HstTitle" 				text="Hydro-Antrieb"/>
 		<text name="CVTAgui_inchingTitle" 			text="Inching"/>
 		<text name="CVTAgui_reverseLightsTitle" 	text="Auto Licht beim Rückwärtsfahren"/>
@@ -80,6 +85,42 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="selection_accRamp_01"			text="1"/>
 		<text name="selection_active"	    		text="Aktiviert"/>
 		<text name="selection_deactive"	    		text="Deakiviert"/>
+
+		<text name="selection_BF_20"	    		text="20%"/>
+		<text name="selection_BF_30"	    		text="30%"/>
+		<text name="selection_BF_40"	    		text="40%"/>
+		<text name="selection_BF_50"	    		text="50%"/>
+		<text name="selection_BF_60"	    		text="60%"/>
+		<text name="selection_BF_70"	    		text="70%"/>
+		<text name="selection_BF_80"	    		text="80%"/>
+		<text name="selection_BF_90"	    		text="90%"/>
+		<text name="selection_BF_default"	   		text="100% default"/>
+		<text name="selection_BF_110"	    		text="110%"/>
+		<text name="selection_BF_120"	    		text="120%"/>
+		<text name="selection_BF_130"	    		text="130%"/>
+		<text name="selection_BF_140"	    		text="140%"/>
+		<text name="selection_BF_150"	    		text="150%"/>
+		<text name="selection_BF_160"	    		text="160%"/>
+		<text name="selection_BF_170"	    		text="170%"/>
+		<text name="selection_BF_180"	    		text="180%"/>
+		<text name="selection_BF_190"	    		text="190%"/>
+		<text name="selection_BF_200"	    		text="200%"/>
+		<text name="brakeForceCorrectionNotTT"    	text="FS25_EngineBrakeforceCompensation nicht aktiv"/>
+		<text name="brakeForceCorrectionTitle"    	text="Motorbremse Kompensation"/>
+		<text name="brakeForceCorrectionModReq"    	text="Motorbremse Kompensation (EBC nötig)"/>
+		<text name="brakeForceCorrectionTT"    		text="Die Wirkung der Motorbremse wird durch das CVT-Addon dynamisch und in Abhängigkeit verschiedener Faktoren berechnet.
+Mit dieser Einstellung lässt sich die resultierende Berechnung gezielt beeinflussen und wahlweise in Richtung einer stärkeren oder schwächeren Bremswirkung ausgleichen."/>
+
+		<text name="drivingLevelStateTT"    		text="Die maximale Geschwindigkeit für niedrigere Fahrbereiche oder beim HST und Erntemaschinen die Limit-Rampen,
+werden hiermit reduziert oder erhöht. Zum Beispiel ein Stufenloses Fahrzeug mit 2 Fahrbereichen fährt in 2 die volle Geschwindigkeit (50km/h), in 1 die hälfte (25km/h).
+Stellt man diesen Wert nun auf geringe, wären es 22 km/h, sehr gering dann 15.5 km/h. Das selbe gilt nach oben. höher, 28 km/h und sehr hoch 31 km/h."/>
+
+		<text name="CVTAgui_drivingLevelStateTitle"    	text="Geschw. Anpassung"/>
+		<text name="selection_DLC_10000"	    		text="sehr gering"/>
+		<text name="selection_DLC_01000"	    		text="geringer"/>
+		<text name="selection_DLC_00100"	    		text="Normal"/>
+		<text name="selection_DLC_00010"	    		text="höher"/>
+		<text name="selection_DLC_00001"	    		text="sehr hoch"/>
 		
 		<text name="selection_inching_dn"			text="Langsamer"/>
 		<text name="selection_inching_up"			text="Schneller"/>

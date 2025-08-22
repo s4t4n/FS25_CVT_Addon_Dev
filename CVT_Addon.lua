@@ -48,11 +48,12 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.9.1.1";
+local scrversion = "0.9.1.4";
+CVTaddon.build = scrversion
 local modversion = CVTaddon.modversion; -- moddesc
-local lastupdate = "02.08.2025"
-local timestamp = "1754334838119";
-local savetime = "21:14:03";
+local lastupdate = "23.08.2025"
+local timestamp = "1755901047588";
+local savetime = "00:17:36";
 
 -- _______________________
 cvtaDebugCVTon = false	 -- \
@@ -190,6 +191,10 @@ function CVTaddon.initSpecialization()
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#inchingState", "inchingState", 1)
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#reverseLightsState", "reverseLightsState", 1)
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#reverseLightsDurationState", "reverseLightsDurationState", 1)
+    schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#brakeForceCorrectionState", "brakeForceCorrectionState", 9)
+    schemaSavegame:register(XMLValueType.FLOAT, "vehicles.vehicle(?)."..key.."#brakeForceCorrectionValue", "brakeForceCorrectionValue", 1)
+    schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#drivingLevelState", "drivingLevelState", 3)
+    schemaSavegame:register(XMLValueType.FLOAT, "vehicles.vehicle(?)."..key.."#drivingLevelValue", "drivingLevelValue", 1)
     schemaSavegame:register(XMLValueType.FLOAT, "vehicles.vehicle(?)."..key.."#CVTdamage", "CVT transmission wear", 0)
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#HUDpos", "CVT hud position", 1)
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#HUDvis", "CVT hud visibility", 1)
@@ -539,6 +544,10 @@ function CVTaddon:onLoad(savegame)
 	spec.inchingState = 1
 	spec.reverseLightsState = 1
 	spec.reverseLightsDurationState = 5
+	spec.brakeForceCorrectionState = 9
+	spec.brakeForceCorrectionValue = 1.0
+	spec.drivingLevelState = 3
+	spec.drivingLevelValue = 1.0
 	spec.preGlow = 0
 	if spec.CVTconfig == nil then
 		spec.CVTconfig = 8			-- CVT transmission type config id
@@ -578,6 +587,7 @@ function CVTaddon:onLoad(savegame)
 	spec.forDBL_autoantislip = 0
 	spec.forDBL_pullinturnactive = 0
 	spec.forDBL_autoreverselight = 0
+	spec.forDBL_brakescale = 0.0
 	
 	-- #GLOWIN-TEMP-SYNC
 	-- spec.SyncMotorTemperature = 20 -- temp
@@ -751,6 +761,10 @@ function CVTaddon:onPostLoad(savegame)
 			spec.inchingState = xmlFile:getValue(key.."#inchingState", spec.inchingState)
 			spec.reverseLightsState = xmlFile:getValue(key.."#reverseLightsState", spec.reverseLightsState)
 			spec.reverseLightsDurationState = xmlFile:getValue(key.."#reverseLightsDurationState", spec.reverseLightsDurationState)
+			spec.brakeForceCorrectionState = xmlFile:getValue(key.."#brakeForceCorrectionState", spec.brakeForceCorrectionState)
+			spec.brakeForceCorrectionValue = xmlFile:getValue(key.."#brakeForceCorrectionValue", spec.brakeForceCorrectionValue)
+			spec.drivingLevelState = xmlFile:getValue(key.."#drivingLevelState", spec.drivingLevelState)
+			spec.drivingLevelValue = xmlFile:getValue(key.."#drivingLevelValue", spec.drivingLevelValue)
 			spec.CVTdamage = xmlFile:getValue(key.."#CVTdamage", spec.CVTdamage)
 			spec.HUDpos = xmlFile:getValue(key.."#HUDpos", spec.HUDpos)
 			spec.HUDvis = xmlFile:getValue(key.."#HUDvis", spec.HUDvis)
@@ -949,6 +963,10 @@ function CVTaddon:saveToXMLFile(xmlFile, key, usedModNames)
 	xmlFile:setValue(key.."#inchingState", spec.inchingState)
 	xmlFile:setValue(key.."#reverseLightsState", spec.reverseLightsState)
 	xmlFile:setValue(key.."#reverseLightsDurationState", spec.reverseLightsDurationState)
+	xmlFile:setValue(key.."#brakeForceCorrectionState", spec.brakeForceCorrectionState)
+	xmlFile:setValue(key.."#brakeForceCorrectionValue", spec.brakeForceCorrectionValue)
+	xmlFile:setValue(key.."#drivingLevelState", spec.drivingLevelState)
+	xmlFile:setValue(key.."#drivingLevelValue", spec.drivingLevelValue)
 	xmlFile:setValue(key.."#CVTdamage", spec.CVTdamage)
 	xmlFile:setValue(key.."#HUDpos", spec.HUDpos)
 	xmlFile:setValue(key.."#HUDvis", spec.HUDvis)
@@ -971,7 +989,7 @@ end
 function CVTaddon:SHOWGUI(actionName, keyStatus, arg3, arg4, arg5)
 	local spec = self.spec_CVTaddon
 	local CVTAGui = g_gui:showDialog("CVTaddonGui")
-	local hasNothing = false
+	local hasNothing = CVTaddon.build
 	-- print("cvtDL: " .. tostring(spec.cvtDL))
 	-- print("showGUI A: " .. tostring(spec.HUDpos))
 	CVTAGui.target:setCallback(CVTaddon.guiCallback, self)
@@ -1537,8 +1555,8 @@ function CVTaddon:VarioOne() -- FAHRSTUFE 1 field
 							print("VarioTwo : FwS / BwS:"..self.spec_motorized.motor.maxForwardSpeed.." / "..self.spec_motorized.motor.maxBackwardSpeed)
 						end
 					end
-					self.spec_motorized.motor.maxForwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 4.49), 6.94)
-					self.spec_motorized.motor.maxBackwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL* spec.vOne, 3.21), 6.36)
+					-- self.spec_motorized.motor.maxForwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 4.49), 6.94)
+					-- self.spec_motorized.motor.maxBackwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL* spec.vOne, 3.21), 6.36)
 				elseif spec.vOne == spec.cvtDL then
 					self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin
 					self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin
@@ -1619,8 +1637,8 @@ function CVTaddon:VarioTwo() -- FAHRSTUFE 2
 							print("VarioTwo : FwS / BwS:"..self.spec_motorized.motor.maxForwardSpeed.." / "..self.spec_motorized.motor.maxBackwardSpeed)
 						end
 					end
-					self.spec_motorized.motor.maxForwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 4.49), 6.94)
-					self.spec_motorized.motor.maxBackwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL* spec.vOne, 3.21), 6.36)
+					-- self.spec_motorized.motor.maxForwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 4.49), 6.94)
+					-- self.spec_motorized.motor.maxBackwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL* spec.vOne, 3.21), 6.36)
 				elseif spec.vOne == spec.cvtDL then
 					self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin
 					self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin
@@ -1701,8 +1719,8 @@ function CVTaddon:Vario3() -- FAHRSTUFE 3
 							print("VarioTwo : FwS / BwS:"..self.spec_motorized.motor.maxForwardSpeed.." / "..self.spec_motorized.motor.maxBackwardSpeed)
 						end
 					end
-					self.spec_motorized.motor.maxForwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 4.49), 6.94)
-					self.spec_motorized.motor.maxBackwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL* spec.vOne, 3.21), 6.36)
+					-- self.spec_motorized.motor.maxForwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 4.49), 6.94)
+					-- self.spec_motorized.motor.maxBackwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL* spec.vOne, 3.21), 6.36)
 				elseif spec.vOne == spec.cvtDL then
 					self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin
 					self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin
@@ -1783,8 +1801,8 @@ function CVTaddon:Vario4() -- FAHRSTUFE 4
 							print("VarioTwo : FwS / BwS:"..self.spec_motorized.motor.maxForwardSpeed.." / "..self.spec_motorized.motor.maxBackwardSpeed)
 						end
 					end
-					self.spec_motorized.motor.maxForwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 4.49), 6.94)
-					self.spec_motorized.motor.maxBackwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL* spec.vOne, 3.21), 6.36)
+					-- self.spec_motorized.motor.maxForwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 4.49), 6.94)
+					-- self.spec_motorized.motor.maxBackwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL* spec.vOne, 3.21), 6.36)
 				elseif spec.vOne == spec.cvtDL then
 					self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin
 					self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin
@@ -1878,8 +1896,8 @@ function CVTaddon:VarioToggle() -- FAHRSTUFEN WECHSELN
 							-- print("VarioTwo : BMFwSpd/BMBwSpd:"..tostring(spec.BackupMaxFwSpd).."/"..tostring(spec.BackupMaxBwSpd))
 						end
 					end
-					self.spec_motorized.motor.maxForwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 4.49), 6.94)
-					self.spec_motorized.motor.maxBackwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL* spec.vOne, 3.21), 6.36)
+					-- self.spec_motorized.motor.maxForwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 4.49), 6.94)
+					-- self.spec_motorized.motor.maxBackwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL* spec.vOne, 3.21), 6.36)
 				elseif spec.vOne == spec.cvtDL then
 					
 					-- spec.vOne = 1
@@ -2246,6 +2264,20 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 	spec.isVarioTM = self.spec_motorized.motor.lastManualShifterActive == false and self.spec_motorized.motor.groupType == 1 and self.spec_motorized.motor.gearType == 1 and self.spec_motorized.motor.forwardGears == nil
 	if self.spec_motorized.motorTemperature.valueMin == 20 then
 		self.spec_motorized.motorTemperature.valueMin = -10
+	end
+	-- spec.drivingLevelState		= self.drivingLevelStateSetting:getState()
+	if spec.drivingLevelState == 1 then
+		spec.drivingLevelValue = 0.625
+	elseif spec.drivingLevelState == 2 then
+		spec.drivingLevelValue = 0.875
+	elseif spec.drivingLevelState == 3 then
+		spec.drivingLevelValue = 1.0
+	elseif spec.drivingLevelState == 4 then
+		spec.drivingLevelValue = 1.125
+	elseif spec.drivingLevelState == 5 then
+		spec.drivingLevelValue = 1.25
+	else
+		self.spec.drivingLevelValue = 1.0
 	end
 	-- CODE Rückwärtslich ab hier
 	if spec.reverseLightsState == 2 then
@@ -3146,7 +3178,11 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 			-- print("preGlow: " .. tostring(spec.preGlow) )
 			-- print("getMotorState: " .. tostring(self:getMotorState()) )
 			-- print("forDBL_glowingstate: " .. tostring(spec.forDBL_glowingstate) )
-			
+			if not FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection and spec.brakeForceCorrectionValue ~= 1 then
+				spec.brakeForceCorrectionValue = 1.0
+			end
+			self.spec_motorized.motor.lowBrakeForceScale = self.spec_motorized.motor.lowBrakeForceScale * spec.brakeForceCorrectionValue
+
 			if spec.isVarioTM then
 				if self.CVTaddon == nil then
 					self.CVTaddon = true
@@ -3350,9 +3386,16 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					end
 				end
 				if FS25_EngineBrakeforceCompensation ~= nil then
-					if printLMBF == false then
-						print("CVT-Addon: FS25_EngineBrakeforceCompensation found, this will change something calculation with the motorbrake force !")
-						printLMBF = true
+					if FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil then
+						if printLMBF == false then
+							print("CVT-Addon/FS25_EngineBrakeforceCompensation: EBfC mod found( ".. tostring(self.MotorBrakeforceCorrection) .." ), this will change something calculation and enable a function in the gui for adjustments !")
+							printLMBF = true
+						end
+					elseif not FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection then
+						if printLMBF == false then
+							print("Info-- CVT-Addon/FS25_EngineBrakeforceCompensation: EBfC mod found( ".. tostring(self.MotorBrakeforceCorrection) .." ), this will NOT change something calculation and disable a function in the gui for adjustments !")
+							printLMBF = true
+						end
 					end
 				end
 
@@ -3756,6 +3799,9 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						if printLMBF == true then
 							self.spec_motorized.motor.lowBrakeForceScale = math.max(self.spec_motorized.motor.lowBrakeForceScale * 0.8, 0.01) 
 						end
+						spec.forDBL_brakescale = self.spec_motorized.motor.lowBrakeForceScale
+						-- self.spec_motorized.motor.lowBrakeForceScale = self.spec_motorized.motor.lowBrakeForceScale * spec.brakeForceCorrectionValue
+						-- print( tostring(self.spec_motorized.motor.lowBrakeForceScale) )
 					end
 					-- g_currentMission:addExtraPrintText(tostring(self.spec_motorized.motor.maxForwardSpeed))
 					-- string = "TEST"
@@ -3841,32 +3887,27 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 
 						-- Planetengetriebe / Hydromotor Übersetzung
 						spec.isHydroState = false
-						if spec.CVTdamage > 60 and spec.forDBL_critdamage == 1 then 																										-- Notlauf
-							self.spec_motorized.motor.maxForwardSpeed = (math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne / 2, 4.49), 6.94*(1-spec.ClutchInputValue)))/2.5
-							self.spec_motorized.motor.maxBackwardSpeed = (math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne / 2, 3.21), 6.36*(1-spec.ClutchInputValue)))/2.5
-							-- self.spec_motorized.motor.accelerationLimit = 0.3
-							-- self.spec_motorized.motor.lowBrakeForceScale = math.max(self.spec_motorized.motor.lowBrakeForceScale * (1-spec.ClutchInputValue),0.04)
-							-- self.spec_motorized.motor.accelerationLimit = math.min(self.spec_motorized.motor.accelerationLimit * (1-spec.ClutchInputValue),0.3)
-						elseif spec.forDBL_critdamage == 0 and spec.isTMSpedal == 0 then 																									-- Normalbetrieb
+						if spec.CVTdamage > 60 and spec.forDBL_critdamage == 1 then 																							-- Notlauf
+							self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * (spec.drivingLevelValue) * 0.4)
+							self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * (spec.drivingLevelValue) * 0.4)
+						elseif spec.forDBL_critdamage == 0 and spec.isTMSpedal == 0 then 
+							self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * (spec.drivingLevelValue))
+							self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * (spec.drivingLevelValue))																						-- Normalbetrieb
 							-- Setze die maxSpeed proportional zum Pedal
-					        local maxSpeed = motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
+					        local maxSpeed = motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01)
 					        if dir == -1 then
-					            maxSpeed = motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
+					            maxSpeed = motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01)
 					        end
-					        motor.motorLimitSpeed = math.abs(axis) * maxSpeed
-							-- self.spec_motorized.motor.maxForwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 4.49), 6.94*(1))
-							-- self.spec_motorized.motor.maxBackwardSpeed = math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 3.21), 6.36*(1))
-							-- self.spec_motorized.motor.lowBrakeForceScale = math.max(self.spec_motorized.motor.lowBrakeForceScale * (1-spec.ClutchInputValue),0.04)
-							-- self.spec_motorized.motor.accelerationLimit = self.spec_motorized.motor.accelerationLimit * (1-spec.ClutchInputValue)
-						elseif spec.isTMSpedal == 1 and self:getCruiseControlState() == 0 and math.abs(self.spec_motorized.motor.lastAcceleratorPedal) >= 0.03 then 						-- PedalTMS
+
+					        motor.motorLimitSpeed = math.abs(axis) * maxSpeed * spec.drivingLevelValue
+						elseif spec.isTMSpedal == 1 and self:getCruiseControlState() == 0 and math.abs(self.spec_motorized.motor.lastAcceleratorPedal) >= 0.03 then 			-- PedalTMS
 							-- TMS like
 							-- wenn Tempomat aus, wird die Tempomatgescwindigkeit als Steps der maxSpeed benutzt
 							-- Setze die maxSpeed proportional zum Pedal
-					        local maxSpeed = math.min(self:getCruiseControlSpeed(), (motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * (1-spec.ClutchInputValue)))
+					        local maxSpeed = math.min(self:getCruiseControlSpeed(), (motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * (1-spec.ClutchInputValue)))
 					        if dir == -1 then
-					            maxSpeed = math.min(self:getCruiseControlSpeed(), (motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * (1-spec.ClutchInputValue)))
+					            maxSpeed = math.min(self:getCruiseControlSpeed(), (motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * (1-spec.ClutchInputValue)))
 					        end
-
 					        motor.motorLimitSpeed = math.abs(axis) * maxSpeed
 							-- self.spec_motorized.motor.maxBackwardSpeed = (math.min(self:getCruiseControlSpeed(), math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 3.21), 6.36*(1-spec.ClutchInputValue) ) )) * math.abs(self.spec_motorized.motor.lastAcceleratorPedal)
 							-- self.spec_motorized.motor.maxForwardSpeed = (math.min(self:getCruiseControlSpeed(), math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 4.49), 6.94*(1-spec.ClutchInputValue) ) )) * math.abs(self.spec_motorized.motor.lastAcceleratorPedal)
@@ -4260,9 +4301,9 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						if spec.HSTstate == 1 then -- vorher FS I. HST (älter)
 							if math.abs(self.spec_motorized.motor.lastAcceleratorPedal) >= 0.01 then  -- todo:  need to check if its in MP works also
 								if direction == -1 then
-									self.spec_motorized.motor.maxBackwardSpeed = math.max((targetSpeedBw / spec.cvtAR * spec.vTwo) * (self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm), 0.001)
+									self.spec_motorized.motor.maxBackwardSpeed = math.max((targetSpeedBw / spec.cvtAR * spec.vTwo * spec.drivingLevelValue) * (self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm), 0.001)
 								else
-									self.spec_motorized.motor.maxForwardSpeed  = math.max((targetSpeedFw / spec.cvtAR * spec.vTwo) * (self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm), 0.001)
+									self.spec_motorized.motor.maxForwardSpeed  = math.max((targetSpeedFw / spec.cvtAR * spec.vTwo * spec.drivingLevelValue) * (self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm), 0.001)
 								end
 									-- self.spec_motorized.motor.maxForwardSpeed  = (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtAR * spec.vTwo) * math.abs(self.spec_motorized.motor.lastAcceleratorPedal * (self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm))
 								-- self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtAR * spec.vTwo) * math.abs(self.spec_motorized.motor.lastAcceleratorPedal * (self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm))
@@ -4302,8 +4343,8 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 								-- else
 								-- 	self.spec_motorized.motor.maxForwardSpeed  = math.max((targetSpeedFw / spec.cvtAR * spec.vTwo), 0.001)
 								-- end
-									self.spec_motorized.motor.maxForwardSpeed  = (self.spec_motorized.motor.maxForwardSpeedOrigin / 4 * spec.vTwo) * math.max( math.abs(self.spec_motorized.motor.lastAcceleratorPedal), 0.05)
-								self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxForwardSpeedOrigin / 4 * spec.vTwo) * math.max( math.abs(self.spec_motorized.motor.lastAcceleratorPedal), 0.05)
+									self.spec_motorized.motor.maxForwardSpeed  = (self.spec_motorized.motor.maxForwardSpeedOrigin / 4 * spec.vTwo * spec.drivingLevelValue) * math.max( math.abs(self.spec_motorized.motor.lastAcceleratorPedal), 0.05)
+								self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxForwardSpeedOrigin / 4 * spec.vTwo * spec.drivingLevelValue) * math.max( math.abs(self.spec_motorized.motor.lastAcceleratorPedal), 0.05)
 								-- self.spec_motorized.motor.lastMotorRpm = math.max(math.max(math.max(self.spec_motorized.motor.lastMotorRpm, self.spec_motorized.motor.minRpm + (self.spec_motorized.motor.minRpm/1.4 * self.spec_motorized.motor.smoothedLoadPercentage), (self.spec_motorized.motor.maxRpm*0.6) * self.spec_motorized.motor.smoothedLoadPercentage*0.5 ), self.spec_motorized.motor.minRpm), self.spec_motorized.motor.maxRpm * math.max(self.spec_motorized.motor.smoothedLoadPercentage, .5))
 								self.spec_motorized.motor.lastMotorRpm = math.max(math.max(math.max(self.spec_motorized.motor.lastMotorRpm, self.spec_motorized.motor.minRpm + (self.spec_motorized.motor.minRpm/1.4), (self.spec_motorized.motor.maxRpm*0.6) * 0.5 ), self.spec_motorized.motor.minRpm), self.spec_motorized.motor.maxRpm * math.max(self.spec_motorized.motor.smoothedLoadPercentage, 0.5))
 								self.spec_motorized.motor.accelerationLimit = 2
@@ -4507,24 +4548,26 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							if self.spec_motorized.motor ~= nil then
 								-- if self:getDamageAmount() > 0.7 and spec.forDBL_critdamage == 1 and spec.forDBL_critheat == 1 then
 								if spec.forDBL_critdamage == 1 and spec.forDBL_critheat == 1 then -- Notlauf
-									self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne / 2.5 * math.max((1-spec.ClutchInputValue), 0.01)
-									self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne / 2.5 * math.max((1-spec.ClutchInputValue), 0.01)
+									-- self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne / (2.5 * spec.drivingLevelValue) * math.max((1-spec.ClutchInputValue), 0.01)
+									-- self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne / (2.5 * spec.drivingLevelValue) * math.max((1-spec.ClutchInputValue), 0.01)
+									self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne / (2.5*spec.drivingLevelValue))*(1.01-spec.ClutchInputValue)
+									self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne / (2.5*spec.drivingLevelValue))*(1.01-spec.ClutchInputValue)
 									-- self.spec_motorized.motor.accelerationLimit = 0.25
 									-- self.spec_motorized.motor.lowBrakeForceScale = math.max(self.spec_motorized.motor.lowBrakeForceScale
 									-- self.spec_motorized.motor.accelerationLimit = math.min(self.spec_motorized.motor.accelerationLimit
 								elseif spec.forDBL_critdamage == 0 then 																	-- Normalbetrieb
 									-- Setze die maxSpeed proportional zum Pedal
-							        local maxSpeed = motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
+							        local maxSpeed = motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01)
 							        if dir == -1 then
-							            maxSpeed = motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
+							            maxSpeed = motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01)
 							        end
 							        motor.motorLimitSpeed = math.abs(axis) * maxSpeed
 									-- self.spec_motorized.motor.maxForwardSpeed  =  self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne
 									-- self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne
 								else 																										-- nur heat
-									local maxSpeed = motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
+									local maxSpeed = motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01)
 							        if dir == -1 then
-							            maxSpeed = motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
+							            maxSpeed = motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01)
 							        end
 							        motor.motorLimitSpeed = math.abs(axis) * maxSpeed
 									-- self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne
@@ -5232,7 +5275,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					    local pedalInput = math.abs(axis)
 
 					    -- Zielgeschwindigkeit bei Pedaleingabe
-					    local desiredSpeed = maxSpeed * pedalInput / spec.cvtDL * spec.vOne
+					    local desiredSpeed = maxSpeed * pedalInput / spec.cvtDL * spec.vOne * spec.drivingLevelValue
 
 					    -- Rekuperation / sanftes Abbremsen wenn kein Pedal gedrückt
 					    if pedalInput < 0.01 then
@@ -5327,13 +5370,13 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 										if self:getCruiseControlState() == 0 then -- inching wenn CC aus
 											if spec.inchingState == 1 then
 													-- slower
-												self.spec_motorized.motor.maxForwardSpeed = math.max( (self.spec_motorized.motor.maxForwardSpeedOrigin * combineLeaver  / spec.cvtAR * spec.vTwo) / 1.5 * math.max( (1 - spec.ClutchInputValue), 0.4), 0.01)
-												self.spec_motorized.motor.maxBackwardSpeed= math.max( (self.spec_motorized.motor.maxBackwardSpeedOrigin* combineLeaver  / spec.cvtAR * spec.vTwo) / 1.5 * math.max( (1 - spec.ClutchInputValue), 0.6), 0.01)
+												self.spec_motorized.motor.maxForwardSpeed = math.max( (self.spec_motorized.motor.maxForwardSpeedOrigin * combineLeaver  / spec.cvtAR * spec.vTwo * spec.drivingLevelValue) / 1.5 * math.max( (1 - spec.ClutchInputValue), 0.4), 0.01)
+												self.spec_motorized.motor.maxBackwardSpeed= math.max( (self.spec_motorized.motor.maxBackwardSpeedOrigin* combineLeaver  / spec.cvtAR * spec.vTwo * spec.drivingLevelValue) / 1.5 * math.max( (1 - spec.ClutchInputValue), 0.6), 0.01)
 											elseif spec.inchingState == 2 then
 													-- faster
-												self.spec_motorized.motor.maxForwardSpeed = math.max(self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtAR * spec.vTwo * (0.6 + spec.ClutchInputValue), 0.01)
+												self.spec_motorized.motor.maxForwardSpeed = math.max(self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtAR * spec.vTwo * spec.drivingLevelValue * (0.6 + spec.ClutchInputValue), 0.01)
 												-- self.spec_motorized.motor.motorLimitSpeed = math.max(self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtAR * spec.vTwo * (1 + spec.ClutchInputValue), 0.001)
-												self.spec_motorized.motor.maxBackwardSpeed= math.max(self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtAR * spec.vTwo * (0.4 + spec.ClutchInputValue), 0.01)
+												self.spec_motorized.motor.maxBackwardSpeed= math.max(self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtAR * spec.vTwo * spec.drivingLevelValue * (0.4 + spec.ClutchInputValue), 0.01)
 											end
 										elseif self:getCruiseControlState() > 0 then -- inching wenn CC an
 											if spec.inchingState == 1 then -- slower
@@ -5342,9 +5385,9 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 												self.spec_motorized.motor.maxBackwardSpeed= ( self:getCruiseControlSpeed() * (1.5 - spec.ClutchInputValue) ) / 3.6
 											elseif spec.inchingState == 2 then  -- faster
 												-- self.spec_drivable.lastInputValues.cruiseControlValue = math.max(self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtAR * spec.vTwo * (1 + spec.ClutchInputValue), 1)
-												self.spec_motorized.motor.maxForwardSpeed = math.max(self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtAR * spec.vTwo * (1 + spec.ClutchInputValue), 0.01)
+												self.spec_motorized.motor.maxForwardSpeed = math.max(self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtAR * spec.vTwo * spec.drivingLevelValue * (1 + spec.ClutchInputValue), 0.01)
 												-- self.spec_motorized.motor.motorLimitSpeed = math.max(self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtAR * spec.vTwo * (1 + spec.ClutchInputValue), 0.01)
-												self.spec_motorized.motor.maxBackwardSpeed= math.max(self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtAR * spec.vTwo * (1 + spec.ClutchInputValue), 0.01)
+												self.spec_motorized.motor.maxBackwardSpeed= math.max(self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtAR * spec.vTwo * spec.drivingLevelValue * (1 + spec.ClutchInputValue), 0.01)
 												-- self:getLastSpeed() = self:getLastSpeed() * (1 + spec.ClutchInputValue)
 												-- self:setCruiseControlMaxSpeed( ccSpeed, self:getCruiseControlSpeed() * (1.0 + spec.ClutchInputValue) )
 
@@ -5356,7 +5399,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 										end
 
 									elseif spec.vOne == 2 then 												-- STREETMODE
-										self.spec_motorized.motor.motorLimitSpeed = math.max(self.spec_motorized.motor.maxForwardSpeedOrigin * combineLeaver / spec.cvtAR * spec.vTwo, 0.001)
+										self.spec_motorized.motor.motorLimitSpeed = math.max(self.spec_motorized.motor.maxForwardSpeedOrigin * combineLeaver / spec.cvtAR * spec.vTwo * spec.drivingLevelValue, 0.001)
 										local function lerp(a, b, t)
 										    return (1 - t) * a + t * b
 										end
