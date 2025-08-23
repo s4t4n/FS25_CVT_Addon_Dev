@@ -1075,7 +1075,7 @@ function CVTaddon:BrakeRamps() -- BREMSRAMPEN - Ab kmh X wird die Betriebsbremse
 		end
 		self:raiseDirtyFlags(spec.dirtyFlag)
 		if g_server ~= nil then
-			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists), nil, nil, self)
+			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue), nil, nil, self)
 		else
 			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists))
 		end
@@ -4255,19 +4255,22 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 
 					    -- Nur eine Richtung aktiv (anti-Stotter)
 					    if reverseInput > 0.01 and forwardInput < 0.01 then
-					        direction = -1
+					        motor.currentDirection = -1
+					        -- direction = -1
 					        activePedal = reverseInput
 					    elseif forwardInput > 0.01 and reverseInput < 0.01 then
-					        direction = 1
+					        motor.currentDirection = 1
+					        -- direction = 1
 					        activePedal = forwardInput
 					    else
-					        direction = 0
+					        motor.currentDirection = 0
+					        -- direction = 0
 					        activePedal = 0
 					    end
 
 					    -- Richtung setzen (nur wenn aktiv)
-					    if direction ~= 0 then
-					        motor.currentDirection = direction
+					    if motor.currentDirection ~= 0 then
+					        -- motor.currentDirection = direction
 					        motor.lastAcceleratorPedal = activePedal
 					        motor.acceleratorPedal = activePedal
 					        motor.axisForward = activePedal
@@ -4275,12 +4278,13 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					    else
 					        motor.lastAcceleratorPedal = 0
 					    end
-						local targetSpeedFw = math.max(0.1, maxSpeedFw * activePedal)
-						local targetSpeedBw = math.max(0.1, maxSpeedBw * activePedal)
+						-- local targetSpeedFw = math.max(0.1, maxSpeedFw * activePedal)
+						-- local targetSpeedBw = math.max(0.1, maxSpeedBw * activePedal)
 					    -- local targetSpeed = math.max(minSpeed, self._originalMaxSpeed * activePedal)
 						-- kann die pedale für Vor- und Rückwärts nicht trennen, es muß immer das Gaspedal dazu genommen werden
 					    
--- print(string.format("activePedal=%.2f Dir=%d Speed=%.2f km/h RPM=%.0f MaxSpeed=%.2f axisForward=%.2f" ,    activePedal, motor.currentDirection, self:getLastSpeed(), motor.lastMotorRpm, motor.maxForwardSpeed*3.6, motor.axisForward))
+						-- print(string.format("activePedal=%.2f Dir=%d Speed=%.2f km/h RPM=%.0f MaxSpeed=%.2f axisForward=%.2f" ,
+						--    activePedal, motor.currentDirection, self:getLastSpeed(), motor.lastMotorRpm, motor.maxForwardSpeed*3.6, motor.axisForward))
 
 
 						if spec.cvtAR ~= 4 then
@@ -4301,9 +4305,9 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						if spec.HSTstate == 1 then -- vorher FS I. HST (älter)
 							if math.abs(self.spec_motorized.motor.lastAcceleratorPedal) >= 0.01 then  -- todo:  need to check if its in MP works also
 								if direction == -1 then
-									self.spec_motorized.motor.maxBackwardSpeed = math.max((targetSpeedBw / spec.cvtAR * spec.vTwo * spec.drivingLevelValue) * (self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm), 0.001)
+									self.spec_motorized.motor.maxBackwardSpeed = math.max((math.max(0.1, maxSpeedBw * activePedal) / spec.cvtAR * spec.vTwo * spec.drivingLevelValue) * (self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm), 0.001)
 								else
-									self.spec_motorized.motor.maxForwardSpeed  = math.max((targetSpeedFw / spec.cvtAR * spec.vTwo * spec.drivingLevelValue) * (self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm), 0.001)
+									self.spec_motorized.motor.maxForwardSpeed  = math.max((math.max(0.1, maxSpeedFw * activePedal) / spec.cvtAR * spec.vTwo * spec.drivingLevelValue) * (self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm), 0.001)
 								end
 									-- self.spec_motorized.motor.maxForwardSpeed  = (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtAR * spec.vTwo) * math.abs(self.spec_motorized.motor.lastAcceleratorPedal * (self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm))
 								-- self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtAR * spec.vTwo) * math.abs(self.spec_motorized.motor.lastAcceleratorPedal * (self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm))
