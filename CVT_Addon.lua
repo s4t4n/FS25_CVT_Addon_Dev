@@ -374,9 +374,9 @@ function CVTaddon:onRegisterActionEvents()
 			g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdV4, false)
 
 			-- rpm axis
-			_, CVTaddon.eventIdV12 = self:addActionEvent(CVTaddon.actionEventsV12, 'SETVARIORPM_AXIS', self, CVTaddon.VarioRpmAxis, false, false, true, true)
-			g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdV12, GS_PRIO_NORMAL)
-			g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdV12, false)
+			-- _, CVTaddon.eventIdV12 = self:addActionEvent(CVTaddon.actionEventsV12, 'SETVARIORPM_AXIS', self, CVTaddon.VarioRpmAxis, false, false, true, true)
+			-- g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdV12, GS_PRIO_NORMAL)
+			-- g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdV12, false)
 			
 			-- clutch axis
 			if spec.isVarioTM == true then
@@ -1011,6 +1011,11 @@ function CVTaddon:guiCallback(changes, debug, showKeys)
 	-- spec.CVTconfigLast = spec.CVTconfig
 	-- print("callbackGUI E: " .. tostring(spec.HUDpos))
 	self:raiseDirtyFlags(spec.dirtyFlag)
+	if g_server ~= nil then
+		g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue), nil, nil, self)
+	else
+		g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue))
+	end
 end
 
 
@@ -1454,22 +1459,22 @@ end -- AccRamps Down
 
 
 
-function CVTaddon:VarioRpmAxis(actionName, inputValue)	
-	local spec = self.spec_CVTaddon
-	if g_client ~= nil then
-		if inputValue ~= nil then
-			spec.HandgasPercent = (math.floor(tonumber(inputValue) * 100)/100)
-		end
-		spec.forDBL_digitalhandgasstep = spec.vFive
+-- function CVTaddon:VarioRpmAxis(actionName, inputValue)	
+	-- local spec = self.spec_CVTaddon
+	-- if g_client ~= nil then
+	-- 	if inputValue ~= nil then
+	-- 		spec.HandgasPercent = (math.floor(tonumber(inputValue) * 100)/100)
+	-- 	end
+	-- 	spec.forDBL_digitalhandgasstep = spec.vFive
 		-- print("CVTa HandgasPercent: " .. tostring(spec.HandgasPercent))
-		self:raiseDirtyFlags(spec.dirtyFlag)
+		-- self:raiseDirtyFlags(spec.dirtyFlag)
 		-- if g_server ~= nil then
 			-- g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue), nil, nil, self)
 		-- else
 			-- g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue))
 		-- end
-	end
-end
+	-- end
+-- end
 
 function CVTaddon:onHighBeamPressed(actionName, inputValue, callbackState, isAnalog)
 	local spec = self.spec_CVTaddon
@@ -3872,7 +3877,8 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						mcRPMvar = 1.025*0.98 	-- 25er c.local
 					else																				-- das ist (dedi)server
 						-- spec.mcRPMvar = 1.0009	-- 22er c.server
-						mcRPMvar = 0.992	-- 25er c.server
+						mcRPMvar = 1.005	-- 25er c.server
+						-- mcRPMvar = 0.992	-- 25er c.server
 					end
 					if cvtaDebugCVTuOn == true then
 						print("CVTa mcRPMvar: " .. tostring(mcRPMvar))
