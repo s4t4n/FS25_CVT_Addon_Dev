@@ -91,11 +91,14 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.guiTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_title") .." für "..vehicleName) -- Top header
 	
 	if g_server and g_client and not g_currentMission.connectedToDedicatedServer then
-		self.guiUnderTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_underTitle2")) -- Undertitle header
-	elseif g_currentMission.connectedToDedicatedServer and self.spec_DashboardLive == nil then
-		self.guiUnderTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_underTitle")) -- Undertitle header
+		self.guiUnderTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_underTitle2")) -- Undertitle header local and host
 	else
-		self.guiUnderTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_underTitle2")) -- Undertitle header
+		-- if self.spec_DashboardLive ~= nil then
+		if FS25_DashboardLive.DashboardLive ~= nil then
+			self.guiUnderTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_underTitle2")) -- Undertitle header dedi with dbl
+		else
+			self.guiUnderTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_underTitle")) -- Undertitle header dedi without dbl
+		end
 	end
 	
 	self.guiModVersion:setText("Ver. " .. CVTaddonGui.modversion) -- Undertitle header
