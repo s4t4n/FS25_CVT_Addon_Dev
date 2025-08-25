@@ -20,8 +20,8 @@
 				<!-- <Text typeClass="TEXT" profile="fs25_dialogTitle" textAutoSize="true" id="guiTitle" /> -->
 				<!-- <Text profile="fs25_dialogTitle" id="guiTitle" textAutoSize="true" position="0px -20px"/> -->
 				<Text typeClass="TEXT" profile="dialogHeaderText" textAutoSize="true" id="guiTitle" position="0px -20px" />
-				<Text typeClass="TEXT" profile="versionText" 	  textAutoSize="true" id="guiModVersion" position="1600px -20px" />
-				<Text typeClass="TEXT" profile="versionText" 	  textAutoSize="true" id="guiModBuild" position="1600px -35px" />
+				<Text typeClass="TEXT" profile="versionText" 	  textAutoSize="true" id="guiModVersion" position="1600px -30px" />
+				<Text typeClass="TEXT" profile="versionText" 	  textAutoSize="true" id="guiModBuild" position="1600px -45px" />
 				<Text typeClass="TEXT" profile="dialogTitle" 	  textAutoSize="true" id="guiUnderTitle" position="-100px -95px" />
 			</GuiElement>
 			
