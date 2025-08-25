@@ -1466,7 +1466,7 @@ function CVTaddon:VarioRpmAxis(actionName, inputValue)
 			spec.HandgasPercent = (math.floor(tonumber(inputValue) * 100)/100)
 		end
 		spec.forDBL_digitalhandgasstep = spec.vFive
-		print("CVTa HandgasPercent: " .. tostring(spec.HandgasPercent))
+		-- print("CVTa HandgasPercent: " .. tostring(spec.HandgasPercent))
 		self:raiseDirtyFlags(spec.dirtyFlag)
 		if g_server ~= nil then
 			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate), nil, nil, self)
@@ -3183,8 +3183,12 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 			-- print("preGlow: " .. tostring(spec.preGlow) )
 			-- print("getMotorState: " .. tostring(self:getMotorState()) )
 			-- print("forDBL_glowingstate: " .. tostring(spec.forDBL_glowingstate) )
-			if not FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection and spec.brakeForceCorrectionValue ~= 1 then
-				spec.brakeForceCorrectionValue = 1.0
+			if FS25_EngineBrakeforceCompensation ~= nil and FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil then
+				--
+			else
+				if spec.brakeForceCorrectionValue ~= 1 then
+					spec.brakeForceCorrectionValue = 1.0
+				end
 			end
 			self.spec_motorized.motor.lowBrakeForceScale = self.spec_motorized.motor.lowBrakeForceScale * spec.brakeForceCorrectionValue
 
@@ -3950,7 +3954,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						self.spec_motorized.motor.maxBackwardGearRatio = self.spec_motorized.motor.maxForwardGearRatio
 						self.spec_motorized.motor.minBackwardGearRatio = self.spec_motorized.motor.minForwardGearRatio
 						if spec.HSTstate == 1 then -- vorher FS I. HST (älter)
-							if math.abs(self.spec_motorized.motor.lastAcceleratorPedal) >= 0.01 then  -- todo:  need to check if its in MP works also
+							if math.abs(self.spec_motorized.motor.lastAcceleratorPedal) >= 0.01 then
 								if motor.currentDirection == -1 then
 									self.spec_motorized.motor.maxBackwardSpeed = math.max((math.max(0.1, maxSpeedBw * activePedal) / spec.cvtAR * spec.vTwo * spec.drivingLevelValue) * (self.spec_motorized.motor.lastMotorRpm/self.spec_motorized.motor.maxRpm), 0.001)
 								else
@@ -3964,11 +3968,16 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 										self.spec_motorized.motor.lastMotorRpm = math.max(self.spec_motorized.motor.minRpm*0.99, self.spec_motorized.motor.maxRpm* (math.min(self.spec_vca.handThrottle,0.999)) )
 									else
 										if spec.HandgasPercent > 0 then
-											self.spec_motorized.motor.lastMotorRpm = math.max(self.spec_motorized.motor.minRpm*0.95, self.spec_motorized.motor.maxRpm * spec.HandgasPercent)
+											self.spec_motorized.motor.lastMotorRpm = math.max(self.spec_motorized.motor.minRpm*0.5, self.spec_motorized.motor.maxRpm * spec.HandgasPercent)
+											-- self.spec_motorized.motor.lastMotorRpm = math.max(self.spec_motorized.motor.minRpm*0.95, self.spec_motorized.motor.maxRpm * spec.HandgasPercent)
 											self.spec_motorized.motor.smoothedLoadPercentage = self.spec_motorized.motor.smoothedLoadPercentage * 0.9
 											-- print("## hier NOT 0")
 										else
-											self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.minRpm * 0.95
+											if g_server and g_client and not g_currentMission.connectedToDedicatedServer then
+												self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.minRpm * 0.95
+											else
+												self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.minRpm * 0.2
+											end
 											-- print("## hier 0")
 										end
 									end
@@ -3977,7 +3986,11 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 										self.spec_motorized.motor.lastMotorRpm = math.max(self.spec_motorized.motor.minRpm*0.95, self.spec_motorized.motor.maxRpm*spec.HandgasPercent)
 										self.spec_motorized.motor.smoothedLoadPercentage = self.spec_motorized.motor.smoothedLoadPercentage * 0.9
 									else
-										self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.minRpm * 0.95
+										if g_server and g_client and not g_currentMission.connectedToDedicatedServer then
+											self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.minRpm * 0.95
+										else
+											self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.minRpm * 0.2
+										end
 										-- print("## hier")
 									end
 								end
@@ -4008,7 +4021,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						end
 						if self.spec_motorized.motor.lastMotorRpm > self.spec_motorized.motor.minRpm + 2 then
 							if self.spec_motorized.motor.smoothedLoadPercentage >= 0.99 then
-								self.spec_motorized.motor.lastMotorRpm = (self.spec_motorized.motor.lastMotorRpm * .8 * mcRPMvar)
+								self.spec_motorized.motor.lastMotorRpm = (self.spec_motorized.motor.lastMotorRpm * 0.8 * mcRPMvar)
 								if self.spec_motorized.motorTemperature ~= nil then
 									self.spec_motorized.motorTemperature.heatingPerMS = 0.0016
 								end
