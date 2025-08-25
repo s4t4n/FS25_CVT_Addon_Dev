@@ -81,9 +81,9 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.reverseLightsTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("reverseLightsTT"))
 	self.reverseLightsDurationTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("reverseLightsDurationTT"))
 	self.drivingLevelStateTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("drivingLevelStateTT"))
-	if FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection then
+	if FS25_EngineBrakeforceCompensation ~= nil and FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil then
 		self.brakeForceCorrectionTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("brakeForceCorrectionTT"))
-	elseif not FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection then
+	else
 		self.brakeForceCorrectionTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("brakeForceCorrectionNotTT"))
 	end
 
@@ -125,7 +125,7 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.reverseLightsTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_reverseLightsTitle"))	-- rl
 	self.reverseLightsDurationTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_reverseLightsDurationTitle"))
 	self.drivingLevelStateTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_drivingLevelStateTitle"))
-	if FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection then
+	if FS25_EngineBrakeforceCompensation ~= nil and FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil then
 		self.brakeForceCorrectionTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("brakeForceCorrectionTitle"))
 	else
 		self.brakeForceCorrectionTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("brakeForceCorrectionModReq"))
@@ -279,7 +279,7 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	local variantstateSet = 1
 	-- if variant and self.spec.isVarioTM then
 	if self.spec.isVarioTM == true then
-		if FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection and self.variantSetting:getState() ~= 8 then
+		if FS25_EngineBrakeforceCompensation ~= nil and FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil and self.variantSetting:getState() ~= 8 then
 			self.brakeForceCorrectionSetting:setDisabled(false)
 		else
 			self.brakeForceCorrectionSetting:setDisabled(true)
@@ -576,7 +576,7 @@ function CVTaddonGui:logicalCheck()
 		self.drivingLevelStateSetting:setDisabled(true)
 	end
 	-- print("GUI logical E: " .. tostring(self.spec.HUDpos))
-	if FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection and self.variantSetting:getState() ~= 8 then
+	if FS25_EngineBrakeforceCompensation ~= nil and FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil and self.variantSetting:getState() ~= 8 then
 		self.brakeForceCorrectionSetting:setDisabled(false)
 	else
 		self.brakeForceCorrectionSetting:setDisabled(true)
@@ -721,7 +721,7 @@ function CVTaddonGui:onButtonLoad()
 	local variantstateSet = 1
 	-- if variant and self.spec.isVarioTM then
 	if self.spec.isVarioTM == true then
-		if FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection and self.spec.CVTconfig ~= 8 then
+		if FS25_EngineBrakeforceCompensation ~= nil and FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil and self.spec.CVTconfig ~= 8 then
 			self.brakeForceCorrectionSetting:setDisabled(false)
 		else
 			self.brakeForceCorrectionSetting:setDisabled(true)
