@@ -71,6 +71,30 @@ je nach Hersteller sogar Einzelrad-Hydromotoren."/>
 		<text name="selection_accRamp_01"			text="1"/>
 		<text name="selection_active"	    		text="activated"/>
 		<text name="selection_deactive"	    		text="deaching"/>
+
+		<text name="selection_BF_20"	    		text="20%"/>
+		<text name="selection_BF_30"	    		text="30%"/>
+		<text name="selection_BF_40"	    		text="40%"/>
+		<text name="selection_BF_50"	    		text="50%"/>
+		<text name="selection_BF_60"	    		text="60%"/>
+		<text name="selection_BF_70"	    		text="70%"/>
+		<text name="selection_BF_80"	    		text="80%"/>
+		<text name="selection_BF_90"	    		text="90%"/>
+		<text name="selection_BF_default"	   		text="100% default"/>
+		<text name="selection_BF_110"	    		text="110%"/>
+		<text name="selection_BF_120"	    		text="120%"/>
+		<text name="selection_BF_130"	    		text="130%"/>
+		<text name="selection_BF_140"	    		text="140%"/>
+		<text name="selection_BF_150"	    		text="150%"/>
+		<text name="selection_BF_160"	    		text="160%"/>
+		<text name="selection_BF_170"	    		text="170%"/>
+		<text name="selection_BF_180"	    		text="180%"/>
+		<text name="selection_BF_190"	    		text="190%"/>
+		<text name="selection_BF_200"	    		text="200%"/>
+		<text name="brakeForceCorrectionNotTT"    	text="FS25_EngineBrakeforceCompensation is not active"/>
+		<text name="brakeForceCorrectionTitle"    	text="Motorbreak compensation"/>
+		<text name="brakeForceCorrectionTT"    		text="The engine braking effect is dynamically calculated by the CVT add-on based on various factors.
+This setting allows you to adjust the resulting calculation, compensating towards either a stronger or weaker braking effect."/>
 		
 		<text name="selection_inching_dn"			text="Slower"/>
 		<text name="selection_inching_up"			text="Faster"/>

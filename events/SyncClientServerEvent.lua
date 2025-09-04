@@ -15,7 +15,7 @@ end
 ---Create new instance of event
 -- @param table vehicle vehicle
 -- @param integer state state
-function SyncClientServerEvent.new(vehicle, vOne, vTwo, vThree, CVTCanStart, vFive, autoDiffs, isVarioTM, isTMSpedal, CVTconfig, warnHeat, critHeat, warnDamage, critDamage, CVTdamage, HandgasPercent, ClutchInputValue, cvtDL, cvtAR, VCAantiSlip, VCApullInTurn, CVTcfgExists)
+function SyncClientServerEvent.new(vehicle, vOne, vTwo, vThree, CVTCanStart, vFive, autoDiffs, isVarioTM, isTMSpedal, CVTconfig, warnHeat, critHeat, warnDamage, critDamage, CVTdamage, HandgasPercent, ClutchInputValue, cvtDL, cvtAR, VCAantiSlip, VCApullInTurn, CVTcfgExists, reverseLightsState, reverseLightsDurationState, brakeForceCorrectionState, brakeForceCorrectionValue, drivingLevelState, drivingLevelValue, HSTstate, preGlow, forDBL_pregluefinished, forDBL_glowingstate, forDBL_preglowing)
 -- function SyncClientServerEvent.new(vehicle, vOne, vTwo, vThree, CVTCanStart, vFive, autoDiffs, isVarioTM, isTMSpedal, CVTconfig, warnHeat, critHeat, warnDamage, critDamage, CVTdamage, HandgasPercent, ClutchInputValue, cvtDL, cvtAR, CVTcfgExists)
     local self = SyncClientServerEvent.emptyNew()
     self.vOne = vOne
@@ -43,6 +43,17 @@ function SyncClientServerEvent.new(vehicle, vOne, vTwo, vThree, CVTCanStart, vFi
     self.VCAantiSlip = VCAantiSlip
     self.VCApullInTurn = VCApullInTurn
     self.CVTcfgExists = CVTcfgExists
+    self.reverseLightsState = reverseLightsState
+    self.reverseLightsDurationState = reverseLightsDurationState
+    self.brakeForceCorrectionState = brakeForceCorrectionState
+    self.brakeForceCorrectionValue = brakeForceCorrectionValue
+    self.drivingLevelState = drivingLevelState
+    self.drivingLevelValue = drivingLevelValue
+    self.HSTstate = HSTstate
+    self.preGlow = preGlow
+    self.forDBL_pregluefinished = forDBL_pregluefinished
+    self.forDBL_glowingstate = forDBL_glowingstate
+    self.forDBL_preglowing = forDBL_preglowing
     self.vehicle = vehicle
     return self
 end
@@ -78,6 +89,17 @@ function SyncClientServerEvent:readStream(streamId, connection)
     self.VCAantiSlip = streamReadInt32(streamId)
     self.VCApullInTurn = streamReadInt32(streamId)
     self.CVTcfgExists = streamReadBool(streamId)
+    self.reverseLightsState         = streamReadInt32(streamId)
+    self.reverseLightsDurationState = streamReadInt32(streamId)
+    self.brakeForceCorrectionState  = streamReadInt32(streamId)
+    self.brakeForceCorrectionValue  = streamReadFloat32(streamId)
+    self.drivingLevelState          = streamReadInt32(streamId)
+    self.drivingLevelValue          = streamReadFloat32(streamId)
+    self.HSTstate                   = streamReadInt32(streamId)
+    self.preGlow                    = streamReadInt32(streamId)
+    self.forDBL_pregluefinished     = streamReadBool(streamId)
+    self.forDBL_glowingstate        = streamReadInt32(streamId)
+    self.forDBL_preglowing          = streamReadInt32(streamId)
     self:run(connection)
 end
 
@@ -116,7 +138,20 @@ function SyncClientServerEvent:writeStream(streamId, connection)
     streamWriteInt32(streamId, self.VCAantiSlip)
     streamWriteInt32(streamId, self.VCApullInTurn)
     streamWriteBool(streamId, self.CVTcfgExists)
-    -- print("(event)ClutchInputValue: " .. tostring(self.ClutchInputValue))
+
+    streamWriteInt32(streamId, self.reverseLightsState)
+    streamWriteInt32(streamId, self.reverseLightsDurationState)
+
+    streamWriteInt32(streamId, self.brakeForceCorrectionState)
+    streamWriteFloat32(streamId, self.brakeForceCorrectionValue)
+
+    streamWriteInt32(streamId, self.drivingLevelState)
+    streamWriteFloat32(streamId, self.drivingLevelValue)
+    streamWriteInt32(streamId, self.HSTstate)
+    streamWriteInt32(streamId, self.preGlow)
+    streamWriteBool(streamId, self.forDBL_pregluefinished)
+    streamWriteInt32(streamId, self.forDBL_glowingstate)
+    streamWriteInt32(streamId, self.forDBL_preglowing)
 end
 
 
@@ -125,10 +160,10 @@ end
 function SyncClientServerEvent:run(connection)
     if self.vehicle ~= nil and self.vehicle:getIsSynchronized() then
         -- CVTaddon.SyncClientServer(self.vehicle, self.vOne, self.vTwo, self.vThree, self.CVTCanStart, self.vFive, self.autoDiffs, self.isVarioTM, self.isTMSpedal, self.CVTconfig, self.warnHeat, self.critHeat, self.warnDamage, self.critDamage, self.CVTdamage, self.HandgasPercent, self.ClutchInputValue, self.cvtDL, self.cvtAR, self.CVTcfgExists)
-        CVTaddon.SyncClientServer(self.vehicle, self.vOne, self.vTwo, self.vThree, self.CVTCanStart, self.vFive, self.autoDiffs, self.isVarioTM, self.isTMSpedal, self.CVTconfig, self.warnHeat, self.critHeat, self.warnDamage, self.critDamage, self.CVTdamage, self.HandgasPercent, self.ClutchInputValue, self.cvtDL, self.cvtAR, self.VCAantiSlip, self.VCApullInTurn, self.CVTcfgExists)
+        CVTaddon.SyncClientServer(self.vehicle, self.vOne, self.vTwo, self.vThree, self.CVTCanStart, self.vFive, self.autoDiffs, self.isVarioTM, self.isTMSpedal, self.CVTconfig, self.warnHeat, self.critHeat, self.warnDamage, self.critDamage, self.CVTdamage, self.HandgasPercent, self.ClutchInputValue, self.cvtDL, self.cvtAR, self.VCAantiSlip, self.VCApullInTurn, self.CVTcfgExists, self.reverseLightsState, self.reverseLightsDurationState, self.brakeForceCorrectionState, self.brakeForceCorrectionValue, self.drivingLevelState, self.drivingLevelValue, self.HSTstate, self.preGlow, self.forDBL_pregluefinished, self.forDBL_glowingstate, self.forDBL_preglowing)
 		if not connection:getIsServer() then --
 			-- g_server:broadcastEvent(SyncClientServerEvent.new(self.vehicle, self.vOne, self.vTwo, self.vThree, self.CVTCanStart, self.vFive, self.autoDiffs, self.isVarioTM, self.isTMSpedal, self.CVTconfig, self.warnHeat, self.critHeat, self.warnDamage, self.critDamage, self.CVTdamage, self.HandgasPercent, self.ClutchInputValue, self.cvtDL, self.cvtAR, self.CVTcfgExists), nil, connection, self.vehicle)
-			g_server:broadcastEvent(SyncClientServerEvent.new(self.vehicle, self.vOne, self.vTwo, self.vThree, self.CVTCanStart, self.vFive, self.autoDiffs, self.isVarioTM, self.isTMSpedal, self.CVTconfig, self.warnHeat, self.critHeat, self.warnDamage, self.critDamage, self.CVTdamage, self.HandgasPercent, self.ClutchInputValue, self.cvtDL, self.cvtAR, self.VCAantiSlip, self.VCApullInTurn, self.CVTcfgExists), nil, connection, self.vehicle)
+			g_server:broadcastEvent(SyncClientServerEvent.new(self.vehicle, self.vOne, self.vTwo, self.vThree, self.CVTCanStart, self.vFive, self.autoDiffs, self.isVarioTM, self.isTMSpedal, self.CVTconfig, self.warnHeat, self.critHeat, self.warnDamage, self.critDamage, self.CVTdamage, self.HandgasPercent, self.ClutchInputValue, self.cvtDL, self.cvtAR, self.VCAantiSlip, self.VCApullInTurn, self.CVTcfgExists, self.reverseLightsState, self.reverseLightsDurationState, self.brakeForceCorrectionState, self.brakeForceCorrectionValue, self.drivingLevelState, self.drivingLevelValue, self.HSTstate, self.preGlow, self.forDBL_pregluefinished, self.forDBL_glowingstate, self.forDBL_preglowing), nil, connection, self.vehicle)
 		end
     end
 end
