@@ -48,12 +48,12 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.9.1.7";
+local scrversion = "0.9.1.9";
 CVTaddon.build = scrversion
 local modversion = CVTaddon.modversion; -- moddesc
-local lastupdate = "24.08.2025"
-local timestamp = "1756071997944";
-local savetime = "23:46:42";
+local lastupdate = "04.09.2025"
+local timestamp = "1757013094157";
+local savetime = "21:11:38";
 
 -- _______________________
 cvtaDebugCVTon = false	 -- \
