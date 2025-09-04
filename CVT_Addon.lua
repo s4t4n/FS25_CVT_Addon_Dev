@@ -118,11 +118,8 @@ function addCVTconfig(self, superfunc, xmlFile, baseXMLName, baseDir, customEnvi
 		)
 		
 		and	configurations ~= nil
-		
-		and xmlFile:hasProperty("vehicle.enterable")
-		-- and xmlFile:hasProperty("vehicle.motorized")
-		-- and xmlFile:hasProperty("vehicle.drivable")
 
+		and xmlFile:hasProperty("vehicle.enterable")
 	then
 		local cvtAddonConfigFile = XMLFile.load("CVT_Addon_storeConfig", CVTaddon.MOD_PATH.."CVT_Addon_storeConfig.xml", xmlFile.schema) -- ta glowin for cfg schemata
 		
@@ -157,7 +154,6 @@ function addCVTconfig(self, superfunc, xmlFile, baseXMLName, baseDir, customEnvi
 					configurations[cvtaConfig.name] = configItems
 				end
 			end
-			
 			cvtAddonConfigFile:delete()
 		end
 	end
@@ -165,8 +161,6 @@ function addCVTconfig(self, superfunc, xmlFile, baseXMLName, baseDir, customEnvi
 end
 
 --new storeCfg fs25
-
-
 function CVTaddon.prerequisitesPresent(specializations)
     return true
 end
@@ -175,8 +169,7 @@ function CVTaddon.initSpecialization()
 	print("CVTaddon init Specialization")
 	local schemaSavegame = Vehicle.xmlSchemaSavegame
 	local key = CVTaddon.MOD_NAME..".CVTaddon"
-	
-	-- print("here is the key: " .. key)
+
 	schemaSavegame:register(XMLValueType.BOOL, "vehicles.vehicle(?)."..key..".cvtconfigured", "CVTa configured", false)
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#vOne", "Driving level", 2) -- DL
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#cvtDL", "Driving level count", 2) -- DLcount
@@ -200,20 +193,13 @@ function CVTaddon.initSpecialization()
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#HUDvis", "CVT hud visibility", 1)
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#VCAantiSlip", "CVT has automatic anti slip function", 1)
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#VCApullInTurn", "CVT has pull in turn like by fendt", 1)
-	-- schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#CVTCanStart", "motorAllow to start", 1) -- ms
-	-- schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#rpmDmax", "max rpm actually", 1)
-	-- schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#CvtConfigActive", "OnOrOff", 1)
 
-	
 	-- new config add fs25
 	if g_vehicleConfigurationManager.configurations["CVTaddon"] == nil then
 		g_vehicleConfigurationManager:addConfigurationType("CVTaddon", g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("text_CVT_cfg"), key, VehicleConfigurationItem)
-		-- g_    configurationManager:addConfigurationType("CVTaddon", g_i18n:getText                                 ("text_CVT_title"), key, VehicleConfigurationItem, nil, nil, ConfigurationUtil.SELECTOR_MULTIOPTION)
-		-- g_configurationManager:addConfigurationType("CVTaddon", g_i18n:getText                                     ("text_CVT_title"), nil, nil,                      nil, nil, ConfigurationUtil.SELECTOR_MULTIOPTION)
 	end
 	ConfigurationUtil.getConfigurationsFromXML = Utils.overwrittenFunction(ConfigurationUtil.getConfigurationsFromXML, addCVTconfig)
 
-	
 	print("CVT_Addon: initialized config...... ")
 	print("CVT_Addon: by " .. CVTaddon.author .. " and awsome contributors " .. CVTaddon.contributor)
 	print("CVT_Addon: Script-Version...: " .. scrversion)
@@ -242,24 +228,18 @@ function CVTaddon.registerEventListeners(vehicleType)
 	
 	for _, funcName in ipairs(funcNames) do
 		SpecializationUtil.registerEventListener(vehicleType, funcName, CVTaddon)
-		-- addModEventListener(CVTaddon)
 	end
 end
 
 function CVTaddon.registerOverwrittenFunctions(vehicleType)
-	-- print("################################# registerOverwrittenFunctions")
 	SpecializationUtil.registerOverwrittenFunction(vehicleType, "getCanMotorRun", CVTaddon.getCanMotorRun)
-	-- SpecializationUtil.registerOverwrittenFunction(vehicleType, "GetLastModulatedMotorRpm", CVTaddon.cvtGetLastModulatedMotorRpm)
 	SpecializationUtil.registerOverwrittenFunction(vehicleType, "getRequiredMotorRpmRange", CVTaddon.ptoRpmRange)
-	-- SpecializationUtil.registerOverwrittenFunction(vehicleType, "onRegisterDashboardValueTypes", CVTaddon.onRegisterDashboardValueTypes)
-	-- SpecializationUtil.registerOverwrittenFunction(vehicleType, "getLastRealMotorRpm", CVTaddon.cvtGetLastRealMotorRpm)
 end
 
 -- ToDo: buils new fs25 func for this
 ----------------------------------------------------------------------------------------------------------------------
 
 function CVTaddon:onRegisterActionEvents()
-	-- print("################################# onRegisterActionEvents")
 	if g_client ~= nil then
 		local spec = self.spec_CVTaddon
 		spec.BackupMaxFwSpd = tostring(self.spec_motorized.motor.maxForwardSpeedOrigin)
@@ -311,12 +291,11 @@ function CVTaddon:onRegisterActionEvents()
 				print("CVTaddon: onRegisterActionEvents eventActiveV3toggle: ".. tostring(CVTaddon.eventActiveV3toggle))
 				print("CVTaddon: onRegisterActionEvents eventActiveV4: ".. tostring(CVTaddon.eventActiveV4))
 			end
-			-- Tasten Bindings
+
 			-- D1
 			_, CVTaddon.eventIdV1 = self:addActionEvent(CVTaddon.actionEventsV1, 'SETVARIOONE', self, CVTaddon.VarioOne, false, true, false, true)
 			g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdV1, GS_PRIO_NORMAL)
 			g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdV1, false)
-			-- g_inputBinding:setActionEventTextVisibility(spec.eventIdV1, true) -- test if works
 			-- D2
 			_, CVTaddon.eventIdV2 = self:addActionEvent(CVTaddon.actionEventsV2, 'SETVARIOTWO', self, CVTaddon.VarioTwo, false, true, false, true)
 			g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdV2, GS_PRIO_NORMAL)
@@ -389,7 +368,6 @@ function CVTaddon:onRegisterActionEvents()
 			_, CVTaddon.eventIdVL = self:addActionEvent(CVTaddon.actionEventsVL, 'SIGNAL_HOLD_BEAM', self, CVTaddon.onHighBeamPressed, true, true, false, true)
 			g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdVL, GS_PRIO_NORMAL)
 			g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdVL, false)
-			
 	
 			-- CC axis
 			-- if spec.isVarioTM == true then
@@ -410,16 +388,18 @@ function CVTaddon:onRegisterActionEvents()
 			
 			-- preGlow
 			local tempIsCold = g_currentMission.environment.weather:getCurrentTemperature() < 5
-			if spec.CVTcfgExists then
-				_, actionEventIdGL = self:addActionEvent(CVTaddon.actionEventsGL, 'SETPREGLOW', self, CVTaddon.SETPREGLOW, false, true, true, true, nil)
-				g_inputBinding:setActionEventTextPriority(actionEventIdGL, GS_PRIO_NORMAL)
-				g_inputBinding:setActionEventTextVisibility(actionEventIdGL, tempIsCold)
-			end
-		
+			-- if spec.CVTcfgExists then
+			_, actionEventIdGL = self:addActionEvent(CVTaddon.actionEventsGL, 'SETPREGLOW', self, CVTaddon.SETPREGLOW, false, true, true, true, nil)
+			g_inputBinding:setActionEventTextPriority(actionEventIdGL, GS_PRIO_NORMAL)
+			g_inputBinding:setActionEventTextVisibility(actionEventIdGL, tempIsCold)
+			-- end
+
 			-- GUI open
-			_, actionEventIdGui = self:addActionEvent(CVTaddon.actionEventsGUI, 'CVT_SHOWGUI', self, CVTaddon.SHOWGUI, false, true, false, true)
-			g_inputBinding:setActionEventTextPriority(actionEventIdGui, GS_PRIO_NORMAL)
-			g_inputBinding:setActionEventTextVisibility(actionEventIdGui, true)
+			if self.configurations["CVTaddon"] == 2 then
+				_, actionEventIdGui = self:addActionEvent(CVTaddon.actionEventsGUI, 'CVT_SHOWGUI', self, CVTaddon.SHOWGUI, false, true, false, true)
+				g_inputBinding:setActionEventTextPriority(actionEventIdGui, GS_PRIO_NORMAL)
+				g_inputBinding:setActionEventTextVisibility(actionEventIdGui, true)
+			end
 		end
 		if cvtaDebugCVTon then
 			print("CVTaddon: onRegisterActionEvents a vOne: ".. tostring(spec.vOne))
@@ -443,7 +423,6 @@ function CVTaddon:onLoad(savegame)
 	local pcspec = self.spec_powerConsumer
 	CVTaddon.isDedi = g_server ~= nil and g_currentMission.connectedToDedicatedServer
 	-- spec.dirtyFlag = self:getNextDirtyFlag()		-- register a bit in the sync pattern
-	-- print("################################# Anfang onLoad: " .. tostring(spec.CVTconfig))
 	if self.spec_RealisticDamageSystemEngineDied == nil then
 		self.spec_RealisticDamageSystemEngineDied = {}
 		self.spec_RealisticDamageSystemEngineDied.EngineDied = false
@@ -512,7 +491,6 @@ function CVTaddon:onLoad(savegame)
 
 	-- defaults if allother nil
 	spec.smoother = 0
-	-- if spec.HUDpos == nil then spec.HUDpos = 1 end
 	spec.HUDpos = 1
 	spec.HUDvis = 1
 	spec.DTadd = 0
@@ -605,12 +583,6 @@ function CVTaddon:onLoad(savegame)
 	end
 
 	if spec.vOne ~= nil then
-		-- if spec.vOne == 1 then
-			-- spec.forDBL_drivinglevel = tostring(1)
-		-- elseif spec.vOne == 2 then
-			-- spec.forDBL_drivinglevel = tostring(2)
-			
-		-- end
 		spec.forDBL_drivinglevel = tostring(spec.vOne)
 	end
 	if spec.cvtDL ~= nil then
@@ -990,11 +962,8 @@ function CVTaddon:SHOWGUI(actionName, keyStatus, arg3, arg4, arg5)
 	local spec = self.spec_CVTaddon
 	local CVTAGui = g_gui:showDialog("CVTaddonGui")
 	local hasNothing = CVTaddon.build
-	-- print("cvtDL: " .. tostring(spec.cvtDL))
-	-- print("showGUI A: " .. tostring(spec.HUDpos))
 	CVTAGui.target:setCallback(CVTaddon.guiCallback, self)
 	CVTaddonGui.setData(CVTAGui.target, self:getFullName(), spec, hasNothing, CVTaddon.debug, CVTaddon.showKeys)
-	-- CVTaddonGui.logicalCheck(self)
 end
 
 function CVTaddon:guiCallback(changes, debug, showKeys)
@@ -1002,14 +971,11 @@ function CVTaddon:guiCallback(changes, debug, showKeys)
 	CVTaddon.debug = debug
 	CVTaddon.showKeys = showKeys
 	local spec = self.spec_CVTaddon
-	-- print("guiCallBack : "..tostring(spec.CVTconfig).." / "..tostring(spec.CVTconfigLast))
 	if spec.CVTconfig ~= 0 and spec.CVTconfig ~= spec.CVTconfigLast then 
 		print("guiCallback : CVT config changed")
 	else 
 		print("guiCallback : no transmission changes")
 	end
-	-- spec.CVTconfigLast = spec.CVTconfig
-	-- print("callbackGUI E: " .. tostring(spec.HUDpos))
 	self:raiseDirtyFlags(spec.dirtyFlag)
 	if g_server ~= nil then
 
