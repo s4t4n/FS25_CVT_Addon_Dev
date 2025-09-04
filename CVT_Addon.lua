@@ -52,8 +52,8 @@ local scrversion = "0.9.1.9";
 CVTaddon.build = scrversion
 local modversion = CVTaddon.modversion; -- moddesc
 local lastupdate = "04.09.2025"
-local timestamp = "1757013094157";
-local savetime = "21:11:38";
+local timestamp = "1757019329182";
+local savetime = "22:55:33";
 
 -- _______________________
 cvtaDebugCVTon = false	 -- \
