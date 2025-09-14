@@ -29,8 +29,9 @@
 [![GitHub top language](https://img.shields.io/github/languages/top/s4t4n/FS25_CVT_Addon_Dev)](#) \
 [![GitHub Donation/Spende](https://img.shields.io/github/sponsors/s4t4n)](https://www.paypal.com/donate/?hosted_button_id=FXXETABZC3UFW)
 
-[![Discord](https://img.shields.io/discord/660942481118199811?logo=discord&logoColor=%23ffffff&label=SbSh-PooL%20Discord)](https://discord.gg/mfergkwhDu) \
-[![YouTube Channel Views](https://img.shields.io/youtube/channel/views/UC_Yn6bN1MMyd7Sn8wUyXnIg) ![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UC_Yn6bN1MMyd7Sn8wUyXnIg)](https://www.youtube.com/@SbSh-Modastian) \
+[![Community Benutzer](https://discord-live-members-count-badge.vercel.app/api/discord-members?guildId=660942481118199811&color=5865F2&label=Community%20Benutzer&scale=1)](https://discord.gg/mfergkwhDu) [![Discord](https://img.shields.io/discord/660942481118199811?logo=discord&logoColor=%23ffffff&label=SbSh-PooL%20Discord)](https://discord.gg/mfergkwhDu) \
+[![YouTube Views SbSh](https://img.shields.io/youtube/channel/views/UC_Yn6bN1MMyd7Sn8wUyXnIg) ![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UC_Yn6bN1MMyd7Sn8wUyXnIg)](https://www.youtube.com/@SbSh-Modastian) \
+![Static Badge](https://img.shields.io/badge/Instagram-SbSh-FFFFF?style=plastic&logo=instagram&logoColor=%23FFd955&logoSize=auto&labelColor=%23555555&color=%23FF0069&link=https%3A%2F%2Fwww.instagram.com%2Fsbshmodastian) \
 [![Twitch Status](https://img.shields.io/twitch/status/sbsh_modasti4n?logo=twitch&label=sbsh_modasti4n%20Live-Stream%20now&labelColor=%23ffffff&color=%23aa11ff)](https://www.twitch.tv/sbsh_modasti4n)
 
 Instructions how to download the code and use it as modfile zip here -> [Wiki: How to download and use master code](https://github.com/s4t4n/FS25_CVT_Addon_Dev/wiki/How-to-download-and-use-master-code)
