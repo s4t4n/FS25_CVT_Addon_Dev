@@ -5,7 +5,7 @@
 <img src="https://github.com/s4t4n/FS25_CVT_Addon_Dev/assets/4678246/f3f66c42-fe3e-419c-b4f7-552e2ebe2ea6" alt="" width="250"/>
 
 ### [Modhub 22](https://www.farming-simulator.com/mod.php?lang=de&country=de&mod_id=269645&title=fs2022)
-### [Modhub 22](https://www.farming-simulator.com/mod.php?lang=de&country=de&mod_id=327932&title=fs2025)
+### [Modhub 25](https://www.farming-simulator.com/mod.php?lang=de&country=de&mod_id=327932&title=fs2025)
 ### [Tutorial Videos](https://github.com/s4t4n/FS25_CVT_Addon_Dev/wiki/Videos)
 ### [CVT Addon Wiki](https://github.com/s4t4n/FS25_CVT_Addon_Dev/wiki/Features)
 ### [CVT Addon DBL Features](https://github.com/s4t4n/FS25_CVT_Addon_Dev/wiki/Dashboard%E2%80%90Live-features#dbl-specs-overview)
