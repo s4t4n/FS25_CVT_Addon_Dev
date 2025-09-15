@@ -1,15 +1,23 @@
-# FS25_CVT_Addon
+# FS25_CVT_Addon 
 
-### Script-Documatation or Glowin needed^^ !
+[![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) [![separator](https://img.shields.io/badge/--/--?style=for-the-badge&color=lightgrey)](#) 
+<p align="center">
+  <a href="https://www.paypal.com/donate/?hosted_button_id=FXXETABZC3UFW">
+    <img src="https://www.paypalobjects.com/de_DE/DE/i/btn/btn_donateCC_LG.gif" 
+         alt="Spenden mit PayPal">
+  </a>
+</p>
 
-<img src="https://github.com/s4t4n/FS25_CVT_Addon_Dev/assets/4678246/f3f66c42-fe3e-419c-b4f7-552e2ebe2ea6" alt="" width="250"/>
+#### Script-Documatation or Glowin needed^^ !
+***
 
-### [Modhub 22](https://www.farming-simulator.com/mod.php?lang=de&country=de&mod_id=269645&title=fs2022)
-### [Modhub 25](https://www.farming-simulator.com/mod.php?lang=de&country=de&mod_id=327932&title=fs2025)
-### [Tutorial Videos](https://github.com/s4t4n/FS25_CVT_Addon_Dev/wiki/Videos)
-### [CVT Addon Wiki](https://github.com/s4t4n/FS25_CVT_Addon_Dev/wiki/Features)
-### [CVT Addon DBL Features](https://github.com/s4t4n/FS25_CVT_Addon_Dev/wiki/Dashboard%E2%80%90Live-features#dbl-specs-overview)
 
+
+
+## Navigation
+| [![Modhub 22](https://img.shields.io/badge/Modhub%2022-blue?logo=farmbot)](https://www.farming-simulator.com/mod.php?lang=de&country=de&mod_id=269645&title=fs2022) | [![Modhub 25](https://img.shields.io/badge/Modhub%2025-green?logo=farmbot)](https://www.farming-simulator.com/mod.php?lang=de&country=de&mod_id=327932&title=fs2025) | [![Tutorials](https://img.shields.io/badge/Tutorial%20Videos-orange?logo=youtube)](https://github.com/s4t4n/FS25_CVT_Addon_Dev/wiki/Videos) | [![Wiki](https://img.shields.io/badge/CVT%20Addon%20Wiki-lightgrey?logo=github)](https://github.com/s4t4n/FS25_CVT_Addon_Dev/wiki/Features) | [![DBL Features](https://img.shields.io/badge/DBL%20Features-purple?logo=github)](https://github.com/s4t4n/FS25_CVT_Addon_Dev/wiki/Dashboard%E2%80%90Live-features#dbl-specs-overview) | [![English](https://img.shields.io/badge/in-English-blue?logo=google-translate)](#english) | [![Deutsch](https://img.shields.io/badge/auf-Deutsch-red?logo=google-translate)](#deutsch) |
+|---|---|---|---|---|---|---|
+___
 
 [![GitHub release (by tag)](https://img.shields.io/github/downloads/s4t4n/FS25_CVT_Addon_Dev/latest/total?label=Latest%20Version%20Downloads)](https://github.com/s4t4n/FS25_CVT_Addon_Dev/releases/latest/download/FS25_CVT_Addon.zip)
 [![GitHub all releases](https://img.shields.io/github/downloads/s4t4n/FS25_CVT_Addon_Dev/total?label=Total%20downloads)](https://github.com/s4t4n/FS25_CVT_Addon_Dev/releases)
@@ -27,19 +35,24 @@
 [![language count](https://img.shields.io/github/languages/count/s4t4n/FS25_CVT_Addon_Dev)](#)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/s4t4n/FS25_CVT_Addon_Dev)](#)
 [![GitHub top language](https://img.shields.io/github/languages/top/s4t4n/FS25_CVT_Addon_Dev)](#) \
-[![GitHub Donation/Spende](https://img.shields.io/github/sponsors/s4t4n)](https://www.paypal.com/donate/?hosted_button_id=FXXETABZC3UFW)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-blue?logo=paypal)](https://www.paypal.com/donate/?hosted_button_id=FXXETABZC3UFW)
 
 [![Community Benutzer](https://discord-live-members-count-badge.vercel.app/api/discord-members?guildId=660942481118199811&color=5865F2&label=Community%20Benutzer&scale=1)](https://discord.gg/mfergkwhDu) [![Discord](https://img.shields.io/discord/660942481118199811?logo=discord&logoColor=%23ffffff&label=SbSh-PooL%20Discord)](https://discord.gg/mfergkwhDu) \
 [![YouTube Views SbSh](https://img.shields.io/youtube/channel/views/UC_Yn6bN1MMyd7Sn8wUyXnIg) ![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UC_Yn6bN1MMyd7Sn8wUyXnIg)](https://www.youtube.com/@SbSh-Modastian) \
-![Static Badge](https://img.shields.io/badge/Instagram-SbSh-FFFFF?style=plastic&logo=instagram&logoColor=%23FFd955&logoSize=auto&labelColor=%23555555&color=%23FF0069&link=https%3A%2F%2Fwww.instagram.com%2Fsbshmodastian) \
+![Instagram](https://img.shields.io/badge/Instagram-SbSh-FFFFF?style=plastic&logo=instagram&logoColor=%23FFd955&logoSize=auto&labelColor=%23555555&color=%23FF0069&link=https%3A%2F%2Fwww.instagram.com%2Fsbshmodastian) \
 [![Twitch Status](https://img.shields.io/twitch/status/sbsh_modasti4n?logo=twitch&label=sbsh_modasti4n%20Live-Stream%20now&labelColor=%23ffffff&color=%23aa11ff)](https://www.twitch.tv/sbsh_modasti4n)
 
 Instructions how to download the code and use it as modfile zip here -> [Wiki: How to download and use master code](https://github.com/s4t4n/FS25_CVT_Addon_Dev/wiki/How-to-download-and-use-master-code)
 
+___
+### Navigation
+| [![Deutsch](https://img.shields.io/badge/auf-Deutsch-red?logo=google-translate)](#deutsch) | [![Top](https://img.shields.io/badge/↑-Back%20to%20Top-lightgrey)](#fs25_cvt_addon) |
+|---|---|
 
-[#deutsch](#deutsch)   [#english](#english)   [to the top](#FS25_CVT_Addon)
 
-### english
+### <a id="english"></a>English
+<details>
+<summary>🇬🇧 Click to expand/collapse</summary>
 
 Known issues:
 - Neutral doesnt work correct in multiplayer, because of a bug(giants part), can't sync the lastDirection
@@ -82,14 +95,22 @@ Important:
  - CVT addon should be used actively and not just a "it runs in the background" mod (adapt for the respective application)
  - For the temperature to work in multiplayer, DashboardLive must be active.
  - Automatic engine start must be “off”.
+
+
  
-
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-
+__________________
 
 
-[goto english](#english)
-### deutsch  
+
+### Navigation
+| [![English](https://img.shields.io/badge/in-English-blue?logo=google-translate)](#english) | [![Top](https://img.shields.io/badge/↑-Back%20to%20Top-lightgrey)](#fs25_cvt_addon) |
+|---|---|
+</details>
+
+
+### <a id="deutsch"></a>Deutsch
+<details>
+<summary>🇩🇪 Klick zum Ein-/Ausklappen</summary>
 
 Dieses Skript berechnet je nach Einstellung die Motorbremswirkung völlig neu
 
@@ -101,22 +122,22 @@ Die Berechnungen sind von verschiedenen Faktoren abhängig - z.B.:
 - Untergrund, Reifen, Reibung
 - Motordrehzahl
 - Motorleistung/ PS-Klasse (Hubraum wäre noch schön, gibt es leider nicht im LS)
-- Wind
+- ~Wind~
 - Fahrzeugzustand
 
   
 Mein Skript "Verringerte Motorbremswirkung" wird mit dieser Neuauflage nicht mehr benötigt, bzw. sollte nicht zusammen genutzt werden.
 
-EV: 100%
-- keine Einschränkungen
+EV: 80%
+- AutoDiff don't work
+- PullInTurn doesn't exist
   
-VCA: 99%
-- Update VCA auf Build 130 oder höher
-- Die vca:Motormodifikation sollte ausgeschalten sein
-- dann sind es 100%
+VCA: 95%
+- Es muß etwas angepasst werden mit der Motorbremswirkung in VCA (siehe mein [Fork](https://github.com/s4t4n/VehicleControlAddon/tree/master/FS25_VehicleControlAddon))
+- Schlupf wird noch nicht in vca gesynct.
 
-realismAddon_Gearbox: 100%
-- keine Einschränkungen
+realismAddon_Gearbox: 99%
+- Handbremse in rAG ist überflüßig
 - Ergänzt sich Gegenseitig in den zwei Getriebearten.
 
 
@@ -130,7 +151,15 @@ Wichtig:
 - Damit die Temperatur im Multiplayer funktioniert, muß DashbordLive aktiv sein.
 - Automatischer Motorstart muß "aus" sein.
 
-[nach oben](#FS22_CVT_Addon)
-=======
-# Script-Documantation or Glowin needed^^ !
 
+### Navigation
+| [![English](https://img.shields.io/badge/in-English-blue?logo=google-translate)](#english) | [![Nach oben](https://img.shields.io/badge/↑-Back%20to%20Top-lightgrey)](#fs25_cvt_addon) |
+|---|---|
+</details>
+
+__--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--¯¯--__ \
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯ 
+
+[![Donate](https://www.paypalobjects.com/de_DE/DE/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=FXXETABZC3UFW)
+
+------------------
