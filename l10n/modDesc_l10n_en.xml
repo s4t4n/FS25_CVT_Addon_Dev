@@ -1,410 +1,250 @@
-<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<?xml version='1.0' encoding='utf-8'?>
 <l10n>
 	<texts>
-		<text name="txt_VarioOne" 					text=". "/>
-		<text name="txt_VarioTwo" 					text=" ."/>
-		<text name="txt_VarioN" 					text="N"/>
-		<text name="txt_VarioR" 					text="↓"/>
-		<text name="txt_VarioD" 					text="↑"/>
-
-		<text name="txt_VarioRpmPlus" 				text="UPM +"/>
-		<text name="txt_VarioRpmMinus" 				text="UPM -"/>
-
-		<text name="CVTAgui_title" 					text="CVT-Addon Getriebeeinstellungen"/>
-		<text name="CVTAgui_Variant" 				text="Getriebe Variante"/>
-		<text name="CVTAgui_Hud" 					text="HUD"/>
-		<text name="cvtgui_Cvthud" 					text="Visability"/>
-		<text name="CVTAgui_CvthudPos" 				text="Position"/>
-		<text name="variantTT" 						text="Choose a transmission variant, there are a variety of different continuously variable transmissions."/>
-		<text name="CvthudTT" 						text="Hud display visible or deactivate."/>
-		<text name="CvthudPOSTT" 					text="HUD display positioning."/>
-		<text name="CVTAguiHUD_on" 					text="On"/>
-		<text name="CVTAguiHUD_off" 				text="Off"/>
-		
-		<text name="text_CVT_title" 				text="CVTaddon"/>
-		<text name="text_CVT_cfg" 					text="CVTaddon activate"/>
-		<text name="text_CVT_notInstalled_short" 	text="No"/>
-		<text name="text_CVT_notInstalledTemp_short" 	text="Inactive"/>
-		<text name="text_CVT_notInstalled_desc" 	text="CVTadonn not active, vehicles are however compensated in acceleration."/>
-		<text name="text_CVTclas_installed_short" 	text="CVT classic"/>
-		<text name="text_CVTmod_installed_short" 	text="CVT modern"/>
-		<text name="text_ipmTitle" 					text="Intellegent Power Management"/>
-		<!-- <text name="text_ipmTT" 					text="Intellegent Power Management Boost"/> -->
-		<text name="drivinglevelTT" 			text="Number of possible drivinglevel.
-Different manufacturers and models have many variants. Fendt, for example, has two, Claas often has three and two."/>
-		<text name="drivinglevelTT" 			text="Anzahl der möglichen Fahrbereiche.
-Unterschiedliche Hersteller und Modelle haben da viele Varianten. Fendt z.B. hat Zwei, Claas oft Drei und Zwei."/>
-		<text name="ipmTT" 							text="Intellegent Power Management Boost.
-There is a corresponding increase in power when exceeding 14 km/h and/or switching on the PTO under load.
-This is a relatively modern version to keep emissions lower and still have more power available when needed."/>
-		<text name="hstTT" 							text="HST oder Hydrastat Hydraulikgetriebe?
-HST legt keine automatische Motordrehzahl, außer die Leerlaufregelung, fest.
-Hydrostat ist dabei auf verschiedenen Varianten automatisierter und hat meistens Allrad-Antrieb und besitzen,
-je nach Hersteller sogar Einzelrad-Hydromotoren."/>
-		<text name="text_IPMboost0" 				text="no IPM"/>
-		<text name="text_IPMboost15" 				text="IPM 15ps Boost"/>
-		<text name="text_IPMboost22" 				text="IPM 22ps Boost"/>
-		<text name="text_IPMboost27" 				text="IPM 27ps Boost"/>
-		<text name="text_IPMboost34"			 	text="IPM 34ps Boost"/>
-		<text name="CVTAgui_drivinglevelT" 			text="Driving areas"/>
-		<text name="CVTAgui_accRampT" 				text="Acceleration ramps"/>
-		<text name="CVTAgui_antiSlipT" 				text="Auto Anti-slip (vca)"/>
-		<text name="CVTAgui_pitT" 					text="Pull-In-Turn (vca)"/>
-		<text name="CVTAgui_HstTitle" 				text="Hydro-drive"/>
-		<text name="CVTAgui_inchingTitle" 			text="Inching"/>
-		<text name="CVTAgui_reverseLightsTitle" 	text="Auto worklight when reversing"/>
-		<text name="CVTAgui_reverseLightsDurationTitle" text="Duration"/>
-		<text name="selection_drivinglevel_1"		text="Vario"/>
-		<text name="selection_drivinglevel_2"		text="2"/>
-		<text name="selection_drivinglevel_3"		text="3"/>
-		<text name="selection_drivinglevel_4"		text="4"/>
-		<text name="selection_accRamp_1"			text="0"/>
-		<text name="selection_accRamp_2"			text="2"/>
-		<text name="selection_accRamp_3"			text="3"/>
-		<text name="selection_accRamp_4"			text="4"/>
-		<text name="selection_accRamp_5"			text="5"/>
-		<text name="selection_accRamp_6"			text="6"/>
-		<text name="selection_accRamp_7"			text="7"/>
-		<text name="selection_accRamp_8"			text="8"/>
-		<text name="selection_accRamp_9"			text="9"/>
-		<text name="selection_accRamp_10"			text="10"/>
-		<text name="selection_accRamp_01"			text="1"/>
-		<text name="selection_active"	    		text="activated"/>
-		<text name="selection_deactive"	    		text="deaching"/>
-
-		<text name="selection_BF_20"	    		text="20%"/>
-		<text name="selection_BF_30"	    		text="30%"/>
-		<text name="selection_BF_40"	    		text="40%"/>
-		<text name="selection_BF_50"	    		text="50%"/>
-		<text name="selection_BF_60"	    		text="60%"/>
-		<text name="selection_BF_70"	    		text="70%"/>
-		<text name="selection_BF_80"	    		text="80%"/>
-		<text name="selection_BF_90"	    		text="90%"/>
-		<text name="selection_BF_default"	   		text="100% default"/>
-		<text name="selection_BF_110"	    		text="110%"/>
-		<text name="selection_BF_120"	    		text="120%"/>
-		<text name="selection_BF_130"	    		text="130%"/>
-		<text name="selection_BF_140"	    		text="140%"/>
-		<text name="selection_BF_150"	    		text="150%"/>
-		<text name="selection_BF_160"	    		text="160%"/>
-		<text name="selection_BF_170"	    		text="170%"/>
-		<text name="selection_BF_180"	    		text="180%"/>
-		<text name="selection_BF_190"	    		text="190%"/>
-		<text name="selection_BF_200"	    		text="200%"/>
-		<text name="brakeForceCorrectionNotTT"    	text="FS25_EngineBrakeforceCompensation is not active"/>
-		<text name="brakeForceCorrectionTitle"    	text="Motorbreak compensation"/>
-		<text name="brakeForceCorrectionTT"    		text="The engine braking effect is dynamically calculated by the CVT add-on based on various factors.
-This setting allows you to adjust the resulting calculation, compensating towards either a stronger or weaker braking effect."/>
-		
-		<text name="selection_inching_dn"			text="Slower"/>
-		<text name="selection_inching_up"			text="Faster"/>
-		<text name="selection_hst_hst"				text="HST"/>
-		<text name="selection_hst_hydrostat"		text="hydrostat"/>
-		<text name="selection_hst_brake"			text="Single pedal"/>
-		<text name="text_HST_installed_short" 		text="HST Hydrostate"/>
-		<text name="text_CVT_Installed_short" 		text="Active"/>
-		<text name="text_CVT_Installed_desc" 		text="CVTaddon active and configurable in the GUI."/>
-		<text name="text_CVT_manuInstalled_short" 	text="Is manual"/>													 
-		<text name="text_CVT_ElektroInstalled_short" 	text="Electric (e.g. forklift)"/>
-		<text name="text_CVT_HarvesterInstalled_short" 	text="Harvester"/>
-        
-		<text name="input_SETVARIOONE" 				text="CVTa: Drivinglevel 1"/>
-		<text name="input_SETVARIOTWO" 				text="CVTa: Drivinglevel 2"/>
-		<text name="input_SETVARIO3" 				text="CVTa: Drivinglevel 3"/>
-		<text name="input_SETVARIO4" 				text="CVTa: Drivinglevel 4"/>
-		<text name="input_SETVARIOTOGGLE" 			text="CVTa: Toggle Drivinglevel"/>
-		<text name="input_SETVARION" 				text="CVTa: neutral"/>
-		<text name="input_SETVARIOADIFFS" 			text="CVTa: AWD and DIFF automatic"/>
-		<text name="input_CVT_SHOWGUI" 				text="CVTa: Open settings menu"/>
-		<text name="input_SETVARIORPM_AXIS"			text="CVTa: Handthrottle axis"/>
-		<text name="input_SETVARIOCLUTCH_AXIS"		text="CVTa: Clutch (Doublebinding)"/>
-		<text name="input_SETVARIORPMP" 			text="CVTa: Increase engine rpm"/>
-		<text name="input_SETVARIORPMM" 			text="CVTa: Decrease engine rpm"/>
-		<text name="input_SETVARIORPMDMAX" 			text="CVTa: RPM Limiter"/>
-		<text name="input_SETPEDALTMS" 				text="CVTa: TMS Pedalmode"/>
-		<text name="input_SETPREGLOW" 				text="CVTa: Preheat candles"/>
-		<text name="input_SIGNAL_HIGH_BEAM" 		text="CVTa: Highlight of the light"/>
-		<text name="input_SIGNAL_HOLD_BEAM" 		text="CVTa: Highlight of the light"/>
-		<text name="input_LMBF_TOGGLE_RAMP" 		text="CVTa: Accelerationramp Increase"/>
-		<text name="input_LMBF_TOGGLE_RAMPT" 		text="CVTa: Toggle acceleration ramp"/>
-		<text name="input_LMBF_TOGGLE_RAMPS1" 		text="CVTa: Set Accelerationramp 1"/>
-		<text name="input_LMBF_TOGGLE_RAMPS2" 		text="CVTa: Set Accelerationramp 2"/>
-		<text name="input_LMBF_TOGGLE_RAMPS3" 		text="CVTa: Set Accelerationramp 3"/>
-		<text name="input_LMBF_TOGGLE_RAMPS4" 		text="CVTa: Set Accelerationramp 4"/>
-		<text name="input_LMBF_TOGGLE_RAMPD" 		text="CVTa: Accelerationramp Decrease"/>
-		<text name="input_LMBF_TOGGLE_BRAMP" 		text="CVTa: Change brakeramp"/>
-		
-		<text name="txt_accRamp1" 					text="AR 1"/>
-		<text name="txt_accRamp2" 					text="AR 2"/>
-		<text name="txt_accRamp3" 					text="AR 3"/>
-		<text name="txt_accRamp4" 					text="AR 4"/>
-
-		<text name="txt_bRamp1" 					text="BR off"/>
-		<text name="txt_bRamp2" 					text="BR  4"/>
-		<text name="txt_bRamp3" 					text="BR  8"/>
-		<text name="txt_bRamp4" 					text="BR 15"/>
-		<text name="txt_bRamp5" 					text="BR 17"/>
-		
-		<text name="txt_vcaInfo" 					text="The Low Brake Force was set to 100% in VCA and the engine modifications were disabled. You can reactivate the latter as you wish, depending on the vehicle it works more or less."/>
-		<text name="txt_needClutch2start" 			text="Press clutch to start the engine."/>
-		<text name="txt_needBrake2start" 			text="Pull handbrake to start the engine."/>
-		<text name="txt_needNoHG2start" 			text="Turn off Handgas to start the engine."/>
-		<text name="txt_needpreGlow" 				text="Pullet necessary for motor start!"/>
-		<text name="txt_preGlow" 					text="Preheat..."/>
-		<text name="txt_attCVTpressure" 			text="Caution, too much pressure in the powertrain. Watch temp."/>
-		<text name="txt_warn_tofastDn" 				text="Too fast! Change gears at a maximum of 10 km/h, otherwise the transmission will be damaged."/>
-		<text name="txt_warn_tofastUp" 				text="Caution! Change gears at a maximum of 10 km/h, preferably stop for a moment."/>
-		
-		
-		<text name="help_page_title" 				text="CVT-Addon"/>
-			<text name="help_page_Functions" 			text="Functions"/>
-				<text name="help_page_startEngine_title"	text="Start the motor"/>
-				<text name="help_page_startEngine_text"		text="In the case of continuously variable vehicles,
-the clutch must be pressed, the same input as the normal clutch. In hydrostatic configuration,
-when VCA is active, the handbrake must be pulled in order to start the engine.
-In addition, the hand throttle must not be pulled up, it must be at 0."/>
-				
-				<text name="help_page_DL_title"				text="Driving Level"/>
-				<text name="help_page_BLANK_text"					text=" "/>
-				<text name="help_page_DLimg_text"					text="
-
-
-
-The left point shows driving level I.
-the right point shows driving level II."/>
-				<text name="help_page_DL_text"					text="There are 2 driving levels, II. is intended for road travel,
-transport and light work. Stage I. Rather for heavy field work and heavy transport.
-The maximum speed is also reduced here and the torque provides more thrust,
-especially when starting.
-A key assignment must be assigned for each level.
-Changing the driving range should be done while stationary,
-since damage can also occur here.
-*A little tip if you use the group switching buttons for up/down,
-you can use the same buttons for the speed levels.
-A special feature of the 'modern' configuration is that the driving ranges are regulated."/>
-				
-				<text name="help_page_AR_title"				text="Acceleration ramps"/>
-				<text name="help_page_AR_text"					text="Furthermore, there is now an acceleration ramp in 4 levels,
-which can be switched through with a button.
-Here the tightening behavior when accelerating and
-reducing the driving speed influences.
-Gentle and with feeling or full power and rough.
-With heavy equipment or trailers,
-High pressures can occur in the planetary gear and damage can occur!
-Here the acceleration ramp should be set to 3 or less.
-Level 4 is more suitable for empty trips.
-For light field work you can easily use speed level 1
-Pull acceleration ramp 4 - For example, disc harrow, flat cultivator."/>
-<text name="help_page_ARimg_text"					text="
-
-
-
-AR levels and 1 to 4"/>
-				
-				<text name="help_page_BR_title"				text="Brake ramps"/>
-				<text name="help_page_BR_text"					text="In order not to miss out on convenient setting options,
-You can also change the braking ramp.
-There is also a button that can be used to switch between 5 levels.
-The braking ramp at different speed levels
-from 1 km/h (standard) 4, 8, 15 and 17 km/h cause,
-that when you release the accelerator pedal or joystick, the engine brakes
-supported by the service brake from the set braking ramp.
-This can be helpful for shunting or front loader work
-- or simply during stop and go road trips."/>
-<text name="help_page_BRimg_text"					text="
-
-
-
-
-
-
-
-BR levels and 1 to 4"/>
-
-				<text name="help_page_tmsP_title"			text="TMS pedal mode"/>
-				<text name="help_page_tmsP_text"				text="The TMS 'Pedal' mode, with this you can control the pedal resolution.
-I.e. set the maximum speed of the pedal.
-With the cruise control deactivated, you can set the levels there.
-Example 1 could be a maximum of 3 km/h.
-The Padal then reacts in percentage terms,
-i.e. 50% pedal travel corresponds to 6 km/h at a maximum of 12 km/h."/>
-				
-				<text name="help_page_HG_title"				text="Handthrottle"/>
-				<text name="help_page_HG_text"					text="Digital hand throttle only has a decorative function
-- but together with another mod (rAdas), it will then
-Among other things, the rear hydraulics, PTO performance, etc. are controlled.
-There is a special feature for HST and wheel loaders."/>
-				
-				<text name="help_page_aDiff_title"			text="Auto diffs (VCA or EV requied)"/>
-				<text name="help_page_aDiff_text"				text="Automatic differential lock depending on steering angle and four-wheel drive
-depending on the speed in speed level I.
-For field work with additional automatic preselection in DL II. to DL I.
-In a modern CVT configuration, the all-wheel drive is permanently active and self-regulating.
-You can only activate the automatic axle differential lock."/>
-				
-				<text name="help_page_HST_title"			text="Hydrostate HST drive"/>
-				<text name="help_page_HST_text"					text="If a vehicle is configured as HST, there are two hydraulic drive types
-which can be changed through the former driving areas 1 and 2.
-Here you should decide what type of vehicle you have
-- In reality, a vehicle cannot have both."/>
-				
-				<text name="help_page_HST1_text"				text="1 is the classic HST,
-in which the foot pedal is usually designed like a rocker
-or there are two pedals left and right,
-each for backwards and forwards.
-If you press the pedal for one direction of travel,
-the vehicle moves as a percentage of the pedal
-- However, the engine speed remains unchanged (idle).
-This leads to the maximum speed
-is not achieved.
-The hand throttle must be used for this.
-At 100% hand throttle, the driving speed can be adjusted
-still serve percentage,
-because it is a hydraulic drive.
-Furthermore, the front loader is used on wheel loaders
-depending on the hand throttle in performance,
-i.e. the lower the engine speed
-- which is also the pump speed
-- the slower the hydraulic lifting cylinders move.
-In addition, the heavier a front-loading tool is
-and the heavier it is loaded,
-the speed drops when lifting,
-the lower the hand throttle is set.
-Be careful, operate the engine when the engine is still cold
-Front loader can cause the engine to stall."/>
-				
-				<text name="help_page_HST2_text"				text="2 is the newer variant, which has many, many other variations,
-Depending on the manufacturer - but I won't go into all of them.
-In addition to a brake, there is usually only one accelerator pedal instead of two.
-There is also a joystik or something similar that you can use to move forward,
-Return to neutral if necessary. If you press the accelerator pedal,
-The engine speed regulates automatically and the vehicle accelerates
-on the percentage of pedal operation.
-Furthermore, the engine speed increases automatically,
-as soon as the front loader is operated - as long as the accelerator pedal is pressed at least 0.001%.
-At 0% pedal position, the hand throttle must still be used to ensure a minimum speed.
-In reality it's a little different, but unfortunately it can't be implemented quite like that in the game mechanics."/>
-				<text name="help_page_HST3_text"				text="Drive features: Either hydraulic motors are directly on/behind the wheels
-or there is an HST transmission, which usually also comes with one
-Cardan shaft (if AWD available) takes over the AWD supply.
-The latter is more of a newer variant. With older generation AWD,
-Especially with articulated vehicles, a hydraulic transmission is used at the front and rear.
-The stepless acceleration ramps have a slightly different function on HST's!
-The Hud then says 'HySt' - which can still be switched from 1 to 4.
-For hydrostatic drives, these are the speed ranges,
-    4 fastest
-    1 quickly
-    2 slowly
-    3 slowest
-"/>
-
-				<text name="help_page_HARVESTER_text"				text="This configuration is common to most
-the right choice for modern threshers and shredders.
-Everything is very similar to the HST configuration,
-However, there is a road driving range and a field mode - driving ranges 1 and 2 represent
-this. In field mode it is also possible to use a corresponding input device,
-e.g. using a joystick that does not center itself as a driving lever.
-In addition, the vehicles can simply be started in this configuration.
-But be careful if the hand throttle is still turned on and the engine is not yet warm.
-As with the HST, the acceleration ramps also serve as speed ranges.
-"/>
-			<text name="help_page_manual_title"		text="Manual transmission"/>
-			<text name="help_page_manual_text"		text="If a vehicle has a manual transmission,
-You can specify this here to use the engine warm-up function there.
-For vehicles that have several transmission variants to choose from in the shop,
-With these it is not possible to read out the gear type correctly.
-If the warm-up function is not desired on manual vehicles,
-select the No option."/>
-
-<text name="help_page_electic_title"		text="Electric vehicles"/>
-			<text name="help_page_electric_text"		text="These vehicles do not need to warm up
-and have a different acceleration curve.
-With the driving ranges you have a slow and fast travel option.
-The ramps adjust the power of the battery,
-how much the traction motor has available at the same time.
-The higher, the more kWh is consumed.
-"/>
-				
-			<text name="help_page_beginning"		text="Preface"/>
-			<text name="help_page_keybinds_title"		text="Key bindings"/>
-			<text name="help_page_keybinds_text"		text="There are no buttons assigned by default; everyone has to set this up themselves."/>
-			<text name="help_page_keysInfo_text"		text="For the clutch, the same input can be assigned,
-as for the clutch that was set up for manual transmissions.
-The driving areas can also have the same occupancies,
-such as those for the group switches."/>
-			
-			<text name="help_page_heatSystem"		text="Damage and overheating system"/>
-				<text name="help_page_cold_title"					text="Engine still too cold"/>
-				<text name="help_page_cold_text"				text=" 
-Engine is too cold for full throttle below 45 °C, max. less than max rpm: 1.5
-Example: max 2200 rpm: 1.5 = not higher than approx. 1460 rpm.
-Be careful, engine speeds that are too high when the engine is cold increase wear drastically.
-Warm up by slightly accelerating or driving slowly without increasing the speed.
-This feature works on all vehicles."/>
-
-				<text name="help_page_warnHeat_title"		text="High pressure in the drive train heats up"/>
-				<text name="help_page_warnHeat_text"			text=" 
-Warning temperature, there is high pressure,
-at less than 50% load and less than 50% throttle or when you stop driving,
-it is deactivated when the cooling is sufficient."/>
-				
-				<text name="help_page_warnDmg_title"		text="Warning: May be damaged"/>
-				<text name="help_page_warnDmg_text"			text=" 
-A warning indicator at the top informing you
-that the current acceleration ramp could cause damage"/>
-				
-				<text name="help_page_critHeat_title"		text="Critical heat"/>
-				<text name="help_page_critHeat_text"			text="
-Red is the critical temperature warning.
-It's better to stand still and let it cool down."/>
-				
-				<text name="help_page_critDmg_title"		text="Critical damage"/>
-				<text name="help_page_critDmg_text"				text="
-Critical damage indicator.
-Now it has suffered minor or major damage.
-To reset the lamp: allow the engine to cool down and turn the engine off and on again.
-If the damage was too great and while the lamp is lit,
-the transmission electronics switches to safety mode,
-so that the acceleration and the top speed are reduced.
-If turning off/on does not deactivate the lamp, repair the damage first,
-allow it to cool and turn the engine off and on again."/>
-				
-				<text name="help_page_wearTear_title"		text="Wear and tear"/>
-				<text name="help_page_wearTear_text"			text="Damage does not occur immediately; wear initially increases.
-If a certain level is exceeded together with other factors,
-Actual damage or even total failure occurs.
-In reality, repairing or replacing the gearbox is extremely expensive - so be careful."/>
-
-				<text name="help_page_manuheat_title"		text="Engine warm-up with manual transmission"/>
-				<text name="help_page_manuheat_text"			text="With manual transmissions,
-if it has not been deactivated in the shop,
-The engine also has to warm up first.
-There are 4 colors here,
-Blue - cold
-Green - ok
-Yellow, orange - ok, warm
-Red - too warm or too many revolutions when the engine is still cold."/>
-
+		<text name="txt_VarioOne" text=". " />
+		<text name="txt_VarioTwo" text=" ." />
+		<text name="txt_VarioN" text="N" />
+		<text name="txt_VarioR" text="↓" />
+		<text name="txt_VarioD" text="↑" />
+		<text name="txt_VarioRpmPlus" text="UPM +" />
+		<text name="txt_VarioRpmMinus" text="UPM -" />
+		<text name="CVTAgui_title" text="CVT-Addon Gear settings" />
+		<text name="CVTAgui_underTitle" text="The engine temperature is not synced in the multiplayer.Please use DashboardLive for this" />
+		<text name="CVTAgui_underTitle2" text=" " />
+		<text name="CVTAgui_Variant" text="Gear variant" />
+		<text name="CVTAgui_additionalFuncs" text="Extra functions" />
+		<text name="CVTAgui_Hud" text="HUD" />
+		<text name="cvtgui_Cvthud" text="Visibility" />
+		<text name="CVTAgui_CvthudPos" text="Position" />
+		<text name="variantTT" text="Select gear variant, there are a variety of different stepless gears." />
+		<text name="CvthudTT" text="HUD Visible or deactivate display." />
+		<text name="CvthudPOSTT" text="HUD Position." />
+		<text name="CVTAguiHUD_on" text="on" />
+		<text name="CVTAguiHUD_off" text="off" />
+		<text name="text_CVT_title" text="CVT-Addon" />
+		<text name="text_CVT_cfg" text="CVTaddon activate" />
+		<text name="text_CVT_notInstalled_short" text="Inactive" />
+		<text name="text_CVT_notInstalledTemp_short" text="Non -active" />
+		<text name="text_CVT_notInstalled_desc" text="CVTaddon Not active, but vehicles are compensated for in acceleration." />
+		<text name="text_CVTclas_installed_short" text="CVT classic" />
+		<text name="text_CVTmod_installed_short" text="CVT modern" />
+		<text name="text_ipmTitle" text="Intellegent Power Management" />
+		<text name="drivinglevelTT" text="Number of possible driving levels.
+Different manufacturers and models have many variants.Fendt, for example, has two, JD three, Claas often three and two.
+(Vario coming soon)" />
+		<text name="accRampTT" text="Number of possible acceleration ramps.
+Different manufacturers and models have many variants.Fendt, for example, has four, John Deere three." />
+		<text name="antiSlipTT" text="As soon as slippage arises on the wheels, the function intervenes and brakes individual wheels." />
+		<text name="pitTT" text="Runs into the curve instead of sliding over the front axle.Real is only available at Fendt." />
+		<text name="ipmTT" text="Intellegent Power Management Boost.
+A corresponding performance increase is given for overweak of 14 km/h and/or switching on the PTO under load.
+This is a relatively modern version to keep the Emmision values ​​lower and still have more power available if necessary." />
+		<text name="inchingTT" text="The clutch pedal is used as an inching pedal.
+When pressing, the vehicle becomes faster or slower, even when the cruise control is activated." />
+		<text name="reverseLightsTT" text="When driving backwards, the rear working light automatically switches on.
+Often to be found in modern and large machines such as harvest." />
+		<text name="reverseLightsDurationTT" text="Time in seconds how long the light should remain switched on after reversing." />
+		<text name="hstTT" text="HST or hydrostat Hydraulic transmission?
+HST No automatic engine speed, except for the idle control.
+Hydrostat is more automated on different variants and mostly has all-wheel drive drive and own,
+Depending on the manufacturer, even retail hydromotors." />
+		<text name="text_IPMboost0" text="no IPM" />
+		<text name="text_IPMboost15" text="IPM 15ps Boost" />
+		<text name="text_IPMboost22" text="IPM 22ps Boost" />
+		<text name="text_IPMboost27" text="IPM 27ps Boost" />
+		<text name="text_IPMboost34" text="IPM 34ps Boost" />
+		<text name="CVTAgui_drivinglevelT" text="Driving Level" />
+		<text name="CVTAgui_accRampT" text="Acceleration ramps" />
+		<text name="CVTAgui_antiSlipT2" text="Auto Anti-slip (vca necessary)" />
+		<text name="CVTAgui_antiSlipT" text="Auto Anti-slip" />
+		<text name="CVTAgui_pitT2" text="Pull-In-Turn (vca necessary)" />
+		<text name="CVTAgui_pitT" text="Pull-In-Turn" />
+		<text name="CVTAgui_HstTitle" text="Hydro-drive" />
+		<text name="CVTAgui_inchingTitle" text="Inching" />
+		<text name="CVTAgui_reverseLightsTitle" text="Auto Light when reversing" />
+		<text name="CVTAgui_reverseLightsDurationTitle" text="Afterlight Duration" />
+		<text name="selection_drivinglevel_1" text="Vario" />
+		<text name="selection_drivinglevel_2" text="2" />
+		<text name="selection_drivinglevel_3" text="3" />
+		<text name="selection_drivinglevel_4" text="4" />
+		<text name="selection_accRamp_1" text="0" />
+		<text name="selection_accRamp_2" text="2" />
+		<text name="selection_accRamp_3" text="3" />
+		<text name="selection_accRamp_4" text="4" />
+		<text name="selection_accRamp_5" text="5" />
+		<text name="selection_accRamp_6" text="6" />
+		<text name="selection_accRamp_7" text="7" />
+		<text name="selection_accRamp_8" text="8" />
+		<text name="selection_accRamp_9" text="9" />
+		<text name="selection_accRamp_10" text="10" />
+		<text name="selection_accRamp_01" text="1" />
+		<text name="selection_active" text="Activated" />
+		<text name="selection_deactive" text="Deaching" />
+		<text name="selection_BF_20" text="20%" />
+		<text name="selection_BF_30" text="30%" />
+		<text name="selection_BF_40" text="40%" />
+		<text name="selection_BF_50" text="50%" />
+		<text name="selection_BF_60" text="60%" />
+		<text name="selection_BF_70" text="70%" />
+		<text name="selection_BF_80" text="80%" />
+		<text name="selection_BF_90" text="90%" />
+		<text name="selection_BF_default" text="100% default" />
+		<text name="selection_BF_110" text="110%" />
+		<text name="selection_BF_120" text="120%" />
+		<text name="selection_BF_130" text="130%" />
+		<text name="selection_BF_140" text="140%" />
+		<text name="selection_BF_150" text="150%" />
+		<text name="selection_BF_160" text="160%" />
+		<text name="selection_BF_170" text="170%" />
+		<text name="selection_BF_180" text="180%" />
+		<text name="selection_BF_190" text="190%" />
+		<text name="selection_BF_200" text="200%" />
+		<text name="brakeForceCorrectionNotTT" text="FS25_EngineBrakeforceCompensation non -active" />
+		<text name="brakeForceCorrectionTitle" text="Motor brake compensation" />
+		<text name="brakeForceCorrectionModReq" text="Motor brake compensation (EBC necessary)" />
+		<text name="brakeForceCorrectionTT" text="The effect of the engine brake is calculated dynamically and depending on various factors by the CVT add-on.
+With this setting, the resulting calculation can be influenced in a targeted manner and optionally compensates for a stronger or weaker braking effect." />
+		<text name="drivingLevelStateTT" text="The maximum speed for lower driving areas or the HST and harvesting machines the limit ramps,
+are hereby reduced or increased.For example, a stepless vehicle with 2 driving areas drives the full speed (50km/h) in 2, in 1 half (25km/h).
+If you place this value on low, it would be 22 km/h, very little then 15.5 km/h.The same applies.Higher, 28 km/h and very high 31 km/h." />
+		<text name="CVTAgui_drivingLevelStateTitle" text="Speed adaptation" />
+		<text name="selection_DLC_10000" text="very low" />
+		<text name="selection_DLC_01000" text="less" />
+		<text name="selection_DLC_00100" text="Normal" />
+		<text name="selection_DLC_00010" text="higher" />
+		<text name="selection_DLC_00001" text="very high" />
+		<text name="selection_inching_dn" text="Slower" />
+		<text name="selection_inching_up" text="Faster" />
+		<text name="selection_hst_hst" text="HST" />
+		<text name="selection_hst_hydrostat" text="Hydrostat" />
+		<text name="selection_hst_brake" text="Single driving pedal" />
+		<text name="text_HST_installed_short" text="HST Hydrostat" />
+		<text name="text_CVT_Installed_short" text="Active" />
+		<text name="text_CVT_Installed_desc" text="CVT-Addon active and configurable in the GUI." />
+		<text name="text_CVT_manuInstalled_short" text="Manual transmission" />
+		<text name="text_CVT_ElektroInstalled_short" text="Electrical (e.g. forklift)" />
+		<text name="text_CVT_HarvesterInstalled_short" text="Harvester" />
+		<text name="input_SETVARIOONE" text="CVTa: Drivinglevel 1" />
+		<text name="input_SETVARIOTWO" text="CVTa: Drivinglevel 2" />
+		<text name="input_SETVARIO3" text="CVTa: Drivinglevel 3" />
+		<text name="input_SETVARIO4" text="CVTa: Drivinglevel 4" />
+		<text name="input_SETVARIOTOGGLE" text="CVTa: Drivinglevel toggle" />
+		<text name="input_SETVARION" text="CVTa: Neutral" />
+		<text name="input_SETVARIOADIFFS" text="CVTa: AWD and DIFF Automatic" />
+		<text name="input_CVT_SHOWGUI" text="CVTa: Open settings menu" />
+		<text name="input_SETVARIORPM_AXIS" text="CVTa: Handgas axis" />
+		<text name="input_SETVARIORPMP" text="CVTa: Increase the engine speed" />
+		<text name="input_SETVARIORPMM" text="CVTa: Reduce the engine speed" />
+		<text name="input_SETVARIORPMDMAX" text="CVTa: RPM Limit (experiment)" />
+		<text name="input_SETPEDALTMS" text="CVTa: TMS pedal modus" />
+		<text name="input_SETPREGLOW" text="CVTa: Kerzen Vorglühen" />
+		<text name="input_SIGNAL_HIGH_BEAM" text="CVTa: High beam Flash" />
+		<text name="input_SIGNAL_HOLD_BEAM" text="CVTa: High beam Flash" />
+		<text name="input_LMBF_TOGGLE_RAMP" text="CVTa: Increase the acceleration ramp" />
+		<text name="input_LMBF_TOGGLE_RAMPT" text="CVTa: Toggle acceleration ramp" />
+		<text name="input_LMBF_TOGGLE_RAMPS1" text="CVTa: Switch the acceleration ramp 1" />
+		<text name="input_LMBF_TOGGLE_RAMPS2" text="CVTa: Switch the acceleration ramp 2" />
+		<text name="input_LMBF_TOGGLE_RAMPS3" text="CVTa: Switch the acceleration ramp 3" />
+		<text name="input_LMBF_TOGGLE_RAMPS4" text="CVTa: Switch the acceleration ramp 4" />
+		<text name="input_LMBF_TOGGLE_RAMPD" text="CVTa: Reduce the acceleration ramp" />
+		<text name="input_LMBF_TOGGLE_BRAMP" text="CVTa: Change brake ramp" />
+		<text name="txt_accRamp1" text="AR 1" />
+		<text name="txt_accRamp2" text="AR 2" />
+		<text name="txt_accRamp3" text="AR 3" />
+		<text name="txt_accRamp4" text="AR 4" />
+		<text name="txt_bRamp1" text="BR aus" />
+		<text name="txt_bRamp2" text="BR  4" />
+		<text name="txt_bRamp3" text="BR  8" />
+		<text name="txt_bRamp4" text="BR 15" />
+		<text name="txt_bRamp5" text="BR 17" />
+		<text name="txt_vcaInfo" text="The low braking force was set in VCA to 100% and the engine modifications were deactivated.The latter can be activated again, depending on the vehicle, it works more or less." />
+		<text name="txt_needClutch2start" text="Press clutch to start the engine." />
+		<text name="txt_needBrake2start" text="Pull handbrake to start the engine." />
+		<text name="txt_needNoHG2start" text="handgas out to start the engine." />
+		<text name="txt_needpreGlow" text="Preheat necessary for the start of the engine!" />
+		<text name="txt_preGlow" text="Preheating..." />
+		<text name="txt_attCVTpressure" text="Attention, too high pressure in the driving rate.Temp. Watch." />
+		<text name="txt_warn_tofastDn" text="Too fast!Change the driving level at a maximum of 10 km/h, otherwise the gearbox is damaged." />
+		<text name="txt_warn_tofastUp" text="Caution! Change driving levels at a maximum of 10 km/h, it is best to stop briefly." />
+		<text name="help_page_title" text="CVT-Addon" />
+		<text name="help_page_Functions" text="Functions" />
+		<text name="help_page_startEngine_title" text="Start the engine" />
+		<text name="help_page_startEngine_text" text="The clutch must be kicked in stepless vehicles,
+So the same input which is also the normal coupling.With hydrostatic configuration, if VCA is active,
+The handbrake was pulled to start the engine.
+In addition, the hand gas must not be raised, it must be to 0." />
+		<text name="help_page_DL_title" text="Driving Level" />
+		<text name="help_page_BLANK_text" text=" " />
+		<text name="help_page_DLimg_text" text="    The left point shows the travel area I. The right point shows driving area II. " />
+<text name = "help_page_dl_text" text = "There are 2 driving levels, II. is intended for road trips, transport and easy work. Level I. more for severe field work and heavy transports.
+The maximum speed is also reduced and the torque ensures more thrust, especially when starting.
+A key assignment must be assigned for each stage.Changing the driving areas should happen at a standstill, since damage can also occur here.
+*A little tip, if you use the group circuit buttons for high/down, you can use the same buttons for the driving levels.
+Special feature of the 'modern' configuration is that the driving areas are regulated." />
+		<text name="help_page_AR_title" text="Acceleration ramps" />
+		<text name="help_page_AR_text" text="Furthermore, there is now an acceleration ramp in 4 stages that can be switched through with a button.
+Here the suit behavior when accelerating and reducing the driving speed is influenced.Gentle and with feeling or full power and rough.
+With heavy devices or trailers, there may be high pressures in the planetary gear and it can be damaged!
+Here the acceleration ramp should be set to 3 or less.Level 4 is more suitable for empty trips.
+In the light field work, you can still draw on speed 1 in the acceleration ramp 4 - for example, disc icons, flat grubber." />
+		<text name="help_page_ARimg_text" text="    AR Stufen 1 bis 4" />
+		<text name="help_page_BR_title" text="Brake ramp" />
+		<text name="help_page_BR_text" text="In order not to indulge in comfortable setting options, you can also change the brake ramp.
+There is also a button with which can be switched into 5 steps.
+The brake ramp in different speed levels of 1 km/h (standard) 4, 8, 15 and 17 km/h,
+that when the driving pedal or driving joy stick is released, support the engine brake effect from the set brake ramp with the operating brake.
+This can be helpful for shunting or front loading work - or simply with stop and go road trips." />
+		<text name="help_page_BRimg_text" text="        BR levels and 1 to 4" />
+		<text name="help_page_tmsP_title" text="TMS Pedal modus" />
+		<text name="help_page_tmsP_text" text="The TMS 'Pedal' mode, with this you can control the pedal resolution.I.e. determine the maximum speed of the pedal.
+With deactivated cruise control, you set the steps there.
+Example 1 could be max 3 km/h.The pedal then reacts in percentage, i.e. 50% pedal path corresponds to a maximum of 12 km/h, 6 km/h." />
+		<text name="help_page_HG_title" text="handgas" />
+		<text name="help_page_HG_text" text="Digital handgas, has easily only a decoration function-but together with another mod (radas), the rear hydraulic, PTO performance, etc. is then controlled.There is a special feature with HST and wheel loaders." />
+		<text name="help_page_aDiff_title" text="Auto Diffs (VCA oder EV benötigt)" />
+		<text name="help_page_aDiff_text" text="Automatische Differenzialsperre je nach Lenkwinkel und Allradantrieb je nach Geschwindigkeit in Fahrstufe I. Für Feldarbeiten mit zusätzlicher automatischer Vorwahl in DL II. zu DL I. In einer modernen CVT-Konfiguration ist der Allradantrieb permanent aktiv und regelt sich selbst. Lediglich die Achsdifferenzialsperre-Automatik können Sie aktivieren." />
+		<text name="help_page_HST_title" text="Hydrostat HST Antrieb" />
+		<text name="help_page_HST_text" text="Ist ein Fahrzeug als HST konfiguriert, so gibt es zwei hydraulische Antriebsarten die durch die ehemals Fahrbereiche 1 und 2 gewechselt werden können. Hier sollte entschieden werden, welche Art das Fahzeug besitzt  - ein Fahrzeug kann in der Realität nicht beide haben." />
+		<text name="help_page_HST1_text" text="1 ist der klassische HST, bei dem das Fußpedal meistens wie eine Wippe aufgebaut ist oder es gibt zwei Pedale links und rechts, jeweils für Rückwärts und Vorwärts. Betätigt man das Pedal für eine Fahrtrichtung, bewegt sich das Fahrzeug prozentual des Pedals - Die Motordrehzahl bleibt jedoch unverändert (Standgas). Das führt dazu, daß die maximale Geschwindigkeit nicht erreicht wird. Dazu muß das Handgas genutzt werden. Bei 100% Handgas lässt sich die Fahrgeschwindigkeit immer noch prozentual bedienen, da es ein Hydraulischer Antrieb ist. Desweiteren wird der Frontlader bei Radladern abhänging vom Handgas in der Leistung, d.h. je niedriger die Motordrehzahl - die auch ebenso die Pumpendrehzahl ist - desto langsamer bewegen sich die Hydraulikhubzylinder. Dazu, desto schwerer ein Frontladertool ist und umso schwerer es beladen ist, sinkt die Drehzahl beim anheben, je niedriger das Handgas eingestellt ist. Achtung, bei noch kaltem Motor und betätigen des Frontladers kann der Motor abgewürgt werden." />
+		<text name="help_page_HST2_text" text="2 ist die neuere Variante, die noch viele viele andere Variationen, je nach Hersteller bietet - auf alle gehe ich jedoch nicht ein. Hier gibt es neben einer Bremse meistens nur ein Fahrpedal anstatt zwei. Zudem gibt es einen Joystick oder ähnliches, mit dem man Vor, Zurück ggf. Neutral einstellen kann. Betätigt man das Fahrpedal, regelt sich die Motordrehzahl automatisch und das Fehrzeug beschleunigt auf die prozentuele Betätigung des Pedals. Desweiteren geht die Motordrehzahl automatisch hoch, sobald der Frontlader betätigt wird - solange das Fahrpedal min. 0.001% betätigt wird. Bei 0% Pedalstellung muß trotzdem das Handgas benutzt werde, um eine mindest Drehzahl zu gewährleisten. Real ist das etwas anders, lässt sich in der Spielmechanik leider nicht ganz so umsetzen." />
+		<text name="help_page_HST3_text" text="Antriebs-Merkmale: Entweder sind Hydromotoren direkt an / hinter den Rädern oder es gibt ein HST Getriebe, welches dann meistens auch mit einer Kardanwelle(wenn AWD vorhanden)die AWD Versorgung übernimmt. Letzteres ist eher die neuere Variante. Bei AWD der älteren Generation werden, besonders bei Knicklenkern, je vorne und hinten ein hydraulisches Getriebe eingesetzt. Die bei Stufenlosen Beschleunigungs-Rampen, haben eine kleine andere Funktion bei HST's! Im HUD steht dann 'HySt' - die aber immer noch von 1 bis 4 geschaltet werden können. Diese sind Bei hydrostatischen Antrieben die Geschwindigkeitsbereiche,    4 schnellste    1 schnell    2 langsam    3 langsamste " />
+		<text name="help_page_HARVESTER_text" text="Diese Konfiguration ist bei den meisten moderneren Dreschern und Häckslern die richtige Wahl. Alles ist sehr ähnlich wie bei der HST Konfiguration, jedoch gibt es einen Feldmodus und einen Straßenfahrten-Bereich - die Fahrbereiche 1 und 2 stellen dieses dar. Im Feldmodus ist es auch möglich, eine entsprechendes Eingabegerät, z.B. einen Joystick der sich nicht zentriert oder Schubregler mit Mitte, als Fahrhebel zu nutzen. Zudem können die Fahzeuge in dieser Konfiguration einfach so gestartet werden. Doch Vorsicht, wenn noch das Handgas aufgedreht ist und der Motor noch nicht warm ist. Die Beschleunigungsrampen dienen hier ebenfalls wie beim HST, als Geschwindigkeitsbereiche. " />
+		<text name="help_page_manual_title" text="Manuelles Getriebe" />
+		<text name="help_page_manual_text" text="Wenn ein Fahrzeug ein manuelles Getriebe hat, kann man dies hier angeben, um die Motoraufwärmfunktion dort zu nutzen. Bei Fahrzeugen die mehrere Getriebe Varianten im Shop zur Auswahl haben, bei diesen ist es nicht möglich die Getriebeart korrekt auszulesen. Ist die Aufwärmfunktion bei manuellen Fahrzeugen nicht gewünscht, wähle die Option Nein aus." />
+		<text name="help_page_electic_title" text="Elektrofahrzeuge" />
+		<text name="help_page_electric_text" text="Diese Fahrzeuge müssen nicht warmlaufen und haben eine andere Beschleunigungskurve. Mit den Fahrbereichen hat man eine Langsam- und Schnellfahrt Option. Durch die Rampen wird die Power des Akkus eingestellt, wieviel der Fahrmotor gleichzeitig zur Verfügung bekommt. Je höher, desto mehr kwh wird auch verbraucht. " />
+		<text name="help_page_beginning" text="Vorwort" />
+		<text name="help_page_keybinds_title" text="Tastenbelegungen" />
+		<text name="help_page_keybinds_text" text="Es sind keine Tasten von Haus aus belegt, dies muß jeder selbst einrichten." />
+		<text name="help_page_keysInfo_text" text="Bei der Kupplung, kann die selbe Eingabe belegt werden, wie für die Kupplung, die für manuelle Getriebe eingerichtet wurde. Die Fahrbereiche, können ebenfalls die gleichen Belegungen sein, wie z.B. die für die Gruppenschalter." />
+		<text name="help_page_heatSystem" text="Schaden und Überhitz System" />
+		<text name="help_page_cold_title" text="Motor noch zu Kalt" />
+		<text name="help_page_cold_text" text=" Motor ist unter 45 °C zu kalt für Vollgas, max. weniger als max-U/min : 1,5 Beispiel: max 2200 U/min : 1.5 = nicht höher als ca. 1460 U/min. Vorsicht, zu hohe Motordrehzahlen bei kaltem Motor erhöhen den Verschleiß drastisch. Aufwärmen durch leichtes Gasgeben oder langsames Fahren, ohne die Drehzahl hoch zu treiben. Diese Funktion wirkt sich auf alle Fahrzeuge aus." />
+		<text name="help_page_warnHeat_title" text="Hoher Druck im Triebsatz, heizt sich auf" />
+		<text name="help_page_warnHeat_text" text=" Warntemperatur, es herrscht hoher Druck, bei weniger Last als 50% und weniger als 50% Gas oder wenn Sie mit der Fahrt aufhören, wird es deaktiviert, wenn die Abkühlung ausreichend ist." />
+		<text name="help_page_warnDmg_title" text="Warnung: Könnte beschädigt werden" />
+		<text name="help_page_warnDmg_text" text=" Oben eine Warnanzeige, die Sie darauf hinweist, daß die aktuelle Beschleunigungs-Rampe Schaden anrichten könnte" />
+		<text name="help_page_critHeat_title" text="Kritische Hitze" />
+		<text name="help_page_critHeat_text" text=" Rot ist die kritische Temperaturwarnung. Besser stehen bleiben und abkühlen lassen." />
+		<text name="help_page_critDmg_title" text="Kritischer Schaden" />
+		<text name="help_page_critDmg_text" text=" Anzeige für kritischen Schaden. Jetzt hat es einen kleinen oder großen Schaden erlitten. Die Lampe zurück setzen: lassen Sie den Motor abkühlen und schalten Sie den Motor aus und wieder ein. War der Schaden zu groß und während die Lampe leuchtet, fährt die Getriebeelektronik in den Sicherheitsmodus, sodass die Beschleunigung und die Höchstgeschwindigkeit reduziert werden. Wenn das Aus-/Einschalten die Lampe nicht deaktiviert, reparieren Sie zuerst die Schäden, lassen Sie sie abkühlen und schalten Sie den Motor aus und wieder an." />
+		<text name="help_page_wearTear_title" text="Verschleiß" />
+		<text name="help_page_wearTear_text" text="Schäden entstehen nicht sofort, der Verschleiß nimmt zunächst zu. Wird ein bestimmtes Maß zusammen mit anderen Faktoren überschritten, kommt es zu tatsächlichen Schäden bis hin zum Totalausfall. In der Realität sind Reparaturen oder der Austausch des Getriebes extrem teuer – seien Sie also Vorsichtig." />
+		<text name="help_page_manuheat_title" text="Motor Aufwärmen bei manuellen Getriebe" />
+		<text name="help_page_manuheat_text" text="Bei manuellen Getriebe, wenn es im Shop nicht deaktiviert wurde, muß sich der Motor ebenfalls erst aufwärmen. Hier gibt es 4 Farben, Blau - kalt Grün - ok Gelb, Orange - ok, warm Rot - zu warm oder zu viel Umdrehung wenn der Motor noch kalt ist." />
 		<text name="title_PosOfHUD" text="CVT Addon" />
-		<text name="setting_PosOf_HUD" text="HUD position" />
-		<text name="explanation_PosOf_HUD" text="Change the position of the HUD or deactivate it.
-The Setting and saving will do per player." />
-		<!-- Auswahlmöglichkeiten -->
-		<text name="selection_CVTaddonHUDpos_1" text="Default" />
-		<text name="selection_CVTaddonHUDpos_2" text="Top" />
+		<text name="setting_PosOf_HUD" text="HUD Position" />
+		<text name="explanation_PosOf_HUD" text="Changes the position of the HUD or switches off. The setting and storage of each player." />
+		<text name="selection_CVTaddonHUDpos_1" text="Standard" />
+		<text name="selection_CVTaddonHUDpos_2" text="Above" />
 		<text name="selection_CVTaddonHUDpos_3" text="Off" />
-
 		<text name="SettingChanged_title" text="CVT-Addon" />
-
 		<text name="SettingChanged" text="HUD changed" />
-		<text name="SettingNorm" text="to default" />
-		<text name="SettingTop" text="to top" />
-		<text name="SettingOff" text=".. deactivated!" />
-		<text name="damageWT" text="Please repair, the wear on the drive set is excessive " />
-		
-		<text name="help_page_HUDset_title"	text="Hud Position"/>
-		<text name="help_page_HUDset_text"	text="In the Escapemenu, settings with the tractor-icon,
-the position of the HUD can be changed in two ways
-or deactivate. This setting applies per player." />
-	</texts>   
+		<text name="SettingNorm" text="in Standard" />
+		<text name="SettingTop" text="up" />
+		<text name="SettingOff" text=".. was deactivated!" />
+		<text name="damageWT" text="Please repair, the wear of the driving rate is above " />
+		<text name="help_page_HUDset_title" text="HUD Position" />
+		<text name="help_page_HUDset_text" text="In the escape menu, settings with the tractor symbol, the position of the HUD can be changed or deactivated in 2 variants.This setting applies per player." />
+	</texts>
 </l10n>
