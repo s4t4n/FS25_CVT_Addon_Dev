@@ -48,12 +48,17 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.9.1.9";
+local scrversion = "0.9.2.2";
 CVTaddon.build = scrversion
 local modversion = CVTaddon.modversion; -- moddesc
+
+local lastupdate = "14.09.2025"
+local timestamp = "1757882092036";
+local savetime = "22:34:56";
 local lastupdate = "04.09.2025"
 local timestamp = "1757019329182";
 local savetime = "22:55:33";
+
 
 -- _______________________
 cvtaDebugCVTon = false	 -- \
@@ -4156,29 +4161,38 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						if spec.CVTdamage > 60 and spec.forDBL_critdamage == 1 then 																							-- Notlauf
 							self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * (spec.drivingLevelValue) * 0.4)
 							self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * (spec.drivingLevelValue) * 0.4)
-						elseif spec.forDBL_critdamage == 0 and spec.isTMSpedal == 0 then 
-							self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * (spec.drivingLevelValue))
-							self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * (spec.drivingLevelValue))																						-- Normalbetrieb
-							-- Setze die maxSpeed proportional zum Pedal
-					        local maxSpeed = motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01)
+						elseif spec.forDBL_critdamage == 0 and spec.isTMSpedal == 0 then 																						-- Normalbetrieb
+							self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne * spec.drivingLevelValue )*(1.01-spec.ClutchInputValue)
+							self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue )*(1.01-spec.ClutchInputValue)
+							-- motor.motorLimitSpeed = math.abs(axis) * (motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01))
+							self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * (motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01))
 					        if dir == -1 then
-					            maxSpeed = motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01)
+					            self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * (motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01))
 					        end
+							-- Setze die maxSpeed proportional zum Pedal
+					        -- motor.motorLimitSpeed = math.abs(axis) * (motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01))
+					        -- if dir == -1 then
+					        --     motor.motorLimitSpeed = math.abs(axis) * (motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01))
+					        -- end
 
-					        motor.motorLimitSpeed = math.abs(axis) * maxSpeed * spec.drivingLevelValue
+					        -- motor.motorLimitSpeed = math.abs(axis) * maxSpeed * spec.drivingLevelValue
 						elseif spec.isTMSpedal == 1 and self:getCruiseControlState() == 0 and math.abs(self.spec_motorized.motor.lastAcceleratorPedal) >= 0.03 then 			-- PedalTMS
 							-- TMS like
 							-- wenn Tempomat aus, wird die Tempomatgescwindigkeit als Steps der maxSpeed benutzt
 							-- Setze die maxSpeed proportional zum Pedal
-					        local maxSpeed = math.min(self:getCruiseControlSpeed(), (motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * (1-spec.ClutchInputValue)))
+					        motor.motorLimitSpeed = math.abs(axis) * (math.min(self:getCruiseControlSpeed(), (motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * (1-spec.ClutchInputValue))))
 					        if dir == -1 then
-					            maxSpeed = math.min(self:getCruiseControlSpeed(), (motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * (1-spec.ClutchInputValue)))
+					            motor.motorLimitSpeed = math.abs(axis) * (math.min(self:getCruiseControlSpeed(), (motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * (1-spec.ClutchInputValue))))
 					        end
-					        motor.motorLimitSpeed = math.abs(axis) * maxSpeed
+					        -- motor.motorLimitSpeed = math.abs(axis) * maxSpeed
 							-- self.spec_motorized.motor.maxBackwardSpeed = (math.min(self:getCruiseControlSpeed(), math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 3.21), 6.36*(1-spec.ClutchInputValue) ) )) * math.abs(self.spec_motorized.motor.lastAcceleratorPedal)
 							-- self.spec_motorized.motor.maxForwardSpeed = (math.min(self:getCruiseControlSpeed(), math.min(math.max(self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne, 4.49), 6.94*(1-spec.ClutchInputValue) ) )) * math.abs(self.spec_motorized.motor.lastAcceleratorPedal)
 							self.spec_motorized.motor.motorAppliedTorque = math.max(self.spec_motorized.motor.motorAppliedTorque, 0.5)
 						end
+
+						-- print("cvt_ motor.motorLimitSpeed: " .. motor.motorLimitSpeed*3.6)
+						-- print("cvt_ motor.maxForwardSpeed: " .. motor.maxForwardSpeed*3.6)
+						
 						-- g_currentMission:addExtraPrintText(g_i18n:getText("txt_VarioOne")) -- #l10n
 						self.spec_motorized.motor.gearRatio = math.max(self.spec_motorized.motor.gearRatio, 100) * 1.81 + (self.spec_motorized.motor.rawLoadPercentage*9)
 						self.spec_motorized.motor.minForwardGearRatio = self.spec_motorized.motor.minForwardGearRatioOrigin * 1.6
@@ -4508,7 +4522,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						end
 					end --FS I
 
-					-- -- FAHRSTUFE II. classic (Street/light weight transport or work) inputbinding =====================================
+				   -- -- FAHRSTUFE >= II. classic (Street/light weight transport or work) inputbinding =====================================
 					if spec.vOne >= 2 and spec.isVarioTM and spec.CVTconfig ~= 7
 					and ( spec.CVTconfig == 1 or spec.CVTconfig == 2 or spec.CVTconfig == 3 ) and spec.cvtDL ~= 1 then
 						-- if spec.CVTconfig == 1 or spec.CVTconfig == 2 or spec.CVTconfig == 3 then
@@ -4520,10 +4534,10 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						self.spec_motorized.motor.minBackwardGearRatio = self.spec_motorized.motor.minBackwardGearRatioOrigin
 						self.spec_motorized.motor.maxBackwardGearRatio = self.spec_motorized.motor.maxBackwardGearRatioOrigin
 
-						if self.spec_motorized.motor.maxForwardSpeed ~= self.spec_motorized.motor.maxForwardSpeedOrigin then
-							self.spec_motorized.motor.maxForwardSpeed =  self.spec_motorized.motor.maxForwardSpeedOrigin
-							self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin
-						end
+						-- if self.spec_motorized.motor.maxForwardSpeed ~= self.spec_motorized.motor.maxForwardSpeedOrigin then
+						-- 	self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue / (2.5*spec.drivingLevelValue))*(1.01-spec.ClutchInputValue)
+						-- 	self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue / (2.5*spec.drivingLevelValue))*(1.01-spec.ClutchInputValue)
+						-- end
 
 						local motor = self.spec_motorized.motor
 					    local axis = self.spec_drivable.axisForward or 0
@@ -4532,12 +4546,12 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						-- wenn Tempomat aus, wird die Tempomatgeschwindigkeit als Steps der maxSpeed benutzt
 						if spec.isTMSpedal == 1 and self:getCruiseControlState() == 0 and math.abs(self.spec_motorized.motor.lastAcceleratorPedal) > 0.02 then -- PedalTMS
 					        -- Setze die maxSpeed proportional zum Pedal
-					        local maxSpeed = math.min(self:getCruiseControlSpeed(), (motor.maxForwardSpeedOrigin))
+					        motor.motorLimitSpeed = math.abs(axis) * (math.min(self:getCruiseControlSpeed(), (motor.maxForwardSpeedOrigin)))
 					        if dir == -1 then
-					            maxSpeed = math.min(self:getCruiseControlSpeed(), (motor.maxBackwardSpeedOrigin))
+					            motor.motorLimitSpeed = math.abs(axis) * (math.min(self:getCruiseControlSpeed(), (motor.maxBackwardSpeedOrigin)))
 					        end
 
-					        motor.motorLimitSpeed = math.abs(axis) * maxSpeed
+					        -- motor.motorLimitSpeed = math.abs(axis) * maxSpeed
 							
 							-- self.spec_motorized.motor.maxBackwardSpeed = (math.min(self:getCruiseControlSpeed(), (self.spec_motorized.motor.maxBackwardSpeedOrigin * math.abs(self.spec_motorized.motor.lastAcceleratorPedal))))
 							-- self.spec_motorized.motor.maxForwardSpeed = (math.min(self:getCruiseControlSpeed(), (self.spec_motorized.motor.maxForwardSpeedOrigin * math.abs(self.spec_motorized.motor.lastAcceleratorPedal))))
@@ -4548,40 +4562,40 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						elseif spec.isTMSpedal == 0 then
 							if self.spec_motorized.motor ~= nil then
 								-- if self:getDamageAmount() > 0.7 and spec.forDBL_critdamage == 1 and spec.forDBL_critheat == 1 then
-								if spec.forDBL_critdamage == 1 and spec.forDBL_critheat == 1 then -- Notlauf
-									-- self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne / (2.5 * spec.drivingLevelValue) * math.max((1-spec.ClutchInputValue), 0.01)
-									-- self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne / (2.5 * spec.drivingLevelValue) * math.max((1-spec.ClutchInputValue), 0.01)
-									self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne / (2.5*spec.drivingLevelValue))*(1.01-spec.ClutchInputValue)
-									self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne / (2.5*spec.drivingLevelValue))*(1.01-spec.ClutchInputValue)
-									-- self.spec_motorized.motor.accelerationLimit = 0.25
-									-- self.spec_motorized.motor.lowBrakeForceScale = math.max(self.spec_motorized.motor.lowBrakeForceScale
-									-- self.spec_motorized.motor.accelerationLimit = math.min(self.spec_motorized.motor.accelerationLimit
-								elseif spec.forDBL_critdamage == 0 then 																	-- Normalbetrieb
+								if spec.forDBL_critdamage == 1 and spec.forDBL_critheat == 1 then 		-- Notlauf
+									self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue / (2.5*spec.drivingLevelValue))*(1.01-spec.ClutchInputValue) * 0.3
+									self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue / (2.5*spec.drivingLevelValue))*(1.01-spec.ClutchInputValue) * 0.4
+								elseif spec.forDBL_critdamage == 0 then 								-- Normalbetrieb
 									-- Setze die maxSpeed proportional zum Pedal
-							        local maxSpeed = motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01)
-							        if  spec.vOne == spec.cvtDL then
-										maxSpeed = motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
+									if spec.vOne == spec.cvtDL then
+										self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne )*(1.01-spec.ClutchInputValue)
+										self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne )*(1.01-spec.ClutchInputValue)
+									else
+								        self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne * spec.drivingLevelValue )*(1.01-spec.ClutchInputValue)
+										self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue )*(1.01-spec.ClutchInputValue)
+									end
+							        if spec.vOne == spec.cvtDL then
+										self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
+									else
+										self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01)
 									end
 							        if dir == -1 then
-							            maxSpeed = motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01)
+							            self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * (motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01))
 										if  spec.vOne == spec.cvtDL then
-											maxSpeed = motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
+											self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * (motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)) 
 										end
 							        end
-							        motor.motorLimitSpeed = math.abs(axis) * maxSpeed
-									-- self.spec_motorized.motor.maxForwardSpeed  =  self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne
-									-- self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne
-								else 																										-- nur heat
-									local maxSpeed = motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01)
+								else 																	-- nur heat
+									self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * (motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01))
 							        if dir == -1 then
-							            maxSpeed = motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01)
+							            self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * (motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01))
 							        end
-							        motor.motorLimitSpeed = math.abs(axis) * maxSpeed
-									-- self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne
-									-- self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne
 								end
 							end
 						end
+						-- print("cvt_ motor.motorLimitSpeed: " .. motor.motorLimitSpeed*3.6)
+						-- print("cvt_ motor.maxForwardSpeed: " .. motor.maxForwardSpeed*3.6)
+
 						-- smoothing nicht im Leerlauf
 						if self.spec_motorized.motor.lastMotorRpm > self.spec_motorized.motor.minRpm + 20 then
 							if self.spec_motorized.motor.smoothedLoadPercentage < 0.2 then
@@ -4955,7 +4969,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							if self:getLastSpeed() > ((self.spec_motorized.motor.maxForwardSpeed*3.6) - 3) and self.spec_drivable.axisForward >= 0.1 then
 							-- Ändert die Drehzahl wenn man sich der vMax nähert  ##here  II. FS2
 								-- self.spec_motorized.motor.lastMotorRpm = math.min((self.spec_motorized.motor.lastMotorRpm*1.05) + (self:getLastSpeed()/(8*mcRPMvar) ), self.spec_motorized.motor.maxRpm-18)
-								self.spec_motorized.motor.lastMotorRpm = math.min(self.spec_motorized.motor.maxRpm-18, self.spec_motorized.motor.maxRpm*0.77*( (self:getLastSpeed() / math.pi) / (self.spec_motorized.motor.maxForwardSpeed)) )
+								self.spec_motorized.motor.lastMotorRpm = math.min(self.spec_motorized.motor.maxRpm-18, self.spec_motorized.motor.maxRpm*0.97*( (self:getLastSpeed() / 3.6) / (self.spec_motorized.motor.maxForwardSpeed)) )
 								-- self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.lastMotorRpm *
 								-- if self.spec_motorized.motor.smoothedLoadPercentage <= 0.7 then
 									-- self.spec_motorized.motor.smoothedLoadPercentage = math.max(self.spec_motorized.motor.smoothedLoadPercentage , ( (self:getLastSpeed()/math.pi) / (self.spec_motorized.motor.maxForwardSpeed)) )
@@ -5020,32 +5034,23 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 									self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin * math.max((1-spec.ClutchInputValue), 0.02) / 2.8 * math.max((1-spec.ClutchInputValue), 0.01)
 									self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin * math.max((1-spec.ClutchInputValue), 0.02) / 2.8 * math.max((1-spec.ClutchInputValue), 0.01)
 									-- self.spec_motorized.motor.accelerationLimit = 0.25
-									-- self.spec_motorized.motor.lowBrakeForceScale = math.max(self.spec_motorized.motor.lowBrakeForceScale * (1-spec.ClutchInputValue),0.04)
-									-- self.spec_motorized.motor.accelerationLimit = math.min(self.spec_motorized.motor.accelerationLimit * (1-spec.ClutchInputValue),0.25)
-								elseif spec.forDBL_critdamage == 0 then 																							-- Normalbetrieb
+								elseif spec.forDBL_critdamage == 0 then 																											-- Normalbetrieb
+									self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin )*(1.01-spec.ClutchInputValue)
+									self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin )*(1.01-spec.ClutchInputValue)
 									-- Setze die maxSpeed proportional zum Pedal
-							        local maxSpeed = motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
+									self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
 							        if dir == -1 then
-							            maxSpeed = motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
+										self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * (motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)) 
 							        end
-							        motor.motorLimitSpeed = math.abs(axis) * maxSpeed
-									-- self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin * math.max((1-spec.ClutchInputValue), 0.01)
-									-- self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin * math.max((1-spec.ClutchInputValue), 0.01)
-									-- self.spec_motorized.motor.lowBrakeForceScale = math.max(self.spec_motorized.motor.lowBrakeForceScale * (1-spec.ClutchInputValue),0.04)
-									-- self.spec_motorized.motor.accelerationLimit = self.spec_motorized.motor.accelerationLimit * (1-spec.ClutchInputValue)
 								else
-									local maxSpeed = motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
+									self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
 							        if dir == -1 then
-							            maxSpeed = motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
+										self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * (motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)) 
 							        end
-							        motor.motorLimitSpeed = math.abs(axis) * maxSpeed
-									-- self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin * math.max((1-spec.ClutchInputValue), 0.01)
-									-- self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin * math.max((1-spec.ClutchInputValue), 0.01)
 								end
 							end
 						end
-						
-						
+
 						-- smoothing nicht im Leerlauf
 						if self.spec_motorized.motor.lastMotorRpm > self.spec_motorized.motor.minRpm + 20 then
 							if self.spec_motorized.motor.smoothedLoadPercentage < 0.2 then
@@ -5223,19 +5228,61 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							
 							-- Ändert die Drehzahl wenn man sich der vMax nähert  ##here  II. MODERN
 							-- HydroPumpe abschwenken auf nur mechanischen Antrieb bei vMax
+							-- 40 km/h bei 950 U/min, 50 km/h bei 1.200 U/min, 60 km/h bei 1.450 U/min
 							-- ToDo: assign with vca.keepspeed
 							-- 			kmh 		> 				max kmh								-						max kmh                     :14
 							--          47							16.87 * 3.141592654 (53) 		    -                 "   (53)/14= 3.786    53-3.786= 49.214 kmh
-							if self:getLastSpeed() > ((self.spec_motorized.motor.maxForwardSpeed*3.6) - 1) then
-								-- if spec.CVTconfig == 1 or spec.CVTconfig == 2 or spec.CVTconfig == 3 then
-									-- self.spec_motorized.motor.lastMotorRpm = math.min(self.spec_motorized.motor.lastMotorRpm + (self:getLastSpeed()/(11*mcRPMvar) ), self.spec_motorized.motor.maxRpm-18)
-									-- self.spec_motorized.motor.smoothedLoadPercentage = math.max(self.spec_motorized.motor.smoothedLoadPercentage, 0.61)
-								-- elseif spec.CVTconfig == 4 or spec.CVTconfig == 5 or spec.CVTconfig == 6 then
+							-- if spec.CVTconfig == 1 or spec.CVTconfig == 2 or spec.CVTconfig == 3 then
+								-- self.spec_motorized.motor.lastMotorRpm = math.min(self.spec_motorized.motor.lastMotorRpm + (self:getLastSpeed()/(11*mcRPMvar) ), self.spec_motorized.motor.maxRpm-18)
+								-- self.spec_motorized.motor.smoothedLoadPercentage = math.max(self.spec_motorized.motor.smoothedLoadPercentage, 0.61)
+							-- elseif spec.CVTconfig == 4 or spec.CVTconfig == 5 or spec.CVTconfig == 6 then
+							if math.max(0, self.spec_drivable.axisForward) >= 0.03 and self:getLastSpeed() > 10 and math.max(0, self.spec_drivable.axisForward) < 0.8 and self:getLastSpeed() < ((self.spec_motorized.motor.maxForwardSpeed*3.6) - 6) then
+								self.spec_motorized.motor.lastMotorRpm = math.max(self.spec_motorized.motor.lastMotorRpm, (self.spec_motorized.motor.minRpm + self:getLastSpeed() * 1.49))
+							end
+
+							if self:getLastSpeed() > ((self.spec_motorized.motor.maxForwardSpeed*3.6) - 6) then
 								self.spec_motorized.motor.lastMotorRpm = math.min((self.spec_motorized.motor.lastMotorRpm*0.99) + (self:getLastSpeed()/14 ), self.spec_motorized.motor.maxRpm-21)
-								-- end
-								if cvtaDebugCVTon == true then
-									print("### Ändert die Drehzahl wenn man sich der vMax nähert: ")
+							end
+							if self:getLastSpeed() > ((self.spec_motorized.motor.maxForwardSpeed*3.6) - 3) then
+								-- Geschwindigkeit in km/h holen
+								local speed = self:getLastSpeed()
+
+								-- Tabelle mit Stützpunkten: {geschwindigkeit, rpm}
+								local rpmCurve = {
+								    {40,  905},
+								    {50, 1115},
+								    {60, 1415}
+								}
+
+								-- Funktion für Interpolation
+								local function interpolateRPM(speed, curve)
+								    -- Unterhalb des ersten Werts -> clamp
+								    if speed <= curve[1][1] then
+								        return curve[1][2]
+								    end
+								    -- Oberhalb des letzten Werts -> clamp
+								    if speed >= curve[#curve][1] then
+								        return curve[#curve][2]
+								    end
+
+								    -- Interpolation zwischen den Punkten
+								    for i = 1, #curve-1 do
+								        local x1, y1 = curve[i][1],   curve[i][2]
+								        local x2, y2 = curve[i+1][1], curve[i+1][2]
+								        if speed >= x1 and speed <= x2 then
+								            local t = (speed - x1) / (x2 - x1)
+								            return (1 - t) * y1 + t * y2
+								        end
+								    end
 								end
+
+								self.spec_motorized.motor.lastMotorRpm = interpolateRPM(speed, rpmCurve)
+
+							-- if self:getLastSpeed() > ((self.spec_motorized.motor.maxForwardSpeed*3.6) - 1) then
+							-- 	self.spec_motorized.motor.lastMotorRpm = math.min((self.spec_motorized.motor.lastMotorRpm*0.99) + (self:getLastSpeed()/14 ), self.spec_motorized.motor.maxRpm-21)
+							-- 	if cvtaDebugCVTon == true then
+							-- 		print("### Ändert die Drehzahl wenn man sich der vMax nähert: ")
+							-- 	end
 							end
 						end
 					end -- Modern Curves.
