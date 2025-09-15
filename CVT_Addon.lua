@@ -51,9 +51,14 @@ g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTad
 local scrversion = "0.9.2.2";
 CVTaddon.build = scrversion
 local modversion = CVTaddon.modversion; -- moddesc
+
 local lastupdate = "14.09.2025"
 local timestamp = "1757882092036";
 local savetime = "22:34:56";
+local lastupdate = "04.09.2025"
+local timestamp = "1757019329182";
+local savetime = "22:55:33";
+
 
 -- _______________________
 cvtaDebugCVTon = false	 -- \
