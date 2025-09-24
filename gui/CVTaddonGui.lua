@@ -25,10 +25,8 @@ end
 -- set current values
 function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKeys)
 	self.spec = spec
-	
-	-- print("GUIa: " .. tostring(self.spec.HUDpos))
+
 	-- Clicks
-	
 	self.noButton.onClickCallback  							= CVTaddonGui.onClickBack
 	self.yesButton.onClickCallback 							= CVTaddonGui.onClickOk
 	self.variantSetting.onFocusCallback 					= CVTaddonGui.logicalCheck
@@ -44,7 +42,7 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.CvtHUDSetting.onHighlightCallback 					= CVTaddonGui.logicalCheck
 	
 	self.CvthudPosSetting.onClickCallback 					= CVTaddonGui.logicalCheck
-	-- self.CvthudPosSetting.onFocusCallback 				= CVTaddonGui.logicalCheck
+	self.CvthudPosSetting.onHighlightCallback 				= CVTaddonGui.logicalCheck
 	self.drivinglevelSetting.onClickCallback 				= CVTaddonGui.logicalCheck
 	self.accRampSetting.onClickCallback 					= CVTaddonGui.logicalCheck
 	self.accRampSetting.onHighlightCallback 				= CVTaddonGui.logicalCheck
@@ -575,7 +573,6 @@ function CVTaddonGui:logicalCheck()
 	else
 		self.drivingLevelStateSetting:setDisabled(true)
 	end
-	-- print("GUI logical E: " .. tostring(self.spec.HUDpos))
 	if FS25_EngineBrakeforceCompensation ~= nil and FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil and self.variantSetting:getState() ~= 8 then
 		self.brakeForceCorrectionSetting:setDisabled(false)
 	else
@@ -708,8 +705,6 @@ function CVTaddonGui:onClickOk()
 	-- local showKeys = self.inputbindingsSetting:getState() == 1
 	self:close()
 	self.callbackFunc(self.target, self.spec, debug, showKeys)
-	
-	-- print("GUI OK E: " .. tostring(self.spec.HUDpos))
 end
 
 -- just close gui
