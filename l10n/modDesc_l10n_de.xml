@@ -21,6 +21,7 @@
 		<text name="CvthudPOSTT" text="HUD Anzeige Positionieren." />
 		<text name="CVTAguiHUD_on" text="an" />
 		<text name="CVTAguiHUD_off" text="aus" />
+		<text name="ui_alreadyAdmin" text="Du bist bereits als Admin angemeldet." />
 		<text name="text_CVT_title" text="CVT-Addon" />
 		<text name="text_CVT_cfg" text="CVTaddon aktivieren" />
 		<text name="text_CVT_notInstalled_short" text="Inaktiv" />
@@ -132,6 +133,7 @@ Stellt man diesen Wert nun auf geringe, wären es 22 km/h, sehr gering dann 15.5
 		<text name="input_SETVARION" text="CVTa: Neutral" />
 		<text name="input_SETVARIOADIFFS" text="CVTa: AWD und DIFF Automatik" />
 		<text name="input_CVT_SHOWGUI" text="CVTa: Einstellungen Menü öffnen" />
+		<text name="input_CVT_TOGGLEARWL" text="CVTa: Umschalten Auto-Arbeitslicht Rückwärts fahren" />
 		<text name="input_SETVARIORPM_AXIS" text="CVTa: Handgas Achse" />
 		<text name="input_SETVARIORPMP" text="CVTa: Motordrehzahl erhöhen" />
 		<text name="input_SETVARIORPMM" text="CVTa: Motordrehzahl verringern" />
@@ -146,8 +148,10 @@ Stellt man diesen Wert nun auf geringe, wären es 22 km/h, sehr gering dann 15.5
 		<text name="input_LMBF_TOGGLE_RAMPS2" text="CVTa: Beschleunigungsrampe 2 schalten" />
 		<text name="input_LMBF_TOGGLE_RAMPS3" text="CVTa: Beschleunigungsrampe 3 schalten" />
 		<text name="input_LMBF_TOGGLE_RAMPS4" text="CVTa: Beschleunigungsrampe 4 schalten" />
+		<text name="input_LMBF_TOGGLE_RAMPS5" text="CVTa: Beschleunigungsrampe 5 schalten" />
 		<text name="input_LMBF_TOGGLE_RAMPD" text="CVTa: Beschleunigungsrampe verringern" />
 		<text name="input_LMBF_TOGGLE_BRAMP" text="CVTa: Bremsrampe ändern" />
+		<text name="button_cvtrepair" text="Verschleiss zurücksetzen" />
 		<text name="txt_accRamp1" text="AR 1" />
 		<text name="txt_accRamp2" text="AR 2" />
 		<text name="txt_accRamp3" text="AR 3" />
