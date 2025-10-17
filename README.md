@@ -30,6 +30,9 @@
 ## Navigation
 | [![Modhub 22](https://img.shields.io/badge/Modhub%2022-blue?logo=farmbot)](https://www.farming-simulator.com/mod.php?lang=de&country=de&mod_id=269645&title=fs2022) | [![Modhub 25](https://img.shields.io/badge/Modhub%2025-green?logo=farmbot)](https://www.farming-simulator.com/mod.php?lang=de&country=de&mod_id=327932&title=fs2025) | [![Tutorials](https://img.shields.io/badge/Tutorial%20Videos-orange?logo=youtube)](https://github.com/s4t4n/FS25_CVT_Addon_Dev/wiki/Videos) | [![Wiki](https://img.shields.io/badge/CVT%20Addon%20Wiki-lightgrey?logo=github)](https://github.com/s4t4n/FS25_CVT_Addon_Dev/wiki/Features) | [![DBL Features](https://img.shields.io/badge/DBL%20Features-purple?logo=github)](https://github.com/s4t4n/FS25_CVT_Addon_Dev/wiki/Dashboard%E2%80%90Live-features#dbl-specs-overview) | [![English](https://img.shields.io/badge/in-English-blue?logo=google-translate)](#english) | [![Deutsch](https://img.shields.io/badge/auf-Deutsch-red?logo=google-translate)](#deutsch) |
 |---|---|---|---|---|---|---|
+
+[![Watch on YouTube](https://img.youtube.com/vi/Cphevrq8eMU/hqdefault.jpg)](https://www.youtube.com/watch?v=Cphevrq8eMU)  ![icon_CVT_Addon](https://github.com/user-attachments/assets/a8bf34c1-b10f-43bd-995e-ba3657c1de5b)
+
 ___
 
 [![GitHub release (by tag)](https://img.shields.io/github/downloads/s4t4n/FS25_CVT_Addon_Dev/latest/total?label=Latest%20Version%20Downloads)](https://github.com/s4t4n/FS25_CVT_Addon_Dev/releases/latest/download/FS25_CVT_Addon.zip)
@@ -50,7 +53,7 @@ ___
 [![GitHub top language](https://img.shields.io/github/languages/top/s4t4n/FS25_CVT_Addon_Dev)](#) \
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue?logo=paypal)](https://www.paypal.com/donate/?hosted_button_id=FXXETABZC3UFW)
 
-[![Community Benutzer](https://discord-live-members-count-badge.vercel.app/api/discord-members?guildId=660942481118199811&color=5865F2&label=Community%20Benutzer&scale=1)](https://discord.gg/mfergkwhDu) [![Discord](https://img.shields.io/discord/660942481118199811?logo=discord&logoColor=%23ffffff&label=SbSh-PooL%20Discord)](https://discord.gg/mfergkwhDu) \
+[![](https://discord-live-members-count-badge.vercel.app/api/discord-members?guildId=660942481118199811&color=5865F2&label=Community%20Benutzer&scale=1)](https://discord.gg/mfergkwhDu) [![Discord](https://img.shields.io/discord/660942481118199811?logo=discord&logoColor=%23ffffff&label=SbSh-PooL%20Discord)](https://discord.gg/mfergkwhDu) \
 [![YouTube Views SbSh](https://img.shields.io/youtube/channel/views/UC_Yn6bN1MMyd7Sn8wUyXnIg) ![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UC_Yn6bN1MMyd7Sn8wUyXnIg)](https://www.youtube.com/@SbSh-Modastian) \
 ![Instagram](https://img.shields.io/badge/Instagram-SbSh-FFFFF?style=plastic&logo=instagram&logoColor=%23FFd955&logoSize=auto&labelColor=%23555555&color=%23FF0069&link=https%3A%2F%2Fwww.instagram.com%2Fsbshmodastian) \
 [![Twitch Status](https://img.shields.io/twitch/status/sbsh_modasti4n?logo=twitch&label=sbsh_modasti4n%20Live-Stream%20now&labelColor=%23ffffff&color=%23aa11ff)](https://www.twitch.tv/sbsh_modasti4n)
