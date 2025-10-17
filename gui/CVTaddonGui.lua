@@ -17,7 +17,6 @@ function CVTaddonGui:new(target, customMt)
 	local gui = YesNoDialog:new(nil, CVTaddonGui_mt)
 	-- local gui = DialogElement.new(target, custom_mt or CVTaddonGui_mt)
 	-- self.vehicle = nil
-
 	-- return self
 	return gui
 end
@@ -25,6 +24,19 @@ end
 -- set current values
 function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKeys)
 	self.spec = spec
+	
+	-- if g_mpAdminLoginDialog == nil then
+	if g_server and g_client and not g_currentMission.connectedToDedicatedServer then
+        self.adminLoginButton:setDisabled(true)
+	else
+        self.adminLoginButton:setDisabled(false)
+    end
+	self.scrollingLayout = self:getDescendantById("scrollContent")
+	if self.repairButton ~= nil then
+	    local damagePercent = math.floor(self.spec.CVTdamage or 0)
+	    local baseText = g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("button_cvtrepair")
+	    self.repairButton:setText(string.format("%s (%.0f%%)", baseText, damagePercent))
+	end
 
 	-- Clicks
 	self.noButton.onClickCallback  							= CVTaddonGui.onClickBack
@@ -33,6 +45,8 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.variantSetting.onHighlightCallback 				= CVTaddonGui.logicalCheck
 	self.CvtHUDSetting.onFocusCallback 						= CVTaddonGui.logicalCheck
 	self.resetButton.onClickCallback  						= CVTaddonGui.onButtonLoad
+	self.repairButton.onClickCallback  						= CVTaddonGui.onButtonRepair
+	self.adminLoginButton.onClickCallback 					= CVTaddonGui.onClickAdminLogin
 	-- onButtonAdminLogin()
 	-- if g_currentMission.isMasterUser ~= nil then if g_currentMission.isMasterUser then
 			
@@ -52,6 +66,7 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.pitSetting.onHighlightCallback 					= CVTaddonGui.logicalCheck
 	self.ipmSetting.onClickCallback 						= CVTaddonGui.logicalCheck
 	self.ipmSetting.onHighlightCallback 					= CVTaddonGui.logicalCheck
+	self.ipmSetting.onFocusCallback 						= CVTaddonGui.logicalCheck
 	self.HSTSetting.onClickCallback 						= CVTaddonGui.logicalCheck
 	self.HSTSetting.onHighlightCallback 					= CVTaddonGui.logicalCheck
 	self.inchingSetting.onClickCallback 					= CVTaddonGui.logicalCheck
@@ -116,7 +131,6 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 		self.antiSlipTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_antiSlipT2"))	-- XsubHeader
 		self.pitTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_pitT2"))	-- XsubHeader
 	end
-
 
 	self.HSTTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_HstTitle"))	-- XsubHeader
 	self.inchingTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_inchingTitle"))	-- Inching
@@ -483,8 +497,83 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.drivinglevelSetting:setDisabled(false)
 		end
 	end
-	
+
+	-- ensure scrollingLayout is initialized for dynamic element collapsing
+	if self.getDescendantById ~= nil and (self.scrollingLayout == nil or not self.scrollingLayout.isValid) then
+	    local layout = self:getDescendantById("scrollingLayout")
+	    if layout ~= nil then
+	        self.scrollingLayout = layout
+
+	        if self.scrollingLayout.invalidateLayout ~= nil then
+	            self.scrollingLayout:invalidateLayout()
+	        end
+
+	        local l = self.scrollingLayout.layout
+	        if l ~= nil and l.packLayoutElements ~= nil then
+	            l:packLayoutElements()
+	        elseif self.scrollingLayout.packLayoutElements ~= nil then
+	            self.scrollingLayout:packLayoutElements()
+	        end
+	    else
+	        -- fallback: falls XML noch nicht aktiv ist
+	        self.onFrameUpdate = function()
+	            local lay = self:getDescendantById("scrollingLayout")
+	            if lay ~= nil then
+	                self.scrollingLayout = lay
+	                if self.scrollingLayout.invalidateLayout ~= nil then
+	                    self.scrollingLayout:invalidateLayout()
+	                end
+
+	                local l2 = self.scrollingLayout.layout
+	                if l2 ~= nil and l2.packLayoutElements ~= nil then
+	                    l2:packLayoutElements()
+	                elseif self.scrollingLayout.packLayoutElements ~= nil then
+	                    self.scrollingLayout:packLayoutElements()
+	                end
+	                self.onFrameUpdate = nil -- remove after first success
+	            end
+	        end
+	    end
+	end
+
+	if g_currentMission.isMasterUser ~= nil then
+		if g_currentMission.isMasterUser == false then
+			self.variantSetting:setDisabled(true)
+			self.drivinglevelSetting:setDisabled(true)
+			if self.spec.CVTdamage > 0.1 then
+				self.repairButton:setVisible(true)
+				-- self.repairButton:setDisabled(false)
+			else
+				self.repairButton:setVisible(false)
+				-- self.repairButton:setDisabled(true)
+			end
+		else
+			if self.spec.CVTdamage > 0.1 then
+				-- self.repairButton:setVisible(true)
+				self.repairButton:setDisabled(false)
+			else
+				-- self.repairButton:setVisible(false)
+				self.repairButton:setDisabled(true)
+			end
+			self.variantSetting:setDisabled(false)
+			self.drivinglevelSetting:setDisabled(false)
+		end
+	end
 end
+
+function CVTaddonGui:onClickAdminLogin(element)
+    if not g_currentMission.isMasterUser then
+        PasswordDialog.show(function(target, password, ok)
+            if ok then
+                g_client:getServerConnection():sendEvent(GetAdminEvent.new(password))
+				CVTaddonGui.logicalCheck(self)
+            end
+        end, self, nil, "", g_i18n:getText("button_adminLogin"))
+    else
+        InfoDialog.show(g_i18n:getText("ui_alreadyAdmin") or "Du bist bereits als Admin eingeloggt.")
+    end
+end
+
 
 -- CHECK LOGICAL DEPENDENCIES
 
@@ -504,7 +593,30 @@ function CVTaddonGui:logicalCheck()
 	
 	-- print("GUI logical spec HUDpos: " .. tostring(self.spec.HUDpos))
 	-- print("GUI logical state CvthudPosSetting: " .. tostring(self.CvthudPosSetting:getState()))
-	
+	if g_currentMission.isMasterUser ~= nil then
+		if g_currentMission.isMasterUser == false then
+			self.variantSetting:setDisabled(true)
+			self.drivinglevelSetting:setDisabled(true)
+			if self.spec.CVTdamage > 0.1 then
+				self.repairButton:setVisible(true)
+				-- self.repairButton:setDisabled(false)
+			else
+				self.repairButton:setVisible(false)
+				-- self.repairButton:setDisabled(true)
+			end
+		else
+			if self.spec.CVTdamage > 0.1 then
+				-- self.repairButton:setVisible(true)
+				self.repairButton:setDisabled(false)
+			else
+				-- self.repairButton:setVisible(false)
+				self.repairButton:setDisabled(true)
+			end
+			self.variantSetting:setDisabled(false)
+			self.drivinglevelSetting:setDisabled(false)
+		end
+	end
+
 	if self.spec.isVarioTM == true then
 		hasIPM = self.variantSetting:getState() == 1 or self.variantSetting:getState() == 2
 		hasHST = self.variantSetting:getState() == 3
@@ -568,7 +680,7 @@ function CVTaddonGui:logicalCheck()
 	self.reverseLightsDurationTitle:setVisible(true)
 	self.reverseLightsDurationSetting:setDisabled(not reverseLightsDuration)
 
-	if self.variantSetting:getState() == 1 or self.variantSetting:getState() == 3 or self.variantSetting:getState() == 5 or self.variantSetting:getState() == 6 then 
+	if self.variantSetting:getState() == 1 or self.variantSetting:getState() == 3 or self.variantSetting:getState() == 5 or self.variantSetting:getState() == 6 then
 		self.drivingLevelStateSetting:setDisabled(false)
 	else
 		self.drivingLevelStateSetting:setDisabled(true)
@@ -578,6 +690,20 @@ function CVTaddonGui:logicalCheck()
 	else
 		self.brakeForceCorrectionSetting:setDisabled(true)
 	end
+
+	if self.scrollingLayout ~= nil then
+	    if self.scrollingLayout.invalidateLayout ~= nil then
+	        self.scrollingLayout:invalidateLayout()
+	    end
+
+	    local l = self.scrollingLayout.layout
+	    if l ~= nil and l.packLayoutElements ~= nil then
+	        l:packLayoutElements()
+	    elseif self.scrollingLayout.packLayoutElements ~= nil then
+	        self.scrollingLayout:packLayoutElements()
+	    end
+	end
+	self.scrollingLayout = self:getDescendantById("scrollContent")
 
 end
 
@@ -711,6 +837,28 @@ end
 function CVTaddonGui:onClickBack()
 	self:close()
 end
+
+function CVTaddonGui:onButtonRepair()
+	self.spec.forDBL_cvtwear = 0.00
+	self.spec.CVTdamage = 0.000
+	self.spec.forDBL_critheat = 0
+	self.spec.forDBL_warnheat = 0
+	self.spec.forDBL_critdamage = 0
+	self.spec.forDBL_warndamage = 0
+	-- self:close()
+	-- self:logicalCheck()
+	if self.repairButton ~= nil then
+		local baseText = g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("button_cvtrepair")
+		self.repairButton:setText(baseText .. " (0%)")
+	end
+	CVTaddonGui.logicalCheck(self)
+end
+
+-- function CVTaddonGui:update(dt)
+--     if self.onFrameUpdate ~= nil then
+--         self.onFrameUpdate()
+--     end
+-- end
 
 function CVTaddonGui:onButtonLoad()
 	local variantstateSet = 1

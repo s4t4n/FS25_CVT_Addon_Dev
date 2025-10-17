@@ -21,6 +21,7 @@
 		<text name="CvthudPOSTT" text="HUD Position." />
 		<text name="CVTAguiHUD_on" text="on" />
 		<text name="CVTAguiHUD_off" text="off" />
+		<text name="ui_alreadyAdmin" text="You're logged in as admin already." />
 		<text name="text_CVT_title" text="CVT-Addon" />
 		<text name="text_CVT_cfg" text="CVTaddon activate" />
 		<text name="text_CVT_notInstalled_short" text="Inactive" />
@@ -132,6 +133,7 @@ If you place this value on low, it would be 22 km/h, very little then 15.5 km/h.
 		<text name="input_SETVARION" text="CVTa: Neutral" />
 		<text name="input_SETVARIOADIFFS" text="CVTa: AWD and DIFF Automatic" />
 		<text name="input_CVT_SHOWGUI" text="CVTa: Open settings menu" />
+		<text name="CVT_TOGGLEARWL" text="CVTa: Toggle Auto-Worklight reversedrive" />
 		<text name="input_SETVARIORPM_AXIS" text="CVTa: Handgas axis" />
 		<text name="input_SETVARIORPMP" text="CVTa: Increase the engine speed" />
 		<text name="input_SETVARIORPMM" text="CVTa: Reduce the engine speed" />
@@ -146,8 +148,10 @@ If you place this value on low, it would be 22 km/h, very little then 15.5 km/h.
 		<text name="input_LMBF_TOGGLE_RAMPS2" text="CVTa: Switch the acceleration ramp 2" />
 		<text name="input_LMBF_TOGGLE_RAMPS3" text="CVTa: Switch the acceleration ramp 3" />
 		<text name="input_LMBF_TOGGLE_RAMPS4" text="CVTa: Switch the acceleration ramp 4" />
+		<text name="input_LMBF_TOGGLE_RAMPS5" text="CVTa: Switch the acceleration ramp 5" />
 		<text name="input_LMBF_TOGGLE_RAMPD" text="CVTa: Reduce the acceleration ramp" />
 		<text name="input_LMBF_TOGGLE_BRAMP" text="CVTa: Change brake ramp" />
+		<text name="button_cvtrepair" text="Reset Transmissionwear" />
 		<text name="txt_accRamp1" text="AR 1" />
 		<text name="txt_accRamp2" text="AR 2" />
 		<text name="txt_accRamp3" text="AR 3" />
