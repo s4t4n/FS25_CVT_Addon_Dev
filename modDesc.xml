@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="103">
+<modDesc descVersion="104">
     <author>SbSh</author>
 	<contributor>Glowin</contributor>
 	<version>2.0.0.0</version>
@@ -275,15 +275,10 @@ Feedback und Fehlerberichte (und Wiki) gerne unter:
         <action name="SETVARIO3" />
         <action name="SETVARIO4" />
         <action name="SETVARIOTOGGLE" />
-        <!-- <action name="SETVARION" /> -->
         <action name="SETVARIOADIFFS" />
 		<action name="CVT_SHOWGUI" categorie="VEHICLE" ignoreComboMask="false" />
 		<action name="CVT_TOGGLEARWL" />
         <action name="SETVARIORPM_AXIS" />
-        <!-- <action name="SETVARIOCLUTCH_AXIS" /> -->
-        <!-- <action name="SETVARIORPMP" /> -->
-        <!-- <action name="SETVARIORPMM" /> -->
-        <!-- <action name="SETVARIORPMDMAX" /> -->
         <action name="SETPEDALTMS" />
         <action name="SETPREGLOW" />
         <action name="SIGNAL_HOLD_BEAM" />
@@ -310,7 +305,6 @@ Feedback und Fehlerberichte (und Wiki) gerne unter:
 		<actionBinding action="LMBF_TOGGLE_RAMPT">
 			<binding device="KB_MOUSE_DEFAULT" input="" />
 		</actionBinding>
-		
 		<actionBinding action="LMBF_TOGGLE_RAMPS1">
 			<binding device="KB_MOUSE_DEFAULT" input="" />
 		</actionBinding>
@@ -333,9 +327,6 @@ Feedback und Fehlerberichte (und Wiki) gerne unter:
 		<actionBinding action="LMBF_TOGGLE_BRAMP">
 			<binding device="KB_MOUSE_DEFAULT" input="" />
 		</actionBinding>
-		<!-- <actionBinding action="SETVARION"> -->
-			<!-- <binding device="KB_MOUSE_DEFAULT" input="" /> -->
-		<!-- </actionBinding> -->
 		<actionBinding action="SETVARIOADIFFS">
 			<binding device="KB_MOUSE_DEFAULT" input="" />
 		</actionBinding>
