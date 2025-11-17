@@ -101,7 +101,7 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	end
 
 	-- Main Header Titel
-	self.guiTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_title") .." für "..vehicleName) -- Top header
+	self.guiTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_title") .." ".. g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_for") .." ".. vehicleName)
 	
 	if g_server and g_client and not g_currentMission.connectedToDedicatedServer then
 		self.guiUnderTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_underTitle2")) -- Undertitle header local and host

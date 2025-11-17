@@ -9,6 +9,7 @@
 		<text name="txt_VarioRpmPlus" text="UPM +" />
 		<text name="txt_VarioRpmMinus" text="UPM -" />
 		<text name="CVTAgui_title" text="CVT-Addon Getriebeeinstellungen" />
+		<text name="CVTAgui_for" text="für" />
 		<text name="CVTAgui_underTitle" text="Im Multiplayer wird die Motortemperatur nicht gesynct. Nutze dafür bitte DashboardLive" />
 		<text name="CVTAgui_underTitle2" text=" " />
 		<text name="CVTAgui_Variant" text="Getriebe Variante" />
@@ -29,7 +30,7 @@
 		<text name="text_CVT_notInstalled_desc" text="CVTadonn nicht aktiv, Fhzg. werden jedoch in der Beschleunigung kompensiert." />
 		<text name="text_CVTclas_installed_short" text="CVT klassisch" />
 		<text name="text_CVTmod_installed_short" text="CVT modern" />
-		<text name="text_ipmTitle" text="Intellegent Power Management" />
+		<text name="text_ipmTitle" text="Intelligent Power Management" />
 		<text name="drivinglevelTT" text="Anzahl der möglichen Fahrbereiche.
 Unterschiedliche Hersteller und Modelle haben da viele Varianten. Fendt z.B. hat Zwei, JD Drei, Claas oft Drei und Zwei.
 (Vario coming soon)" />
@@ -37,7 +38,7 @@ Unterschiedliche Hersteller und Modelle haben da viele Varianten. Fendt z.B. hat
 Unterschiedliche Hersteller und Modelle haben da viele Varianten. Fendt z.B. hat Vier, John Deere Drei." />
 		<text name="antiSlipTT" text="Sobald Schlupf an den Rädern entsteht, greift die Funktion ein und bremst einzelne Räder ab." />
 		<text name="pitTT" text="Zieht sich in die Kurve anstatt über die Vorderachse zu schieben. Real gibt es das nur bei Fendt." />
-		<text name="ipmTT" text="Intellegent Power Management Boost.
+		<text name="ipmTT" text="Intelligent Power Management Boost.
 Es wird ein entsprechender Leistungszuwachs bei überschreibten von 14 km/h und/oder einschalten der PTO unter Last gegeben.
 Dies ist eine relativ moderne Version, um die Emmisionswerte niedriger zu halten und bei Bedarf trotzdem mehr Power zur Verfügung stehen zu haben." />
 		<text name="inchingTT" text="Das Kupplungspedal wird als Inchingpedal verwendet.
