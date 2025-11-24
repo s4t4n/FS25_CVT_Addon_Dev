@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='utf-8'?>
+<l10n>
+    <texts>
+        <text name="txt_VarioOne" text=". " />
+        <text name="txt_VarioTwo" text=" ." />
+        <text name="txt_VarioN" text="N" />
+        <text name="txt_VarioR" text="↓" />
+        <text name="txt_VarioD" text="↑" />
+        <text name="txt_VarioRpmPlus" text="ot/min +" />
+        <text name="txt_VarioRpmMinus" text="ot/min -" />
+        <text name="CVTAgui_title" text="Nastavení převodovky CVT-Addon" />
+        <text name="CVTAgui_for" text="pro" />
+        <text name="CVTAgui_underTitle" text="Teplota motoru se v multiplayeru nesynchronizuje. Použijte prosím DashboardLive pro toto." />
+        <text name="CVTAgui_underTitle2" text=" " />
+        <text name="CVTAgui_Variant" text="Varianta převodovky" />
+        <text name="CVTAgui_additionalFuncs" text="Další funkce" />
+        <text name="CVTAgui_Hud" text="HUD" />
+        <text name="cvtgui_Cvthud" text="Viditelnost" />
+        <text name="CVTAgui_CvthudPos" text="Pozice" />
+        <text name="variantTT" text="Vyberte variantu převodovky, existuje řada různých bezstupňových převodů." />
+        <text name="CvthudTT" text="HUD viditelný nebo deaktivovat zobrazení." />
+        <text name="CvthudPOSTT" text="Pozice HUD." />
+        <text name="CVTAguiHUD_on" text="zapnuto" />
+        <text name="CVTAguiHUD_off" text="vypnuto" />
+        <text name="ui_alreadyAdmin" text="Jste již přihlášeni jako administrátor." />
+        <text name="text_CVT_title" text="CVT-Addon" />
+        <text name="text_CVT_cfg" text="Aktivovat CVT-Addon" />
+        <text name="text_CVT_notInstalled_short" text="Neaktivní" />
+        <text name="text_CVT_notInstalledTemp_short" text="Neaktivní" />
+        <text name="text_CVT_notInstalled_desc" text="CVT-Addon neaktivní, ale vozidla jsou kompenzována v zrychlení." />
+        <text name="text_CVTclas_installed_short" text="CVT klasická" />
+        <text name="text_CVTmod_installed_short" text="CVT moderní" />
+        <text name="text_ipmTitle" text="Inteligentní řízení výkonu" />
+        <text name="drivinglevelTT" text="Počet možných řídicích stupňů. Různí výrobci a modely mají mnoho variant. Fendt např. dva, JD tři, Claas často tři a dva. (Vario brzy)" />
+        <text name="accRampTT" text="Počet možných zrychlovacích ramp. Různí výrobci a modely mají mnoho variant. Fendt např. čtyři, John Deere tři." />
+        <text name="antiSlipTT" text="Jakmile dojde k prokluzu na kolech, funkce zasáhne a brzdí jednotlivá kola." />
+        <text name="pitTT" text="Vejde se do zatáčky místo prokluzu přední nápravou. Reálné pouze u Fendt." />
+        <text name="ipmTT" text="Boost inteligentního řízení výkonu. Při překročení 14 km/h a/nebo zapnutí PTO pod zátěží se poskytne odpovídající zvýšení výkonu. Jedná se o poměrně moderní verzi, která snižuje emisní hodnoty a přitom poskytuje více výkonu, pokud je potřeba." />
+        <text name="inchingTT" text="Pedál spojky slouží jako inching pedál. Při stisknutí se vozidlo zrychluje nebo zpomaluje, i když je aktivní tempomat." />
+        <text name="reverseLightsTT" text="Při couvání se automaticky zapne zadní pracovní světlo. Často u moderních a velkých strojů, jako jsou kombajny." />
+        <text name="reverseLightsDurationTT" text="Doba v sekundách, jak dlouho má světlo zůstat zapnuté po couvání." />
+        <text name="hstTT" text="HST nebo hydrostatická hydraulická převodovka? HST bez automatické regulované otáčky motoru, kromě volnoběhu. Hydrostat je automatizovanější v různých variantách a většinou má pohon všech kol a vlastní hydraulické motory." />
+        <text name="text_IPMboost0" text="bez IPM" />
+        <text name="text_IPMboost15" text="IPM 15 KS Boost" />
+        <text name="text_IPMboost22" text="IPM 22 KS Boost" />
+        <text name="text_IPMboost27" text="IPM 27 KS Boost" />
+        <text name="text_IPMboost34" text="IPM 34 KS Boost" />
+        <text name="CVTAgui_drivinglevelT" text="Řídicí stupeň" />
+        <text name="CVTAgui_accRampT" text="Zrychlovací rampy" />
+        <text name="CVTAgui_antiSlipT2" text="Auto protiskluz (vyžaduje VCA)" />
+        <text name="CVTAgui_antiSlipT" text="Auto protiskluz" />
+        <text name="CVTAgui_pitT2" text="Tah do zatáčky (vyžaduje VCA)" />
+        <text name="CVTAgui_pitT" text="Tah do zatáčky" />
+        <text name="CVTAgui_HstTitle" text="Hydro-pohon" />
+        <text name="CVTAgui_inchingTitle" text="Inching" />
+        <text name="CVTAgui_reverseLightsTitle" text="Auto světlo při couvání" />
+        <text name="CVTAgui_reverseLightsDurationTitle" text="Doba doznívání světla" />
+        <text name="selection_drivinglevel_1" text="Vario" />
+        <text name="selection_drivinglevel_2" text="2" />
+        <text name="selection_drivinglevel_3" text="3" />
+        <text name="selection_drivinglevel_4" text="4" />
+        <text name="selection_accRamp_1" text="0" />
+        <text name="selection_accRamp_2" text="2" />
+        <text name="selection_accRamp_3" text="3" />
+        <text name="selection_accRamp_4" text="4" />
+        <text name="selection_accRamp_5" text="5" />
+        <text name="selection_accRamp_6" text="6" />
+        <text name="selection_accRamp_7" text="7" />
+        <text name="selection_accRamp_8" text="8" />
+        <text name="selection_accRamp_9" text="9" />
+        <text name="selection_accRamp_10" text="10" />
+        <text name="selection_accRamp_01" text="1" />
+        <text name="selection_active" text="Aktivní" />
+        <text name="selection_deactive" text="Deaktivováno" />
+        <text name="selection_BF_20" text="20%" />
+        <text name="selection_BF_30" text="30%" />
+        <text name="selection_BF_40" text="40%" />
+        <text name="selection_BF_50" text="50%" />
+        <text name="selection_BF_60" text="60%" />
+        <text name="selection_BF_70" text="70%" />
+        <text name="selection_BF_80" text="80%" />
+        <text name="selection_BF_90" text="90%" />
+        <text name="selection_BF_default" text="100% výchozí" />
+        <text name="selection_BF_110" text="110%" />
+        <text name="selection_BF_120" text="120%" />
+        <text name="selection_BF_130" text="130%" />
+        <text name="selection_BF_140" text="140%" />
+        <text name="selection_BF_150" text="150%" />
+        <text name="selection_BF_160" text="160%" />
+        <text name="selection_BF_170" text="170%" />
+        <text name="selection_BF_180" text="180%" />
+        <text name="selection_BF_190" text="190%" />
+        <text name="selection_BF_200" text="200%" />
+        <text name="brakeForceCorrectionNotTT" text="FS25_EngineBrakeforceCompensation neaktivní" />
+        <text name="brakeForceCorrectionTitle" text="Kompenzace motorové brzdy" />
+        <text name="brakeForceCorrectionModReq" text="Kompenzace motorové brzdy (vyžaduje EBC)" />
+        <text name="brakeForceCorrectionTT" text="Účinek motorové brzdy je dynamicky počítán a závisí na různých faktorech díky CVT-Addon. Tímto nastavením lze výsledek cíleně ovlivnit a volitelně kompenzovat silnější nebo slabší brzdný účinek." />
+        <text name="drivingLevelStateTT" text="Maximální rychlost pro nižší řídicí stupně nebo u HST a sklízecích strojů limit rampy se tím sníží nebo zvýší. Např. bezstupňové vozidlo s 2 řídicími stupni jede plnou rychlostí (50 km/h) ve 2, v 1 poloviční (25 km/h). Při nastavení na nízkou bude 22 km/h, velmi nízká 15,5 km/h. Stejně vyšší 28 km/h a velmi vysoká 31 km/h." />
+        <text name="CVTAgui_drivingLevelStateTitle" text="Adaptace rychlosti" />
+        <text name="selection_DLC_10000" text="velmi nízká" />
+        <text name="selection_DLC_01000" text="nižší" />
+        <text name="selection_DLC_00100" text="Normální" />
+        <text name="selection_DLC_00010" text="vyšší" />
+        <text name="selection_DLC_00001" text="velmi vysoká" />
+        <text name="selection_inching_dn" text="Zpomalení" />
+        <text name="selection_inching_up" text="Zrychlení" />
+        <text name="selection_hst_hst" text="HST" />
+        <text name="selection_hst_hydrostat" text="Hydrostat" />
+        <text name="selection_hst_brake" text="Jeden jízdní pedál" />
+        <text name="text_HST_installed_short" text="HST Hydrostat" />
+        <text name="text_CVT_Installed_short" text="Aktivní" />
+        <text name="text_CVT_Installed_desc" text="CVT-Addon aktivní a konfigurovatelný v GUI." />
+        <text name="text_CVT_manuInstalled_short" text="Manuální převodovka" />
+        <text name="text_CVT_ElektroInstalled_short" text="Elektrická (např. vysokozdvižný vozík)" />
+        <text name="text_CVT_HarvesterInstalled_short" text="Sklízecí stroj" />
+        <text name="input_SETVARIOONE" text="CVTa: Řídicí stupeň 1" />
+        <text name="input_SETVARIOTWO" text="CVTa: Řídicí stupeň 2" />
+        <text name="input_SETVARIO3" text="CVTa: Řídicí stupeň 3" />
+        <text name="input_SETVARIO4" text="CVTa: Řídicí stupeň 4" />
+        <text name="input_SETVARIOTOGGLE" text="CVTa: Přepnutí řídicího stupně" />
+        <text name="input_SETVARION" text="CVTa: Neutrál" />
+        <text name="input_SETVARIOADIFFS" text="CVTa: AWD a DIFF automaticky" />
+        <text name="input_CVT_SHOWGUI" text="CVTa: Otevřít menu nastavení" />
+        <text name="CVT_TOGGLEARWL" text="CVTa: Přepnout auto pracovní světlo při couvání" />
+        <text name="input_SETVARIORPM_AXIS" text="CVTa: Osa ručního plynu" />
+        <text name="input_SETVARIORPMP" text="CVTa: Zvýšit otáčky motoru" />
+        <text name="input_SETVARIORPMM" text="CVTa: Snížit otáčky motoru" />
+        <text name="input_SETVARIORPMDMAX" text="CVTa: Limit otáček (experiment)" />
+        <text name="input_SETPEDALTMS" text="CVTa: Režim pedálu TMS" />
+        <text name="input_SETPREGLOW" text="CVTa: Předehřát žhavicí svíčky" />
+        <text name="input_SIGNAL_HIGH_BEAM" text="CVTa: Blikač dálkových světel" />
+        <text name="input_SIGNAL_HOLD_BEAM" text="CVTa: Držení dálkových světel" />
+        <text name="input_LMBF_TOGGLE_RAMP" text="CVTa: Zvýšit zrychlovací rampu" />
+        <text name="input_LMBF_TOGGLE_RAMPT" text="CVTa: Přepnout zrychlovací rampu" />
+        <text name="input_LMBF_TOGGLE_RAMPS1" text="CVTa: Přepnout zrychlovací rampu 1" />
+        <text name="input_LMBF_TOGGLE_RAMPS2" text="CVTa: Přepnout zrychlovací rampu 2" />
+        <text name="input_LMBF_TOGGLE_RAMPS3" text="CVTa: Přepnout zrychlovací rampu 3" />
+        <text name="input_LMBF_TOGGLE_RAMPS4" text="CVTa: Přepnout zrychlovací rampu 4" />
+        <text name="input_LMBF_TOGGLE_RAMPS5" text="CVTa: Přepnout zrychlovací rampu 5" />
+        <text name="input_LMBF_TOGGLE_RAMPD" text="CVTa: Snížit zrychlovací rampu" />
+        <text name="input_LMBF_TOGGLE_BRAMP" text="CVTa: Změnit brzdovou rampu" />
+        <text name="button_cvtrepair" text="Reset opotřebení převodovky" />
+        <text name="txt_accRamp1" text="ZR 1" />
+        <text name="txt_accRamp2" text="ZR 2" />
+        <text name="txt_accRamp3" text="ZR 3" />
+        <text name="txt_accRamp4" text="ZR 4" />
+        <text name="txt_bRamp1" text="BR vyp" />
+        <text name="txt_bRamp2" text="BR  4" />
+        <text name="txt_bRamp3" text="BR  8" />
+        <text name="txt_bRamp4" text="BR 15" />
+        <text name="txt_bRamp5" text="BR 17" />
+        <text name="txt_vcaInfo" text="V modulu VCA byla nízká brzdná síla nastavena na 100 % a úpravy motoru byly deaktivovány. Ty lze podle vozidla opět aktivovat – funguje to více či méně." />
+        <text name="txt_needClutch2start" text="Pro nastartování motoru sešlápněte spojku." />
+        <text name="txt_needBrake2start" text="Pro nastartování motoru zatáhněte ruční brzdu." />
+        <text name="txt_needNoHG2start" text="Pro nastartování motoru vraťte ruční plyn na nulu." />
+        <text name="txt_needpreGlow" text="Pro nastartování motoru je nutné předehřát žhavicí svíčky!" />
+        <text name="txt_preGlow" text="Předehřívání..." />
+        <text name="txt_attCVTpressure" text="Pozor, příliš vysoký tlak v převodovce. Sledujte teplotu." />
+        <text name="txt_warn_tofastDn" text="Příliš rychle! Řídicí stupeň měňte maximálně při 10 km/h, jinak dojde k poškození převodovky." />
+        <text name="txt_warn_tofastUp" text="Pozor! Řídicí stupeň měňte maximálně při 10 km/h, nejlépe krátce zastavte." />
+        <text name="help_page_title" text="CVT-Addon" />
+        <text name="help_page_Functions" text="Funkce" />
+        <text name="help_page_startEngine_title" text="Nastartování motoru" />
+        <text name="help_page_startEngine_text" text="U bezstupňových vozidel je nutné sešlápnout spojku – tedy stejný vstup, který slouží i jako normální spojka. Při konfiguraci hydrostatu a aktivním VCA je pro start nutné zatáhnout ruční brzdu. Navíc nesmí být zvýšený ruční plyn – musí být na 0." />
+        <text name="help_page_DL_title" text="Řídicí stupeň" />
+        <text name="help_page_BLANK_text" text=" " />
+        <text name="help_page_DLimg_text" text="    Levý bod ukazuje jízdní rozsah I. Pravý bod ukazuje jízdní rozsah II. " />
+        <text name="help_page_dl_text" text="Existují 2 řídicí stupně, II. je určen pro jízdu po silnici, transport a lehčí práci. Stupeň I. spíše pro těžkou polní práci a těžké transporty. Maximální rychlost je také snížena a krouticí moment zajišťuje větší tah, zejména při rozjezdu. Pro každý stupeň musí být přiřazena klávesa. Změna řídicích stupňů by měla probíhat při zastavení, protože i zde může dojít k poškození. *Malý tip: pokud pro zvýšení/snížení používáte tlačítka skupinového řazení, můžete stejná tlačítka použít i pro řídicí stupně. Zvláštností „moderní“ konfigurace je, že řídicí stupně se automaticky regulují." />
+        <text name="help_page_AR_title" text="Zrychlovací rampy" />
+        <text name="help_page_AR_text" text="Dále existuje zrychlovací rampa ve 4 stupních, kterou lze přepínat tlačítkem. Ovlivňuje se chování při zrychlování a zpomalování. Jemně a citlivě nebo plným výkonem a hrubě. Při těžkých nářadích nebo přívěsech může v planetové převodovce vznikat vysoký tlak a může dojít k poškození! Zde by měla být zrychlovací rampa nastavena na 3 nebo méně. Stupeň 4 je vhodnější pro jízdu naprázdno. Při lehké polní práci lze ještě na zrychlovací rampě 4 táhnout rychlost 1 – např. talířové podmítače, ploché kypřiče." />
+        <text name="help_page_ARimg_text" text="Stupně ZR 1 až 4" />
+        <text name="help_page_BR_title" text="Brzdová rampa" />
+        <text name="help_page_BR_text" text="Abychom se neomezili jen na pohodlná nastavení, lze měnit i brzdovou rampu. K dispozici je také tlačítko pro přepínání v 5 krocích. Brzdová rampa v různých rychlostech 1 km/h (standard), 4, 8, 15 a 17 km/h – při uvolnění jízdního pedálu nebo joysticku podporuje účinek motorové brzdy provozní brzdou od nastavené brzdové rampy. To může být užitečné při manévrování nebo práci s čelním nakladačem – nebo jednoduše při jízdě „stop and go“ po silnici." />
+        <text name="help_page_BRimg_text" text="Úrovně BR 1 až 4" />
+        <text name="help_page_tmsP_title" text="Režim pedálu TMS" />
+        <text name="help_page_tmsP_text" text="Režim „Pedál“ TMS umožňuje ovládat rozlišení pedálu. Tzn. určit maximální rychlost pedálu. Při deaktivovaném tempomatu zde nastavujete stupně. Příklad 1 může být max 3 km/h. Pedál pak reaguje procentuálně, tj. 50 % dráhy pedálu odpovídá maximálně 12 km/h, 6 km/h." />
+        <text name="help_page_HG_title" text="Ruční plyn" />
+        <text name="help_page_HG_text" text="Digitální ruční plyn má jen dekorativní funkci – ale spolu s dalším modem (radas) se pak ovládá zadní hydraulika, výkon PTO atd. U HST a nakladačů je zde zvláštnost." />
+        <text name="help_page_aDiff_title" text="Auto dif. závěrky (vyžaduje VCA nebo EV)" />
+        <text name="help_page_aDiff_text" text="Automatická uzávěrka diferenciálu podle úhlu řízení a pohon všech kol podle rychlosti v řídicím stupni I. Pro polní práci s automatickým předvolením v DL II → DL I. U moderní konfigurace CVT je pohon všech kol trvale aktivní a sám se reguluje. Lze aktivovat pouze automatickou uzávěrku diferenciálu náprav." />
+        <text name="help_page_HST_title" text="Hydrostat HST pohon" />
+        <text name="help_page_HST_text" text="Je-li vozidlo nastaveno jako HST, existují dva typy hydraulického pohonu, které lze měnit přes dřívější jízdní rozsahy 1 a 2. Zde byste měli rozhodnout, jaký typ vozidlo má – v reálu nemůže mít oba najednou." />
+        <text name="help_page_HST1_text" text="1 je klasický HST, kde je jízdní pedál obvykle tvarován jako kolébka nebo jsou dva pedály vlevo a vpravo – každý pro couvání a jízdu vpřed. Při sešlánutí pedálu pro jeden směr jde vozidlo procentuálně podle sešlápnutí – ale otáčky motoru zůstávají stejné (volnoběh). Maximální rychlost tedy není dosažena. K tomu je nutný ruční plyn. Při 100 % ručním plynu lze rychlost stále ovládat procentuálně, protože jde o hydraulický pohon. Dále výkon čelního nakladače u nakladačů závisí na ručním plynu – čím nižší otáčky motoru (tedy i čerpadla), tím pomaleji se pohybují hydraulické válce. Navíc čím těžší je nářadí čelního nakladače a čím více je naloženo, tím nižší ruční plyn – tím nižší rychlost při zvedání. Pozor, pokud je motor ještě studený a obsluhujete čelní nakladač, může motor zhasnout." />
+        <text name="help_page_HST2_text" text="2 je novější verze, která nabízí podle výrobce mnoho dalších variant – do všech zde nezacházím. Kromě brzdy je obvykle jen jeden plynový pedál místo dvou. Dále je zde joystick nebo podobné zařízení, kterým lze nastavit vpřed, vzad a neutrál. Při sešlápnutí plynového pedálu se otáčky motoru automaticky regulují a vozidlo zrychluje podle procenta sešlápnutí. Otáčky motoru se navíc automaticky zvyšují, jakmile se obsluhuje čelní nakladač – pokud je plynový pedál stisknut alespoň 0,001 %. Při 0 % poloze pedálu je stále nutné použít ruční plyn pro zajištění minimální rychlosti. V reálu je to trochu jinak, ale bohužel to nelze ve hře úplně takto implementovat." />
+        <text name="help_page_HST3_text" text="Charakteristika pohonu: Buď jsou hydraulické motory přímo na/za koly, nebo je zde HST převodovka, která obvykle zajišťuje i pohon všech kol kardanem (pokud je AWD). Poslední varianta je novější. Starší generace AWD, zejména kloubová vozidla, mají hydraulický převod vpředu i vzadu. U HST mají bezstupňové zrychlovací rampy mírně odlišnou funkci! Na HUD se pak zobrazuje „HySt“ – ale stále lze přepínat od 1 do 4. Jedná se o rychlostní rozsahy pro hydrostatické pohony: 4 nejrychlejší, 1 rychlý, 2 pomalý, 3 nejpomalejší." />
+        <text name="help_page_HARVESTER_text" text="Tato konfigurace je správná volba pro většinu moderních kombajnů a řezaček. Vše je velmi podobné konfiguraci HST, ale existuje polní režim a silniční jízdní rozsah – řídicí stupně 1 a 2 to reprezentují. V polním režimu je také možné použít odpovídající vstupní zařízení, např. joystick, který se nevrací do středu, nebo plyn se středem, jako jízdní páku. Vozidla lze navíc v této konfiguraci jednoduše nastartovat. Ale pozor, pokud je ruční plyn stále zvýšený a motor ještě není teplý. Stejně jako u HST slouží zrychlovací rampy také jako rychlostní rozsahy." />
+        <text name="help_page_manual_title" text="Manuální převodovka" />
+        <text name="help_page_manual_text" text="Pokud má vozidlo manuální převodovku, můžete to zde určit, aby se použila funkce zahřívání motoru i tam. U vozidel, která mají v obchodě na výběr více variant převodovek, nelze typ převodovky správně načíst. Pokud nechcete funkci zahřívání u manuálních vozidel, vyberte možnost Ne." />
+        <text name="help_page_electic_title" text="Elektrická vozidla" />
+        <text name="help_page_electric_text" text="Tato vozidla nepotřebují zahřívání a mají jinou křivku zrychlení. S řídicími stupni máte pomalou a rychlou jízdní variantu. Rampami se nastavuje výkon baterie a kolik je současně k dispozici trakčnímu motoru. Čím vyšší, tím více kWh se spotřebuje." />
+        <text name="help_page_beginning" text="Předmluva" />
+        <text name="help_page_keybinds_title" text="Klávesové zkratky" />
+        <text name="help_page_keybinds_text" text="Ve výchozím stavu nejsou přiřazeny žádné klávesy – každý si to musí nastavit sám." />
+        <text name="help_page_keysInfo_text" text="Pro spojku lze použít stejný vstup jako pro spojku nastavenou pro manuální převodovky. Řídicí stupně mohou mít také stejné přiřazení jako tlačítka skupinového řazení." />
+        <text name="help_page_heatSystem" text="Systém poškození a přehřátí" />
+        <text name="help_page_cold_title" text="Motor příliš studený" />
+        <text name="help_page_cold_text" text="Motor je pod 45 °C a příliš studený pro plný plyn, max méně než max otáčky : 1,5. Příklad: max 2200 ot/min : 1,5 = ne vyšší než cca 1460 ot/min. Pozor, příliš vysoké otáčky při studeném motoru dramaticky zvyšují opotřebení. Zahřívejte jemným plynem nebo pomalou jízdou bez vysokého vytáčení. Tato funkce platí pro všechna vozidla." />
+        <text name="help_page_warnHeat_title" text="Vysoký tlak v převodovce, zahřívání" />
+        <text name="help_page_warnHeat_text" text="Varovná teplota, je zde vysoký tlak; při méně než 50 % zatížení a méně než 50 % plynu nebo při zastavení se po dostatečném ochlazení deaktivuje." />
+        <text name="help_page_warnDmg_title" text="Varování: Hrozí poškození" />
+        <text name="help_page_warnDmg_text" text="Nahoře varovný indikátor, který upozorňuje, že aktuální zrychlovací rampa může způsobit poškození." />
+        <text name="help_page_critHeat_title" text="Kritická teplota" />
+        <text name="help_page_critHeat_text" text="Červená je varování kritické teploty. Raději zastavte a nechte vychladnout." />
+        <text name="help_page_critDmg_title" text="Kritické poškození" />
+        <text name="help_page_critDmg_text" text="Indikátor kritického poškození. Nyní došlo k menšímu nebo většímu poškození. Pro reset lampy: nechte motor vychladnout a vypněte a zapněte motor. Pokud bylo poškození příliš vážné a lampa zůstane svítit, elektronika převodovky přepne do nouzového režimu – sníží zrychlení a maximální rychlost. Pokud vypnutí/zapnutí lampu nedeaktivuje, nejprve opravte poškození, nechte vychladnout a restartujte motor." />
+        <text name="help_page_wearTear_title" text="Opotřebení" />
+        <text name="help_page_wearTear_text" text="Poškození nenastává okamžitě – opotřebení se zvyšuje postupně. Při překročení určité úrovně spolu s dalšími faktory může dojít k reálnému poškození až k úplnému selhání. V reálu je oprava nebo výměna převodovky extrémně drahá – buďte tedy opatrní." />
+        <text name="help_page_manuheat_title" text="Zahřívání motoru u manuálních převodovek" />
+        <text name="help_page_manuheat_text" text="U manuálních převodovek, pokud není v obchodě vypnuto, je také nutné motor nejdříve zahřát. Jsou 4 barvy: Modrá – studený, Zelená – OK, Žlutá/oranžová – OK teplý, Červená – příliš horký nebo příliš vysoké otáčky při ještě studeném motoru." />
+        <text name="title_PosOfHUD" text="CVT Addon" />
+        <text name="setting_PosOf_HUD" text="Pozice HUD" />
+        <text name="explanation_PosOf_HUD" text="Mění pozici HUD nebo vypíná. Nastavení a uložení pro každého hráče zvlášť." />
+        <text name="selection_CVTaddonHUDpos_1" text="Standardní" />
+        <text name="selection_CVTaddonHUDpos_2" text="Nahoře" />
+        <text name="selection_CVTaddonHUDpos_3" text="Vypnuto" />
+        <text name="SettingChanged_title" text="CVT-Addon" />
+        <text name="SettingChanged" text="HUD změněn" />
+        <text name="SettingNorm" text="na Standardní" />
+        <text name="SettingTop" text="nahoru" />
+        <text name="SettingOff" text=".. byl deaktivován!" />
+        <text name="damageWT" text="Proveďte opravu, opotřebení převodovky je nad " />
+        <text name="help_page_HUDset_title" text="Pozice HUD" />
+        <text name="help_page_HUDset_text" text="V menu ESC → Nastavení s ikonou traktoru lze v 2 variantách změnit nebo deaktivovat pozici HUD. Toto nastavení platí pro každého hráče zvlášť." />
+    </texts>
+</l10n>
