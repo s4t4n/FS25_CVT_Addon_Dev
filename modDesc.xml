@@ -2,7 +2,7 @@
 <modDesc descVersion="104" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://validation.gdn.giants-software.com/xml/fs25/modDesc.xsd">
     <author>SbSh</author>
 	<contributor>Glowin</contributor>
-	<version>2.0.0.1</version>
+	<version>2.c.0.5</version>
 	<title>
         <en>CVT Addon</en>
     </title>
