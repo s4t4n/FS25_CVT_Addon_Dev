@@ -18,6 +18,9 @@
 		<text name="cvtgui_Cvthud" text="Sichtbarkeit" />
 		<text name="CVTAgui_CvthudPos" text="Position" />
 		<text name="variantTT" text="Getriebevariante wählen, es gibt eine vielzahl an unterschiedlichen Stufenlosen Getriebe." />
+		<text name="HSTshuttleStateSettingTT" text="Fahrzeuge mir Pedalwippe oder 2 Pedalsystem können alternativ mit der Kupplung den Richtungswechseln vornehmen.
+Modernere Maschinen z.B. Hoflader haben u.a. am Joystick einen Taster für diese Funktion." />
+		<text name="startWithClutchTT" text="Das treten des Kupplungspedales wird vorrausgesetzt, wie es bei einigen Fahrzeugen auch in RL ist - und bei anderen widerrum nicht." />
 		<text name="CvthudTT" text="HUD Anzeige sichtbar oder deaktivieren." />
 		<text name="CvthudPOSTT" text="HUD Anzeige Positionieren." />
 		<text name="CVTAguiHUD_on" text="an" />
@@ -110,6 +113,8 @@ Mit dieser Einstellung lässt sich die resultierende Berechnung gezielt beeinflu
 werden hiermit reduziert oder erhöht. Zum Beispiel ein Stufenloses Fahrzeug mit 2 Fahrbereichen fährt in 2 die volle Geschwindigkeit (50km/h), in 1 die hälfte (25km/h).
 Stellt man diesen Wert nun auf geringe, wären es 22 km/h, sehr gering dann 15.5 km/h. Das selbe gilt nach oben. höher, 28 km/h und sehr hoch 31 km/h." />
 		<text name="CVTAgui_drivingLevelStateTitle" text="Geschw. Anpassung" />
+		<text name="CVTAgui_HSTshuttleT" text="Richtungswechselart" />
+		<text name="CVTAgui_startWithClutchSettingTitle" text="Kupplung zum starten" />
 		<text name="selection_DLC_10000" text="sehr gering" />
 		<text name="selection_DLC_01000" text="geringer" />
 		<text name="selection_DLC_00100" text="Normal" />
@@ -120,6 +125,10 @@ Stellt man diesen Wert nun auf geringe, wären es 22 km/h, sehr gering dann 15.5
 		<text name="selection_hst_hst" text="HST" />
 		<text name="selection_hst_hydrostat" text="Hydrostat" />
 		<text name="selection_hst_brake" text="Einzel Fahrpedal" />
+		<text name="selection_noClutch" text="Keine Kupplung" />
+		<text name="selection_withCluth" text="Mit Kupplung" />
+		<text name="selection_shuttle_shift" text="Wechseltaster" />
+		<text name="selection_shuttle_clutch" text="Kupplungspedal" />
 		<text name="text_HST_installed_short" text="HST Hydrostat" />
 		<text name="text_CVT_Installed_short" text="Aktiv" />
 		<text name="text_CVT_Installed_desc" text="CVT-Addon aktiv und im GUI konfigurierbar." />

@@ -46,6 +46,15 @@
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="variantTT" position="700px 0px"/>
 					</MultiTextOption>	
 				</GuiElement>
+				<GuiElement profile="fs25_multiTextOptionContainer">
+					<Text profile="multiTextOptionSettingsTitle" id="startWithClutchSettingTitle"/>
+					<!-- <BinaryOption profile="fs25_settingsBinaryOption" id="startWithClutchSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="startWithClutchSettingTT" position="700px 0px"/>
+					</BinaryOption>	 -->
+					<MultiTextOption profile="fs25_settingsMultiTextOption" id="startWithClutchSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="startWithClutchSettingTT" position="700px 0px"/>
+					</MultiTextOption>
+				</GuiElement>
 				
 				<!-- IPM -->
 				<GuiElement profile="fs25_multiTextOptionContainer">
@@ -111,6 +120,15 @@
 					<BinaryOption profile="fs25_settingsBinaryOption" id="HSTSetting">
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="HSTTT" position="700px 0px"/>
 					</BinaryOption>
+				</GuiElement>
+				<GuiElement profile="fs25_multiTextOptionContainer">
+					<Text profile="multiTextOptionSettingsTitle" id="HSTshuttleTitle"/>
+					<!-- <BinaryOption profile="fs25_settingsBinaryOption" id="HSTshuttleStateSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="HSTshuttleStateSettingTT" position="700px 0px"/>
+					</BinaryOption> -->
+					<MultiTextOption profile="fs25_settingsMultiTextOption" id="HSTshuttleStateSetting">
+						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="HSTshuttleStateSettingTT" position="700px 0px"/>
+					</MultiTextOption>
 				</GuiElement>
 				
 				<!-- INCHING -->

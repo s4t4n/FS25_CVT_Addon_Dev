@@ -87,10 +87,10 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.9.3.60";
+local scrversion = "0.9.9.7";
 local lastupdate = "4.1.2026"
-local timestamp = "1767489210644";
-local savetime = "02:13:30";
+local timestamp = "1767497498909";
+local savetime = "04:31:38";
 local modversion = CVTaddon.modversion; -- moddesc
 CVTaddon.build = scrversion
 
@@ -554,7 +554,7 @@ function CVTaddon:onLoad(savegame)
 	spec.HUDpos = 1
 	spec.HUDvis = 1
 	spec.DTadd = 0
-	spec.needClutchToStart = 1	-- 1 Shuttle or 2 Clutch
+	spec.needClutchToStart = 2	-- 1 no or 2 yes
 	spec.HSTshuttle = 2			-- 1 Shuttle or 2 Clutch
 	spec.vOne = 2				-- DrivingLevel
 	spec.cvtDL = 2				-- DrivingLevel count
@@ -801,6 +801,7 @@ function CVTaddon:onPostLoad(savegame)
 		spec.HUDvis = xmlFile:getValue(key.."#HUDvis", spec.HUDvis)
 		spec.VCAantiSlip = xmlFile:getValue(key.."#VCAantiSlip", spec.VCAantiSlip)
 		spec.VCApullInTurn = xmlFile:getValue(key.."#VCApullInTurn", spec.VCAantiSlip)
+		spec.needClutchToStart = xmlFile:getValue(key.."#needClutchToStart", spec.needClutchToStart)
 
 		if spec.CVTcfgExists then
 			print("CVT_Addon: personal adjustments loaded for "..self:getName())
@@ -959,6 +960,7 @@ function CVTaddon:saveToXMLFile(xmlFile, key, usedModNames)
 	xmlFile:setValue(key.."#HUDvis", spec.HUDvis)
 	xmlFile:setValue(key.."#VCAantiSlip", spec.VCAantiSlip)
 	xmlFile:setValue(key.."#VCApullInTurn", spec.VCApullInTurn)
+	xmlFile:setValue(key.."#needClutchToStart", spec.needClutchToStart)
 	if not cvtsaved then
 		print("CVT_Addon: 22 values saved.")
 		cvtsaved = true
