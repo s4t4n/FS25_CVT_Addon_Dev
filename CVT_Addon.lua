@@ -87,10 +87,10 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.9.9.7";
+local scrversion = "0.9.9.22";
 local lastupdate = "4.1.2026"
-local timestamp = "1767497498909";
-local savetime = "04:31:38";
+local timestamp = "1767546959013";
+local savetime = "18:15:59";
 local modversion = CVTaddon.modversion; -- moddesc
 CVTaddon.build = scrversion
 
@@ -134,7 +134,7 @@ function addCVTconfig(self, superfunc, xmlFile, baseXMLName, baseDir, customEnvi
 		or 	category == "FRONTLOADERVEHICLES" or category == "TELELOADERVEHICLES" or category == "SKIDSTEERVEHICLES" or category == "WHEELLOADERVEHICLES"
 		or 	category == "CARS" 				 or category == "TRUCKS" 			 or category == "MISC"
 		or 	category == "FORKLIFTS" 		 or category == "BEETHARVESTERS" 	 or category == "MISCDRIVABLES" 	or 	category == "HANDTOOLSMISC"
-		or 	category == "FORESTRYMISC"		or 	category == "WOODCHIPPERS"		or 	category == "FORESTRYEXCAVATORS" or category == ""
+		or 	category == "FORESTRYMISC"		or 	category == "WOODCHIPPERS"		or 	category == "FORESTRYEXCAVATORS" or category == "TEST"
 		or 	category == "FORESTRYFORWARDERS" or category == "FORESTRYHARVESTERS" or category == "FORAGEMIXERS"		or 	category == "GRAPEHARVESTERS"
 		or 	category == "COTTONHARVESTERS"	or 	category == "SUGARCANEHARVESTERS"	or 	category == "RICEHARVESTERS" or category == "RICEPLANTERS"
 		or 	category == "PEAHARVESTERS"		or 	category == "GREENBEANHARVESTERS"	or 	category == "POTATOHARVESTING"
@@ -210,7 +210,7 @@ function CVTaddon.initSpecialization()
 
 	schemaSavegame:register(XMLValueType.BOOL, "vehicles.vehicle(?)."..key..".cvtconfigured", "CVTa configured", false)
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#HSTshuttle", "HST Shuttle1 or Clutch2", 2)
-    schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#needClutchToStart", "Need cpressed clutch to start engine", 2) -- DL
+    schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#needClutchToStart", "Need cpressed clutch to start engine", 1) -- DL
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#vOne", "Driving level", 2) -- DL
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#cvtDL", "Driving level count", 2) -- DLcount
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#cvtAR", "accRamps count", 4) -- AccRampsCount
@@ -313,10 +313,16 @@ function CVTaddon:onRegisterActionEvents()
 			CVTaddon.actionEventsV10 = {}
 			CVTaddon.actionEventsGUI = {}
 			CVTaddon.actionEventsARWL = {}
+			CVTaddon.actionEventsVCA1 = {}
+			CVTaddon.actionEventsVCA2 = {}
+			CVTaddon.actionEventsVCA3 = {}
 			CVTaddon.actionEventsGL = {}
 			local actionEventIdGui
 			local actionEventIdARwL
 			local actionEventIdGL
+			local eventIdVCA1
+			local eventIdVCA2
+			local eventIdVCA3
 			local storeItem = g_storeManager:getItemByXMLFilename(self.configFileName)
 			if cvtaDebugCVTon then
 				print("storeItem.categoryName: " .. tostring(storeItem.categoryName)) -- debug
@@ -443,15 +449,15 @@ function CVTaddon:onRegisterActionEvents()
 			end
 			if self.spec_vca ~= nil then
 				-- additional for vca
-				_, CVTaddon.eventIdVCA1 = self:addActionEvent(CVTaddon.actionEventsVCA1, 'SETVCAAWD', self, CVTaddon.VCAawd, false, true, false, true)
+				_, eventIdVCA1 = self:addActionEvent(CVTaddon.actionEventsVCA1, 'SETVCAAWD', self, CVTaddon.VCAawd, false, true, false, true)
 				g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdVCA1, GS_PRIO_NORMAL)
 				g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdVCA1, false)
 
-				_, CVTaddon.eventIdVCA2 = self:addActionEvent(CVTaddon.actionEventsVCA2, 'SETVCAREARDIFF', self, CVTaddon.VCArearDiff, false, true, false, true)
+				_, eventIdVCA2 = self:addActionEvent(CVTaddon.actionEventsVCA2, 'SETVCAREARDIFF', self, CVTaddon.VCArearDiff, false, true, false, true)
 				g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdVCA2, GS_PRIO_NORMAL)
 				g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdVCA1, false)
 
-				_, CVTaddon.eventIdVCA3 = self:addActionEvent(CVTaddon.actionEventsVCA3, 'SETVCAFRONTDIFF', self, CVTaddon.VCAfrontDiff, false, true, false, true)
+				_, eventIdVCA3 = self:addActionEvent(CVTaddon.actionEventsVCA3, 'SETVCAFRONTDIFF', self, CVTaddon.VCAfrontDiff, false, true, false, true)
 				g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdVCA3, GS_PRIO_NORMAL)
 				g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdVCA3, false)
 			end
@@ -554,7 +560,7 @@ function CVTaddon:onLoad(savegame)
 	spec.HUDpos = 1
 	spec.HUDvis = 1
 	spec.DTadd = 0
-	spec.needClutchToStart = 2	-- 1 no or 2 yes
+	spec.needClutchToStart = 1	-- 2 no or 1 yes
 	spec.HSTshuttle = 2			-- 1 Shuttle or 2 Clutch
 	spec.vOne = 2				-- DrivingLevel
 	spec.cvtDL = 2				-- DrivingLevel count
@@ -2361,9 +2367,13 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						if spec.isVarioTM == true then
 							if spec.CVTconfig ~= 7 and spec.CVTcfgExists then
 								if spec.CVTconfig ~= 9 and spec.CVTconfig ~= 10 and spec.CVTconfig ~= 11 and spec.CVTconfig ~= 7 then
-									if spec.ClutchInputValue < 0.6 or spec.HandgasPercent > 0.05 then
+									if (spec.ClutchInputValue < 0.6 or spec.HandgasPercent > 0.05) then
 										if spec.ClutchInputValue < 0.6 then
-											spec.CVTCanStart = false
+											if spec.needClutchToStart == 1 then
+												spec.CVTCanStart = false
+											elseif spec.needClutchToStart == 2 then
+												spec.CVTCanStart = true
+											end
 											-- if g_client ~= nil and isActiveForInputIgnoreSelection and self:getCanMotorRun() == false then
 											if g_client ~= nil and isActiveForInputIgnoreSelection == false then
 												if not self.spec_RealisticDamageSystemEngineDied.EngineDied then
@@ -2384,7 +2394,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 											if cvtaDebugCVTcanStartOn then print("CVTa Hgas [E]: " .. tostring(spec.HandgasPercent)) end
 										end
 										
-									elseif spec.ClutchInputValue >= 0.6 or spec.HandgasPercent <= 0.05 then
+									elseif (spec.ClutchInputValue >= 0.6 or spec.HandgasPercent <= 0.05) then
 										if spec.ClutchInputValue >= 0.6 then
 											spec.CVTCanStart = true
 											if cvtaDebugCVTcanStartOn then print("CVTa Clutch [B]: " .. tostring(spec.ClutchInputValue)) end
@@ -2394,6 +2404,11 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 											if cvtaDebugCVTcanStartOn then print("CVTa Hgas [F]: " .. tostring(spec.HandgasPercent)) end
 										else
 											spec.CVTCanStart = false
+											-- if spec.needClutchToStart == 1 then
+											-- 	spec.CVTCanStart = false
+											-- elseif spec.needClutchToStart == 2 then
+											-- 	spec.CVTCanStart = true
+											-- end
 										end
 									end
 								end
@@ -2497,7 +2512,11 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							if spec.ClutchInputValue < 0.6 or spec.HandgasPercent > 0.05 then
 							
 								if spec.ClutchInputValue < 0.6 then
-									spec.CVTCanStart = false
+									if spec.needClutchToStart == 1 then
+										spec.CVTCanStart = false
+									elseif spec.needClutchToStart == 2 then
+										spec.CVTCanStart = true
+									end
 									
 									if g_client ~= nil and self:getCanMotorRun() == false then
 										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needClutch2start"), 75)
@@ -2526,6 +2545,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 									if cvtaDebugCVTcanStartOn then print("CVTa Hgas [F]: " .. tostring(spec.HandgasPercent)) end
 								else
 									spec.CVTCanStart = false
+									-- end
 								end
 							end
 						elseif spec.CVTconfig == 7 then
@@ -2625,7 +2645,11 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 								if spec.ClutchInputValue < 0.6 or spec.HandgasPercent > 0.05 then
 								
 									if spec.ClutchInputValue < 0.6 then
-										spec.CVTCanStart = false
+										if spec.needClutchToStart == 1 then
+											spec.CVTCanStart = false
+										elseif spec.needClutchToStart == 2 then
+											spec.CVTCanStart = true
+										end
 										-- if g_client ~= nil and isActiveForInputIgnoreSelection and self:getCanMotorRun() == false then
 										if g_client ~= nil and isActiveForInputIgnoreSelection == false then
 											if not self.spec_RealisticDamageSystemEngineDied.EngineDied then
@@ -2755,7 +2779,11 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						if spec.CVTconfig ~= 7 and spec.CVTconfig ~= 8 then
 							if spec.ClutchInputValue < 0.6 or spec.HandgasPercent > 0.05 then
 								if spec.ClutchInputValue < 0.6 then
-									spec.CVTCanStart = false
+									if spec.needClutchToStart == 1 then
+										spec.CVTCanStart = false
+									elseif spec.needClutchToStart == 2 then
+										spec.CVTCanStart = true
+									end
 									-- if g_client ~= nil and isActiveForInputIgnoreSelection and self:getCanMotorRun() == false then
 									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
 										if not self.spec_RealisticDamageSystemEngineDied.EngineDied then
@@ -2970,165 +2998,165 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 		
 		-- FRONTLADER HYDRAULIK RPM - make wheelloader hydraulic assign to rpm
 		-- if spec.CVTconfig == 7 or isLoader or isWoodWorker or isTractor then
-			local i = 0
-			local RPMforHydraulics = 1
-			if spec.CVTconfig == 10 then
-				RPMforHydraulics = math.min( math.max(spec.HandgasPercent, 0.05), 0.8)
-			else
-				RPMforHydraulics = math.min( math.max((self.spec_motorized.motor:getLastModulatedMotorRpm()/self.spec_motorized.motor:getMaxRpm())*0.7, 0.05), 0.8)
-			end
-			-- local KGforHydraulics = math.min( math.max((self.spec_motorized.motor:getLastModulatedMotorRpm()/self.spec_motorized.motor:getMaxRpm())*0.7, 0.05), 0.8)
-			if self:getTotalMass() - self:getTotalMass(true) > 1.2 then
-				RPMforHydraulics = RPMforHydraulics * 0.5
-				-- RPMforHydraulics = RPMforHydraulics * (  1-(self:getTotalMass() - self:getTotalMass(true))/self:getTotalMass(true)  )
-			end
+		local i = 0
+		local RPMforHydraulics = 1
+		if spec.CVTconfig == 10 then
+			RPMforHydraulics = math.min( math.max(spec.HandgasPercent, 0.05), 0.8)
+		else
+			RPMforHydraulics = math.min( math.max((self.spec_motorized.motor:getLastModulatedMotorRpm()/self.spec_motorized.motor:getMaxRpm())*0.7, 0.05), 0.8)
+		end
+		-- local KGforHydraulics = math.min( math.max((self.spec_motorized.motor:getLastModulatedMotorRpm()/self.spec_motorized.motor:getMaxRpm())*0.7, 0.05), 0.8)
+		if self:getTotalMass() - self:getTotalMass(true) > 1.2 then
+			RPMforHydraulics = RPMforHydraulics * 0.5
+			-- RPMforHydraulics = RPMforHydraulics * (  1-(self:getTotalMass() - self:getTotalMass(true))/self:getTotalMass(true)  )
+		end
 
-			if spec.CVTconfig ~= 10 and spec.CVTconfig ~= 8 and spec.CVTcfgExists then
-				for i=1, #self.spec_cylindered.movingTools do
-					local tool = self.spec_cylindered.movingTools[i]
-					local isSelectedGroup = tool.controlGroupIndex == 0 or tool.controlGroupIndex == self.spec_cylindered.currentControlGroupIndex
-					local easyArmControlActive = false
-					if self.spec_cylindered.easyArmControl ~= nil then
-						easyArmControlActive = self.spec_cylindered.easyArmControl.state
+		if spec.CVTconfig ~= 10 and spec.CVTconfig ~= 8 and spec.CVTcfgExists then
+			for i=1, #self.spec_cylindered.movingTools do
+				local tool = self.spec_cylindered.movingTools[i]
+				local isSelectedGroup = tool.controlGroupIndex == 0 or tool.controlGroupIndex == self.spec_cylindered.currentControlGroupIndex
+				local easyArmControlActive = false
+				if self.spec_cylindered.easyArmControl ~= nil then
+					easyArmControlActive = self.spec_cylindered.easyArmControl.state
+				end
+				local canBeControlled = (easyArmControlActive and tool.easyArmControlActive) or (not easyArmControlActive and not tool.isEasyControlTarget)
+				local tool = self.spec_cylindered.movingTools[i]
+				local rotSpeed = 0
+				local transSpeed = 0
+				local animSpeed = 0
+				local move = self:getMovingToolMoveValue(tool)
+
+				if math.abs(move) > 0 then
+					if move < 0 then
+						move = move * 0.8
 					end
-					local canBeControlled = (easyArmControlActive and tool.easyArmControlActive) or (not easyArmControlActive and not tool.isEasyControlTarget)
-					local tool = self.spec_cylindered.movingTools[i]
-					local rotSpeed = 0
-					local transSpeed = 0
-					local animSpeed = 0
-					local move = self:getMovingToolMoveValue(tool)
-
-					if math.abs(move) > 0 then
-						if move < 0 then
-							move = move * 0.8
-						end
-						
-						if move < -0.5 then
-							self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.lastMotorRpm - (math.abs(move)*10)
-							self.spec_motorized.motor.smoothedLoadPercentage = math.min(self.spec_motorized.motor.smoothedLoadPercentage + (math.abs(move)), .9)
-							if self.spec_motorized.motor.lastMotorRpm < self.spec_motorized.motor.minRpm * 0.89 and self.spec_motorized.motor.smoothedLoadPercentage > 0.8 and self.spec_motorized.motorTemperature.value < 50 then
-								move = 0
-								RPMforHydraulics = 0
-								-- Motor abwürgen
-								self:stopMotor();
-								-- break;
-								move = 0
-								self:startMotor(true)
-								if self.spec_vca ~= nil and self.spec_vca.handbrake ~= nil then
-									self.spec_vca.handbrake = true
-									-- self.spec_vca.handbrake = false
-								end
-								-- self:stopMotor()
-								-- tool.rotSpeed = movingBU
+					
+					if move < -0.5 then
+						self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.lastMotorRpm - (math.abs(move)*10)
+						self.spec_motorized.motor.smoothedLoadPercentage = math.min(self.spec_motorized.motor.smoothedLoadPercentage + (math.abs(move)), .9)
+						if self.spec_motorized.motor.lastMotorRpm < self.spec_motorized.motor.minRpm * 0.89 and self.spec_motorized.motor.smoothedLoadPercentage > 0.8 and self.spec_motorized.motorTemperature.value < 50 then
+							move = 0
+							RPMforHydraulics = 0
+							-- Motor abwürgen
+							self:stopMotor();
+							-- break;
+							move = 0
+							self:startMotor(true)
+							if self.spec_vca ~= nil and self.spec_vca.handbrake ~= nil then
+								self.spec_vca.handbrake = true
+								-- self.spec_vca.handbrake = false
 							end
-						elseif move < 0  and move >= -0.5 then
-							self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.lastMotorRpm - (math.abs(move)*10)
-							self.spec_motorized.motor.smoothedLoadPercentage = math.min(self.spec_motorized.motor.smoothedLoadPercentage + (math.abs(move)), .9)
-						elseif move > 0 then
-							self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.lastMotorRpm - (math.abs(move)*5)
-							self.spec_motorized.motor.smoothedLoadPercentage = math.min(self.spec_motorized.motor.smoothedLoadPercentage + (math.abs(move)), .4)
+							-- self:stopMotor()
+							-- tool.rotSpeed = movingBU
 						end
-						
-						
-						-- print("move: " .. move) -- 0 - 1
-						tool.externalMove = 0
-						-- spec.moveRpmL = 1
-
-						if tool.rotSpeed ~= nil then
-							-- rotSpeed = move*tool.rotSpeed * (MathUtil.clamp(RPMforHydraulics, 0.01, 0.7))
-							rotSpeed = move*tool.rotSpeed * RPMforHydraulics
-							-- rotSpeed = move*tool.rotSpeed * (math.max(spec.HandgasPercent, 0.1))
-							if tool.rotAcceleration ~= nil and math.abs(rotSpeed - tool.lastRotSpeed) >= tool.rotAcceleration*dt then
-								if rotSpeed > tool.lastRotSpeed then
-									rotSpeed = (tool.lastRotSpeed*0.8 ) + tool.rotAcceleration*dt
-								else
-									rotSpeed = (tool.lastRotSpeed ) - tool.rotAcceleration*dt
-								end
-							end
-						end
-						if tool.transSpeed ~= nil then
-							-- transSpeed = move*tool.transSpeed * (MathUtil.clamp(RPMforHydraulics, 0.01, 0.7))
-							transSpeed = move*tool.transSpeed * RPMforHydraulics
-							if tool.transAcceleration ~= nil and math.abs(transSpeed - tool.lastTransSpeed) >= tool.transAcceleration*dt then
-								if transSpeed > tool.lastTransSpeed then
-									transSpeed = (tool.lastTransSpeed*0.8 ) + tool.transAcceleration*dt
-								else
-									transSpeed = (tool.lastTransSpeed ) - tool.transAcceleration*dt
-								end
-							end
-						end
-						if tool.animSpeed ~= nil then
-							-- animSpeed = move*tool.animSpeed * (MathUtil.clamp(RPMforHydraulics, 0.01, 0.7))
-							animSpeed = move*tool.animSpeed * RPMforHydraulics
-							if tool.animAcceleration ~= nil and math.abs(animSpeed - tool.lastAnimSpeed) >= tool.animAcceleration*dt then
-								if animSpeed > tool.lastAnimSpeed then
-									animSpeed = (tool.lastAnimSpeed*0.8 ) + tool.animAcceleration*dt
-								else
-									animSpeed = (tool.lastAnimSpeed) - tool.animAcceleration*dt
-								end
-							end
-						end
-						-- set rpm here
-					else
-						if tool.rotAcceleration ~= nil then
-							if tool.lastRotSpeed < 0 then
-								rotSpeed = math.min(tool.lastRotSpeed + tool.rotAcceleration*dt, 0)
-							else
-								rotSpeed = math.max(tool.lastRotSpeed - tool.rotAcceleration*dt, 0)
-							end
-						end
-						if tool.transAcceleration ~= nil then
-							if tool.lastTransSpeed < 0 then
-								transSpeed = math.min(tool.lastTransSpeed + tool.transAcceleration*dt, 0)
-							else
-								transSpeed = math.max(tool.lastTransSpeed - tool.transAcceleration*dt, 0)
-							end
-						end
-						if tool.animAcceleration ~= nil then
-							if tool.lastAnimSpeed < 0 then
-								animSpeed = math.min(tool.lastAnimSpeed + tool.animAcceleration*dt, 0)
-							else
-								animSpeed = math.max(tool.lastAnimSpeed - tool.animAcceleration*dt, 0)
-							end
-						end
+					elseif move < 0  and move >= -0.5 then
+						self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.lastMotorRpm - (math.abs(move)*10)
+						self.spec_motorized.motor.smoothedLoadPercentage = math.min(self.spec_motorized.motor.smoothedLoadPercentage + (math.abs(move)), .9)
+					elseif move > 0 then
+						self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.lastMotorRpm - (math.abs(move)*5)
+						self.spec_motorized.motor.smoothedLoadPercentage = math.min(self.spec_motorized.motor.smoothedLoadPercentage + (math.abs(move)), .4)
 					end
 					
 					
-					
-					local changed = false
-					if rotSpeed ~= nil and rotSpeed ~= 0 then
-						changed = changed or Cylindered.setToolRotation(self, tool, rotSpeed, dt)
-					else
-						tool.lastRotSpeed = 0
-					end
-					if transSpeed ~= nil and transSpeed ~= 0 then
-						changed = changed or Cylindered.setToolTranslation(self, tool, transSpeed, dt)
-					else
-						tool.lastTransSpeed = 0
-					end
-					if animSpeed ~= nil and animSpeed ~= 0 then
-						changed = changed or Cylindered.setToolAnimation(self, tool, animSpeed, dt)
-					else
-						tool.lastAnimSpeed = 0
-					end
-					for _, dependentTool in pairs(tool.dependentMovingTools) do
-						if dependentTool.speedScale ~= nil then
-							local isAllowed = true
-							if dependentTool.requiresMovement then
-								if not changed then
-									isAllowed = false
-								end
-							end
+					-- print("move: " .. move) -- 0 - 1
+					tool.externalMove = 0
+					-- spec.moveRpmL = 1
 
-							if isAllowed then
-								dependentTool.movingTool.externalMove = dependentTool.speedScale * tool.move
+					if tool.rotSpeed ~= nil then
+						-- rotSpeed = move*tool.rotSpeed * (MathUtil.clamp(RPMforHydraulics, 0.01, 0.7))
+						rotSpeed = move*tool.rotSpeed * RPMforHydraulics
+						-- rotSpeed = move*tool.rotSpeed * (math.max(spec.HandgasPercent, 0.1))
+						if tool.rotAcceleration ~= nil and math.abs(rotSpeed - tool.lastRotSpeed) >= tool.rotAcceleration*dt then
+							if rotSpeed > tool.lastRotSpeed then
+								rotSpeed = (tool.lastRotSpeed*0.8 ) + tool.rotAcceleration*dt
+							else
+								rotSpeed = (tool.lastRotSpeed ) - tool.rotAcceleration*dt
 							end
 						end
-						Cylindered.updateRotationBasedLimits(self, tool, dependentTool)
-						self:updateDependentToolLimits(tool, dependentTool)
+					end
+					if tool.transSpeed ~= nil then
+						-- transSpeed = move*tool.transSpeed * (MathUtil.clamp(RPMforHydraulics, 0.01, 0.7))
+						transSpeed = move*tool.transSpeed * RPMforHydraulics
+						if tool.transAcceleration ~= nil and math.abs(transSpeed - tool.lastTransSpeed) >= tool.transAcceleration*dt then
+							if transSpeed > tool.lastTransSpeed then
+								transSpeed = (tool.lastTransSpeed*0.8 ) + tool.transAcceleration*dt
+							else
+								transSpeed = (tool.lastTransSpeed ) - tool.transAcceleration*dt
+							end
+						end
+					end
+					if tool.animSpeed ~= nil then
+						-- animSpeed = move*tool.animSpeed * (MathUtil.clamp(RPMforHydraulics, 0.01, 0.7))
+						animSpeed = move*tool.animSpeed * RPMforHydraulics
+						if tool.animAcceleration ~= nil and math.abs(animSpeed - tool.lastAnimSpeed) >= tool.animAcceleration*dt then
+							if animSpeed > tool.lastAnimSpeed then
+								animSpeed = (tool.lastAnimSpeed*0.8 ) + tool.animAcceleration*dt
+							else
+								animSpeed = (tool.lastAnimSpeed) - tool.animAcceleration*dt
+							end
+						end
+					end
+					-- set rpm here
+				else
+					if tool.rotAcceleration ~= nil then
+						if tool.lastRotSpeed < 0 then
+							rotSpeed = math.min(tool.lastRotSpeed + tool.rotAcceleration*dt, 0)
+						else
+							rotSpeed = math.max(tool.lastRotSpeed - tool.rotAcceleration*dt, 0)
+						end
+					end
+					if tool.transAcceleration ~= nil then
+						if tool.lastTransSpeed < 0 then
+							transSpeed = math.min(tool.lastTransSpeed + tool.transAcceleration*dt, 0)
+						else
+							transSpeed = math.max(tool.lastTransSpeed - tool.transAcceleration*dt, 0)
+						end
+					end
+					if tool.animAcceleration ~= nil then
+						if tool.lastAnimSpeed < 0 then
+							animSpeed = math.min(tool.lastAnimSpeed + tool.animAcceleration*dt, 0)
+						else
+							animSpeed = math.max(tool.lastAnimSpeed - tool.animAcceleration*dt, 0)
+						end
 					end
 				end
+				
+				
+				
+				local changed = false
+				if rotSpeed ~= nil and rotSpeed ~= 0 then
+					changed = changed or Cylindered.setToolRotation(self, tool, rotSpeed, dt)
+				else
+					tool.lastRotSpeed = 0
+				end
+				if transSpeed ~= nil and transSpeed ~= 0 then
+					changed = changed or Cylindered.setToolTranslation(self, tool, transSpeed, dt)
+				else
+					tool.lastTransSpeed = 0
+				end
+				if animSpeed ~= nil and animSpeed ~= 0 then
+					changed = changed or Cylindered.setToolAnimation(self, tool, animSpeed, dt)
+				else
+					tool.lastAnimSpeed = 0
+				end
+				for _, dependentTool in pairs(tool.dependentMovingTools) do
+					if dependentTool.speedScale ~= nil then
+						local isAllowed = true
+						if dependentTool.requiresMovement then
+							if not changed then
+								isAllowed = false
+							end
+						end
+
+						if isAllowed then
+							dependentTool.movingTool.externalMove = dependentTool.speedScale * tool.move
+						end
+					end
+					Cylindered.updateRotationBasedLimits(self, tool, dependentTool)
+					self:updateDependentToolLimits(tool, dependentTool)
+				end
 			end
+		end
 		-- end -- FRONTLADER HYDRAULIK RPM END
 
 		-- BEGIN OF THE MAIN SCRIPT	
@@ -3872,25 +3900,14 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					    local activePedal = 0
 
 					    -- Nur eine Richtung aktiv (anti-Stotter)
-					    -- if math.abs(motor.lastAcceleratorPedal) < 0.01 then
-					        -- motor.currentDirection = -1
-					        -- direction = -1
-					        -- activePedal = spec.ClutchInputValue
-					    -- elseif math.abs(motor.lastAcceleratorPedal) > 0.01 and spec.ClutchInputValue < 0.01 then
-					        -- motor.currentDirection = 1
-					        -- direction = 1
-				        activePedal = math.abs(motor.lastAcceleratorPedal)
-					    -- else
-					        -- motor.currentDirection = 0
-					        -- direction = 0
-					        -- activePedal = 0
-					    -- end
-						if spec.ClutchInputValue > 0.1 then
-							motor.currentDirection = -1
-						else
-							motor.currentDirection = 1
+						activePedal = math.abs(motor.lastAcceleratorPedal)
+						if spec.HSTshuttle == 2 then
+							if spec.ClutchInputValue > 0.2 then
+								motor.currentDirection = -1
+							else
+								motor.currentDirection = 1
+							end
 						end
-
 					    -- Richtung setzen (nur wenn aktiv)
 					    -- if motor.currentDirection ~= 0 then
 					        -- motor.currentDirection = direction
@@ -4147,8 +4164,8 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * (spec.drivingLevelValue) * 0.4)
 							self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * (spec.drivingLevelValue) * 0.4)
 						elseif spec.forDBL_critdamage == 0 and spec.isTMSpedal == 0 then 																						-- Normalbetrieb
-							self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne * spec.drivingLevelValue )*(1.01-spec.ClutchInputValue)
-							self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue )*(1.01-spec.ClutchInputValue)
+							self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne * spec.drivingLevelValue )
+							self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue )
 							-- motor.motorLimitSpeed = math.abs(axis) * (motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01))
 							self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * (motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01))
 					        if dir == -1 then
@@ -4523,16 +4540,16 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							if self.spec_motorized.motor ~= nil then
 								-- if self:getDamageAmount() > 0.7 and spec.forDBL_critdamage == 1 and spec.forDBL_critheat == 1 then
 								if spec.forDBL_critdamage == 1 and spec.forDBL_critheat == 1 then 		-- Notlauf
-									self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue / (2.5*spec.drivingLevelValue))*(1.01-spec.ClutchInputValue) * 0.3
-									self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue / (2.5*spec.drivingLevelValue))*(1.01-spec.ClutchInputValue) * 0.4
+									self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue / (2.5*spec.drivingLevelValue)) * 0.3
+									self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue / (2.5*spec.drivingLevelValue))* 0.4
 								elseif spec.forDBL_critdamage == 0 then 								-- Normalbetrieb
 									-- Setze die maxSpeed proportional zum Pedal
 									if spec.vOne == spec.cvtDL then
-										self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne )*(1.01-spec.ClutchInputValue)
-										self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne )*(1.01-spec.ClutchInputValue)
+										self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne )
+										self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne )
 									else
-								        self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne * spec.drivingLevelValue )*(1.01-spec.ClutchInputValue)
-										self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue )*(1.01-spec.ClutchInputValue)
+								        self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne * spec.drivingLevelValue )
+										self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue )
 									end
 							        if spec.vOne == spec.cvtDL then
 										self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
@@ -4929,7 +4946,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					    motor.lastMotorRpm = currentRpm + (targetRpm - currentRpm) * lerpFactor
 					end -- FSII.
 					
-	-- MODERN CURVES =====================================
+					-- MODERN CURVES =====================================
 					if spec.isVarioTM and spec.CVTconfig ~= 7 and ( spec.CVTconfig == 4 or spec.CVTconfig == 5 or spec.CVTconfig == 6 ) then
 						local motor = self.spec_motorized.motor
 					    local axis = self.spec_drivable.axisForward or 0
@@ -4973,12 +4990,12 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							if self.spec_motorized.motor ~= nil then
 								-- if self:getDamageAmount() > 0.7 and spec.forDBL_critdamage == 1 and spec.forDBL_critheat == 1 then
 								if spec.forDBL_critdamage == 1 and spec.forDBL_critheat == 1 then 																					-- Notlauf
-									self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin * math.max((1-spec.ClutchInputValue), 0.02) / 2.8 * math.max((1-spec.ClutchInputValue), 0.01)
-									self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin * math.max((1-spec.ClutchInputValue), 0.02) / 2.8 * math.max((1-spec.ClutchInputValue), 0.01)
+									self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin * math.max((1-spec.ClutchInputValue), 0.02) / 2.8   
+									self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin * math.max((1-spec.ClutchInputValue), 0.02) / 2.8 
 									-- self.spec_motorized.motor.accelerationLimit = 0.25
 								elseif spec.forDBL_critdamage == 0 then 																											-- Normalbetrieb
-									self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin )*(1.01-spec.ClutchInputValue)
-									self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin )*(1.01-spec.ClutchInputValue)
+									self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin ) 
+									self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin )
 									-- Setze die maxSpeed proportional zum Pedal
 									self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
 							        if dir == -1 then
@@ -5206,7 +5223,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						end
 					end -- Modern Curves.
 
-	-- MOTORDREHZAHL (Handgas-digital)
+					-- MOTORDREHZAHL (Handgas-digital)
 					local maxRpm = self.spec_motorized.motor.maxRpm
 					local minRpm = self.spec_motorized.motor.minRpm
 
@@ -5229,7 +5246,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						spec.vFive = 0
 					end -- Handgas
 
-				-- Elektro Stapler
+					-- Elektro Stapler
 					if spec.CVTconfig == 10 then
 						-- print("vTwo: " .. tostring(spec.vTwo))
 						-- print("cvtAR: " .. tostring(spec.cvtAR))
@@ -5293,7 +5310,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					    self.prevRpm = rpmSmoothed
 					end
 					
-				-- HARVESTER config Erntemaschine
+					-- HARVESTER config Erntemaschine
 					if spec.isVarioTM and spec.CVTconfig == 11 then
 						
 						local combineLeaver = math.abs(self.spec_motorized.motor.lastAcceleratorPedal)
@@ -5312,7 +5329,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 									self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin / 3
 									self.spec_motorized.motor.maxBackwardSpeed=self.spec_motorized.motor.maxBackwardSpeedOrigin / 1.2
 									-- self.spec_motorized.motor.accelerationLimit = 0.25
-									self.spec_motorized.motor.lowBrakeForceScale = math.max(self.spec_motorized.motor.lowBrakeForceScale * (1 - spec.ClutchInputValue),0.02)
+									self.spec_motorized.motor.lowBrakeForceScale = math.max(self.spec_motorized.motor.lowBrakeForceScale * (1 - spec.ClutchInputValue),0.01)
 									-- self.spec_motorized.motor.accelerationLimit = math.min(self.spec_motorized.motor.accelerationLimit * (1 - spec.ClutchInputValue),0.25)
 								elseif spec.forDBL_critdamage == 0 then -- Normalbetrieb
 									if spec.vOne == 1 then 																-- FIELDMODE
@@ -5673,6 +5690,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					spec.forDBL_motorcoldlamp = 0
 				end
 			end
+		
 	else
 		-- set Acceleration of CVT-Addon deactivated vehicle, so that they don't cheating faster than others
 		self.spec_motorized.motor.accelerationLimit = 1.6

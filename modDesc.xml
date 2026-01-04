@@ -255,8 +255,8 @@ https://github.com/s4t4n/FS25_CVT_Addon
  - HST/Hydrostat kann nun auch per Taste die Fahrtrichtung wechseln,
   was bei manchen Fahrzeugen in RL vorhanden wäre.
  - Kupplung treten benötigt zum starten ist nun einstellbar.
- - 
- - 
+ - EV-Unterstützung wegen Multiplayer inkompatibilitäten entfernt
+ - Differential Tastenbelegung für VCA hinzugefügt
  - 
 ]]></de>
     </description> 
@@ -291,6 +291,9 @@ https://github.com/s4t4n/FS25_CVT_Addon
         <action name="SETPEDALTMS" />
         <action name="SETPREGLOW" />
         <action name="SIGNAL_HOLD_BEAM" />
+        <action name="SETVCAAWD" />
+        <action name="SETVCAREARDIFF" />
+        <action name="SETVCAFRONTDIFF" />
     </actions>
 	<inputBinding>
 		<actionBinding action="SETVARIOONE">
@@ -354,8 +357,18 @@ https://github.com/s4t4n/FS25_CVT_Addon
 		<actionBinding action="SETPREGLOW">
 			<binding device="KB_MOUSE_DEFAULT" input="" />
 		</actionBinding>
-        <actionBinding action="SIGNAL_HOLD_BEAM">
+		<actionBinding action="SIGNAL_HOLD_BEAM">
 			<binding device="KB_MOUSE_DEFAULT" input="" />
 		</actionBinding>
+        <actionBinding action="SETVCAAWD">
+			<binding device="KB_MOUSE_DEFAULT" input="" />
+		</actionBinding>
+		<actionBinding action="SETVCAREARDIFF">
+			<binding device="KB_MOUSE_DEFAULT" input="" />
+		</actionBinding>
+		<actionBinding action="SETVCAFRONTDIFF">
+			<binding device="KB_MOUSE_DEFAULT" input="" />
+		</actionBinding>
+		
 	</inputBinding>
 </modDesc>

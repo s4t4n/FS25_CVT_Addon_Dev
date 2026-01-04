@@ -122,7 +122,7 @@
 					</BinaryOption>
 				</GuiElement>
 				<GuiElement profile="fs25_multiTextOptionContainer">
-					<Text profile="multiTextOptionSettingsTitle" id="HSTshuttleTitle"/>
+					<Text profile="multiTextOptionSettingsTitle" id="HSTshuttleStateSettingTitle"/>
 					<!-- <BinaryOption profile="fs25_settingsBinaryOption" id="HSTshuttleStateSetting">
 						<Text profile="fs25_multiTextOptionTooltip" name="ignore" id="HSTshuttleStateSettingTT" position="700px 0px"/>
 					</BinaryOption> -->

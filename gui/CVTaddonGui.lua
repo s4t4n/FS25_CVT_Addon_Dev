@@ -135,7 +135,7 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.CvthudPos:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_CvthudPos"))	-- XsubHeader
 	self.drivinglevelTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_drivinglevelT"))	-- XsubHeader
 	self.accRampTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_accRampT"))	-- XsubHeader
-	if self.spec_vca ~= nil then
+	if FS25_VehicleControlAddon ~= nil then
 		self.antiSlipTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_antiSlipT"))	-- XsubHeader
 		self.pitTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_pitT"))	-- XsubHeader
 	else
@@ -148,7 +148,7 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.reverseLightsTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_reverseLightsTitle"))	-- rl
 	self.reverseLightsDurationTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_reverseLightsDurationTitle"))
 	self.drivingLevelStateTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_drivingLevelStateTitle"))
-	self.HSTshuttleTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_HSTshuttleT"))	-- HSTshuttle
+	self.HSTshuttleStateSettingTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_HSTshuttleT"))	-- HSTshuttle
 	if FS25_EngineBrakeforceCompensation ~= nil and FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil then
 		self.brakeForceCorrectionTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("brakeForceCorrectionTitle"))
 	else
@@ -316,13 +316,16 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	local variantstateSet = 1
 	-- if variant and self.spec.isVarioTM then
 	if self.spec.isVarioTM == true then
-		if FS25_EngineBrakeforceCompensation ~= nil and FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil and self.variantSetting:getState() ~= 8 then
+		if FS25_EngineBrakeforceCompensation ~= nil and FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil and self.variantSetting:getState() ~= 4 then
 			self.brakeForceCorrectionSetting:setDisabled(false)
 		else
 			self.brakeForceCorrectionSetting:setDisabled(true)
 		end
-		self.HSTshuttleStateSetting:setVisible(true)
-		self.startWithClutchSetting:setVisible(true)
+		-- self.HSTshuttleStateSetting:setVisible(true)
+		-- self.startWithClutchSetting:setVisible(true)
+		-- self.HSTshuttleStateSettingTitle:setVisible(true)
+		-- self.startWithClutchSettingTitle:setVisible(true)
+		
 		if self.spec.CVTconfig == 1 or self.spec.CVTconfig == 2 or self.spec.CVTconfig == 3 then -- classic
 			variantstateSet = 1
 			self.HSTTitle:setVisible(false)
@@ -604,6 +607,20 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.drivinglevelSetting:setDisabled(false)
 		end
 	end
+	if self.variantSetting:getState() == 3 then
+		self.HSTshuttleStateSetting:setDisabled(false)
+		self.HSTshuttleStateSettingTitle:setVisible(true)
+	else
+		self.HSTshuttleStateSetting:setDisabled(true)
+		self.HSTshuttleStateSettingTitle:setVisible(false)
+	end
+	if self.variantSetting:getState() == 1 or self.variantSetting:getState() == 2 then
+		self.startWithClutchSetting:setDisabled(false)
+		self.startWithClutchSettingTitle:setVisible(true)
+	else
+		self.startWithClutchSetting:setDisabled(true)
+		self.startWithClutchSettingTitle:setVisible(false)
+	end
 end
 
 function CVTaddonGui:onClickAdminLogin(element)
@@ -728,13 +745,17 @@ function CVTaddonGui:logicalCheck()
 
 	if self.variantSetting:getState() == 3 then
 		self.HSTshuttleStateSetting:setDisabled(false)
+		self.HSTshuttleStateSettingTitle:setVisible(true)
 	else
 		self.HSTshuttleStateSetting:setDisabled(true)
+		self.HSTshuttleStateSettingTitle:setVisible(false)
 	end
-	if self.variantSetting:getState() == 1 and self.variantSetting:getState() == 2 then
-		self.HSTshuttleStateSetting:setDisabled(false)
+	if self.variantSetting:getState() == 1 or self.variantSetting:getState() == 2 then
+		self.startWithClutchSetting:setDisabled(false)
+		self.startWithClutchSettingTitle:setVisible(true)
 	else
-		self.HSTshuttleStateSetting:setDisabled(true)
+		self.startWithClutchSetting:setDisabled(true)
+		self.startWithClutchSettingTitle:setVisible(false)
 	end
 
 	if self.variantSetting:getState() == 1 or self.variantSetting:getState() == 3 or self.variantSetting:getState() == 5 or self.variantSetting:getState() == 6 then
