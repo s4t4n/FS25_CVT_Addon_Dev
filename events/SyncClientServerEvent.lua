@@ -64,7 +64,7 @@ end
 -- @param integer connection connection
 function SyncClientServerEvent:readStream(streamId, connection)
     self.vehicle = NetworkUtil.readNodeObject(streamId)
-    self.HSTshuttle = streamReadBool(streamId)
+    self.HSTshuttle = streamReadInt32(streamId)
     self.vOne = streamReadInt32(streamId)
     self.vTwo = streamReadInt32(streamId)
     self.vThree = streamReadInt32(streamId)
@@ -113,7 +113,7 @@ function SyncClientServerEvent:writeStream(streamId, connection)
     if self.ClutchInputValue == nil then
 		self.ClutchInputValue = 0.0
 	end
-    streamWriteBool(streamId, self.HSTshuttle)
+    streamWriteInt32(streamId, self.HSTshuttle)
     streamWriteInt32(streamId, self.vOne)
 	streamWriteInt32(streamId, self.vTwo)
     streamWriteInt32(streamId, self.vThree)
@@ -164,6 +164,7 @@ function SyncClientServerEvent:run(connection)
         CVTaddon.SyncClientServer(self.vehicle, self.HSTshuttle, self.vOne, self.vTwo, self.vThree, self.CVTCanStart, self.vFive, self.autoDiffs, self.isVarioTM, self.isTMSpedal, self.CVTconfig, self.warnHeat, self.critHeat, self.warnDamage, self.critDamage, self.CVTdamage, self.HandgasPercent, self.ClutchInputValue, self.cvtDL, self.cvtAR, self.VCAantiSlip, self.VCApullInTurn, self.CVTcfgExists, self.reverseLightsState, self.reverseLightsDurationState, self.brakeForceCorrectionState, self.brakeForceCorrectionValue, self.drivingLevelState, self.drivingLevelValue, self.HSTstate, self.preGlow, self.forDBL_pregluefinished, self.forDBL_glowingstate, self.forDBL_preglowing, self.HUDpos)
 		if not connection:getIsServer() then --
 			g_server:broadcastEvent(SyncClientServerEvent.new(self.vehicle, self.HSTshuttle, self.vOne, self.vTwo, self.vThree, self.CVTCanStart, self.vFive, self.autoDiffs, self.isVarioTM, self.isTMSpedal, self.CVTconfig, self.warnHeat, self.critHeat, self.warnDamage, self.critDamage, self.CVTdamage, self.HandgasPercent, self.ClutchInputValue, self.cvtDL, self.cvtAR, self.VCAantiSlip, self.VCApullInTurn, self.CVTcfgExists, self.reverseLightsState, self.reverseLightsDurationState, self.brakeForceCorrectionState, self.brakeForceCorrectionValue, self.drivingLevelState, self.drivingLevelValue, self.HSTstate, self.preGlow, self.forDBL_pregluefinished, self.forDBL_glowingstate, self.forDBL_preglowing, self.HUDpos), nil, connection, self.vehicle)
+                                                                                            --  spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
 		end
     end
 end
