@@ -251,12 +251,13 @@ https://github.com/s4t4n/FS25_CVT_Addon
 
 - Changelog: 2.1.0.0
  - Textmeldung daß man vorgrlühen muß war für alle clients sichtbar
- - HST sync Fehler im Multiplayer behoben
+ - HST sync Fehler im Multiplayer behoben.
  - HST/Hydrostat kann nun auch per Taste die Fahrtrichtung wechseln,
   was bei manchen Fahrzeugen in RL vorhanden wäre.
  - Kupplung treten benötigt zum starten ist nun einstellbar.
- - EV-Unterstützung wegen Multiplayer inkompatibilitäten entfernt
- - Differential Tastenbelegung für VCA hinzugefügt
+ - EV-Unterstützung wegen Multiplayer inkompatibilitäten entfernt.
+ - Differential Tastenbelegung für VCA hinzugefügt.
+ - DLC Fahrzeuge im Shop hinzugefügt.
  - 
 ]]></de>
     </description> 

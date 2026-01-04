@@ -87,10 +87,10 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.9.9.22";
+local scrversion = "0.9.9.23";
 local lastupdate = "4.1.2026"
-local timestamp = "1767546959013";
-local savetime = "18:15:59";
+local timestamp = "1767553334096";
+local savetime = "20:02:14";
 local modversion = CVTaddon.modversion; -- moddesc
 CVTaddon.build = scrversion
 
@@ -134,14 +134,14 @@ function addCVTconfig(self, superfunc, xmlFile, baseXMLName, baseDir, customEnvi
 		or 	category == "FRONTLOADERVEHICLES" or category == "TELELOADERVEHICLES" or category == "SKIDSTEERVEHICLES" or category == "WHEELLOADERVEHICLES"
 		or 	category == "CARS" 				 or category == "TRUCKS" 			 or category == "MISC"
 		or 	category == "FORKLIFTS" 		 or category == "BEETHARVESTERS" 	 or category == "MISCDRIVABLES" 	or 	category == "HANDTOOLSMISC"
-		or 	category == "FORESTRYMISC"		or 	category == "WOODCHIPPERS"		or 	category == "FORESTRYEXCAVATORS" or category == "TEST"
+		or 	category == "FORESTRYMISC"		or 	category == "WOODCHIPPERS"		or 	category == "FORESTRYEXCAVATORS" 
 		or 	category == "FORESTRYFORWARDERS" or category == "FORESTRYHARVESTERS" or category == "FORAGEMIXERS"		or 	category == "GRAPEHARVESTERS"
 		or 	category == "COTTONHARVESTERS"	or 	category == "SUGARCANEHARVESTERS"	or 	category == "RICEHARVESTERS" or category == "RICEPLANTERS"
 		or 	category == "PEAHARVESTERS"		or 	category == "GREENBEANHARVESTERS"	or 	category == "POTATOHARVESTING"
 		or 	category == "BEETLOADING"
 
 		--DLCs
-
+		or category == "COMBINEWINDROWER" or category == "SLURRYTANKS" or category == "SPRAYERS" 
 
 		-- Hof Bergmann etc.
 		or category == "MINIAGRICULTUREEQUIPMENT"	or category == "FM_VEHICLES"
