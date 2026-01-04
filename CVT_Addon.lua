@@ -37,6 +37,8 @@
 	-- spec.forDBL_autoreverselight
 	-- spec.forDBL_brakescale
 	-- spec.forDBL_autoreverseworklight
+	-- spec.forDBL_autoreverseworklightseconds
+	-- spec.forDBL_autoreverselight
 	-- spec.forDBL_motorcanstart
 	-- spec.forDBL_accramp
 	-- spec.forDBL_digitalhandgasstep
@@ -85,10 +87,10 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.9.3.16";
-local lastupdate = "17.10.2025"
-local timestamp = "1760656223963";
-local savetime = "01:10:23";
+local scrversion = "0.9.3.29";
+local lastupdate = "14.12.2025"
+local timestamp = "1765746844472";
+local savetime = "22:14:04";
 local modversion = CVTaddon.modversion; -- moddesc
 CVTaddon.build = scrversion
 
@@ -138,12 +140,15 @@ function addCVTconfig(self, superfunc, xmlFile, baseXMLName, baseDir, customEnvi
 		or 	category == "PEAHARVESTERS"		or 	category == "GREENBEANHARVESTERS"	or 	category == "POTATOHARVESTING"
 		or 	category == "BEETLOADING"
 
-		-- Ifkos etc.
-		or 	category == "LSFM"
-		
+		--DLCs
+
+
 		-- Hof Bergmann etc.
 		or category == "MINIAGRICULTUREEQUIPMENT"	or category == "FM_VEHICLES"
-		
+
+		-- mods
+		or 	category == "LSFM"	or 	category == "TRANSPORTCARS"
+
 		or category == "FENDTPACKCATEGORY"	or category == "FD_CASEPACKCATEGORY"	or category == "SDFCORE2"	or category == "SDFCORE3"
 		or category == "SDFCORE4"	or category == "SDFCORE4H"	or category == "SDFCORE4L"	or category == "SDFCORE4S"	or category == "SDFCORE5"
 		or category == "SDFCORE5A"	or category == "SDFCORE5AH"	or category == "SDFCORE5AL"	or category == "SDFCORE5AS"	or category == "SDFCORE5N"
@@ -204,6 +209,8 @@ function CVTaddon.initSpecialization()
 	local key = CVTaddon.MOD_NAME..".CVTaddon"
 
 	schemaSavegame:register(XMLValueType.BOOL, "vehicles.vehicle(?)."..key..".cvtconfigured", "CVTa configured", false)
+    schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#HSTshuttle", "HST Shuttle1 or Clutch2", 1)
+    schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#needClutchToStart", "Need cpressed clutch to start engine", 2) -- DL
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#vOne", "Driving level", 2) -- DL
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#cvtDL", "Driving level count", 2) -- DLcount
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#cvtAR", "accRamps count", 4) -- AccRampsCount
@@ -528,6 +535,8 @@ function CVTaddon:onLoad(savegame)
 	spec.HUDpos = 1
 	spec.HUDvis = 1
 	spec.DTadd = 0
+	spec.needClutchToStart = 1	-- 1 Shuttle or 2 Clutch
+	spec.HSTshuttle = 2			-- 1 Shuttle or 2 Clutch
 	spec.vOne = 2				-- DrivingLevel
 	spec.cvtDL = 2				-- DrivingLevel count
 	spec.cvtAR = 4				-- AccRamp count
@@ -745,6 +754,7 @@ function CVTaddon:onPostLoad(savegame)
 		local xmlFile = savegame.xmlFile
 		local key = savegame.key .. ".FS25_CVT_Addon.CVTaddon"
 		spec.CVTcfgExists = xmlFile:getValue(key..".cvtconfigured", spec.CVTcfgExists)
+		spec.HSTshuttle = xmlFile:getValue(key.."#HSTshuttle", spec.HSTshuttle)
 		spec.vOne = xmlFile:getValue(key.."#vOne", spec.vOne)
 		spec.cvtDL = xmlFile:getValue(key.."#cvtDL", spec.cvtDL)
 		spec.cvtAR = xmlFile:getValue(key.."#cvtAR", spec.cvtAR)
@@ -903,6 +913,7 @@ function CVTaddon:saveToXMLFile(xmlFile, key, usedModNames)
 	end
 
 	xmlFile:setValue(key..".cvtconfigured", spec.CVTcfgExists)
+	xmlFile:setValue(key.."#HSTshuttle", spec.HSTshuttle)
 	xmlFile:setValue(key.."#vOne", spec.vOne)
 	xmlFile:setValue(key.."#cvtDL", spec.cvtDL)
 	xmlFile:setValue(key.."#cvtAR", spec.cvtAR)
@@ -954,9 +965,9 @@ function CVTaddon:guiCallback(changes, debug, showKeys)
 	self:raiseDirtyFlags(spec.dirtyFlag)
 	if g_server ~= nil then
 
-		g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+		g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
 	else
-		g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+		g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
 	end
 end
 
@@ -1054,7 +1065,7 @@ function CVTaddon:ToggleARWL() -- reverseLightsState toggle
 		end
 		-- DBL data
 			spec.forDBL_autoreverseworklight = tostring(spec.reverseLightsState)
-			spec.forDBL_autoreverseworklightseconds = tostring(spec.reverseLightsDurationState .. "Sek.")
+			spec.forDBL_autoreverseworklightseconds = tostring(spec.reverseLightsDurationState)
 				
 		if (spec.reverseLightsState == 1) then -- Ramp 1 +1
 			if cvtaDebugCVTon then
@@ -2105,7 +2116,9 @@ function CVTaddon:SETPREGLOW()
 	if (g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 2) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() < 3) then
 		spec.preGlow = math.min(spec.preGlow + 1, 500)
 		spec.forDBL_preglowing = 1
-		g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
+		if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+			g_currentMission:showBlinkingWarning(g_i18n:getText("txt_preGlow"), 75)
+		end
 		
 		local airTemp = g_currentMission.environment.weather:getCurrentTemperature()
 				
@@ -2153,7 +2166,7 @@ end
 -- end
 
 function CVTaddon.setReverseWorkLight(self, active)
-    local bitReverseWorkLight = 2 ^ 1 -- Beispielbit für Rückwärts-Arbeitslicht
+    local bitReverseWorkLight = 2 ^ 1 -- bit für Rückwärts-Arbeitslicht
     local mask = self.spec_lights.lightsTypesMask or 0
 
     if active then
@@ -2368,23 +2381,31 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							-- local airTemp = g_currentMission.environment.weather:getCurrentTemperature()
 							
 							if spec.CVTCanStart == true and airTemp <= 6 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 100 then
-								if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+								if spec.preGlow == 0 then
+									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									end
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and airTemp <= 2 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 250 then
 								if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									end
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and airTemp <= -1 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 350 then
 								if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									end
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and airTemp <= -4 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 480 then
 								if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									end
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
@@ -2490,22 +2511,30 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 				
 						if spec.CVTCanStart == true and airTemp <= 6 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 100 then
 							if spec.preGlow == 0 then 
-								g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+								if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+								end
 							end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= 2 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 250 then
 							if spec.preGlow == 0 then 
-								g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+								if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+								end
 							end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= -1 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 350 then
 							if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									end
 								end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= -4 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 480 then
 							if spec.preGlow == 0 then 
-								g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+								if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+								end
 							end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
@@ -2611,23 +2640,31 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							-- local airTemp = g_currentMission.environment.weather:getCurrentTemperature()
 				
 							if spec.CVTCanStart == true and airTemp <= 6 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 100 then
-								if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+								if spec.preGlow == 0 then
+									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									end
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and airTemp <= 2 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 250 then
 								if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									end
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and airTemp <= -1 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 350 then
 								if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									end
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and airTemp <= -4 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 480 then
 								if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									end
 								end
 								spec.CVTCanStart = false
 							elseif spec.CVTCanStart == true and (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
@@ -2735,22 +2772,30 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 
 						if spec.CVTCanStart == true and airTemp <= 6 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 100 then
 							if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									end
 								end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= 2 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 250 then
 							if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									end
 								end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= -1 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 350 then
 							if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									end
 								end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= -4 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 480 then
 							if spec.preGlow == 0 then 
-									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+									end
 								end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
@@ -2783,13 +2828,18 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 		end
 
 		-- new gluefinish
+
+		-- if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
 		if spec.forDBL_pregluefinished and spec.preGlow > 99 and self:getMotorState() == 1 then -- motor off
 			spec.preGlow = 0
 			spec.forDBL_pregluefinished = false
+			print("Part 1")
 		end
+
 		if not spec.forDBL_pregluefinished and spec.preGlow > 99 and spec.forDBL_glowingstate == 1 and self:getMotorState() >= 3 then -- motor on
 			-- spec.preGlow = 0
 			spec.forDBL_pregluefinished = true
+			print("Part 2")
 		end
 
 		-- rebuild hst, hvst can starting
@@ -3058,7 +3108,9 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 								g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
 							end
 						elseif not g_ignitionLockManager:getIsAvailable() then
-							g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+							if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+								g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
+							end
 						end
 					end
 				end
@@ -5579,7 +5631,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 		self.FStelemetryAddonData.CVT_preAutoDiffs 	= spec.forDBL_preautodiffs;		-- Automatische Diff-Sperre vorgewählt
 		self.FStelemetryAddonData.CVT_Clutch 		= spec.forDBL_cvtclutch;		-- Position des Kupplungspedals
 		self.FStelemetryAddonData.CVT_brakeRamp 	= spec.forDBL_brakeramp;		-- Bremsrampe
-		self.FStelemetryAddonData.CVT_vmaxFw 		= spec.fandDBL_vmaxfandward;		-- Aktuelle maximale Geschwindigkeit Vorwärts
+		self.FStelemetryAddonData.CVT_vmaxFw 		= spec.fandDBL_vmaxfandward;	-- Aktuelle maximale Geschwindigkeit Vorwärts
 		self.FStelemetryAddonData.CVT_vmaxBw 		= spec.forDBL_vmaxbackward;		-- Aktuelle maximale Geschwindigkeit Rückwärts
 		self.FStelemetryAddonData.CVT_IMPisActive 	= spec.forDBL_ipmactive;		-- Intelligent Power Management greift ein
 		self.FStelemetryAddonData.CVT_TMSpadelMode 	= spec.forDBL_tmspedal;			-- TMS Pedal Modus aktiv
@@ -5588,6 +5640,8 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 		self.FStelemetryAddonData.CVT_HighPressure 	= spec.forDBL_highpressure;		-- Hoher Druck im Getriebe Warnung
 		-- self.FStelemetryAddonData.CVT_ 		= spec.forDBL; 			--
 	end
+	spec.forDBL_autoreverseworklight = tostring(spec.reverseLightsState)
+	spec.forDBL_autoreverseworklightseconds = tostring(spec.reverseLightsDurationState)
 	-- print("Telemetry Table aR: ".. tostring(self.FStelemetryAddonData.accRamp))
 	-- print("Telemetry Table DL: ".. tostring(self.FStelemetryAddonData.drivinglevel))
 	-- print("isAdmin: " .. tostring( g_currentMission.isMasterUser ))
@@ -6534,8 +6588,9 @@ end
 ----------------------------------------------------------------------------------------------------------------------			
 
 -- ----------------   Server Sync   --------------------------------
-function CVTaddon.SyncClientServer(vehicle, vOne, vTwo, vThree, CVTCanStart, vFive, autoDiffs, isVarioTM, isTMSpedal, CVTconfig, warnHeat, critHeat, warnDamage, critDamage, CVTdamage, HandgasPercent, ClutchInputValue, cvtDL, cvtAR, VCAantiSlip, VCApullInTurn, CVTcfgExists, reverseLightsState, reverseLightsDurationState, brakeForceCorrectionState, brakeForceCorrectionValue, drivingLevelState, drivingLevelValue, HSTstate, preGlow, forDBL_pregluefinished, forDBL_glowingstate, forDBL_preglowing, HUDpos)
+function CVTaddon.SyncClientServer(vehicle, HSTshuttle, vOne, vTwo, vThree, CVTCanStart, vFive, autoDiffs, isVarioTM, isTMSpedal, CVTconfig, warnHeat, critHeat, warnDamage, critDamage, CVTdamage, HandgasPercent, ClutchInputValue, cvtDL, cvtAR, VCAantiSlip, VCApullInTurn, CVTcfgExists, reverseLightsState, reverseLightsDurationState, brakeForceCorrectionState, brakeForceCorrectionValue, drivingLevelState, drivingLevelValue, HSTstate, preGlow, forDBL_pregluefinished, forDBL_glowingstate, forDBL_preglowing, HUDpos)
 	local spec = vehicle.spec_CVTaddon
+	spec.HSTshuttle = HSTshuttle
 	spec.vOne = vOne
 	spec.vTwo = vTwo
 	spec.vThree = vThree
@@ -6571,6 +6626,7 @@ function CVTaddon.SyncClientServer(vehicle, vOne, vTwo, vThree, CVTCanStart, vFi
 end								
 function CVTaddon:onReadStream(streamId, connection)
 	local spec = self.spec_CVTaddon
+	spec.HSTshuttle = streamReadInt32(streamId)  -- state driving level
 	spec.vOne = streamReadInt32(streamId)  -- state driving level
 	spec.vTwo = streamReadInt32(streamId) -- state accelerationRamp
 	spec.vThree = streamReadInt32(streamId) -- state brakeRamp
@@ -6672,6 +6728,7 @@ end
 
 function CVTaddon:onWriteStream(streamId, connection)
 	local spec = self.spec_CVTaddon
+	streamWriteInt32(streamId, spec.HSTshuttle)
 	streamWriteInt32(streamId, spec.vOne)
 	streamWriteInt32(streamId, spec.vTwo)
 	streamWriteInt32(streamId, spec.vThree)
@@ -6715,6 +6772,7 @@ function CVTaddon:onReadUpdateStream(streamId, timestamp, connection)
 	if not connection:getIsServer() then
 		local spec = self.spec_CVTaddon
 		if streamReadBool(streamId) then			
+			spec.HSTshuttle = streamReadInt32(streamId)
 			spec.vOne = streamReadInt32(streamId)
 			spec.vTwo = streamReadInt32(streamId)
 			spec.vThree = streamReadInt32(streamId)
@@ -6760,6 +6818,7 @@ function CVTaddon:onWriteUpdateStream(streamId, connection, dirtyMask)
 	if connection:getIsServer() then
 		local spec = self.spec_CVTaddon
 		if streamWriteBool(streamId, bitAND(dirtyMask, spec.dirtyFlag) ~= 0) then
+			streamWriteInt32(streamId, spec.HSTshuttle)
 			streamWriteInt32(streamId, spec.vOne)
 			streamWriteInt32(streamId, spec.vTwo)
 			streamWriteInt32(streamId, spec.vThree) --

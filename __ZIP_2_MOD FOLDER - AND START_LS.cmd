@@ -136,7 +136,8 @@ REM echo. >> _ZiP_log.txt
 REM echo. >> _ZiP_log.txt
 timeout /T 2
 
-start "" "C:\Games\Farming Simulator 2025\FarmingSimulator2025.exe" -cheats -skipStartVideos
+REM start "" "C:\Games\Farming Simulator 2025\x64\FarmingSimulator2025Game.exe" -cheats -skipStartVideos -skipModUpdateDialog
+start "" "C:\Games\Farming Simulator 2025\x64\FarmingSimulator2025Game.exe" -cheats -skipStartVideos -skipModUpdateDialog -scriptDebug
 
 goto EOF
 
