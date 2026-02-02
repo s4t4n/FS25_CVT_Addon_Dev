@@ -87,10 +87,10 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.9.3.60";
-local lastupdate = "4.1.2026"
-local timestamp = "1767489210644";
-local savetime = "02:13:30";
+local scrversion = "0.9.9.87";
+local lastupdate = "31.1.2026"
+local timestamp = "1769855374453";
+local savetime = "11:29:34";
 local modversion = CVTaddon.modversion; -- moddesc
 CVTaddon.build = scrversion
 
@@ -110,7 +110,7 @@ cvtaDebugCVTcanStartOn = false
 cvtsaved = false 
 
 CVTaddon.debug = false
-CVTaddon.showKeys = true
+	CVTaddon.showKeys = true
 
 printLMBF = false
 VcvtaResetWear = false
@@ -134,20 +134,20 @@ function addCVTconfig(self, superfunc, xmlFile, baseXMLName, baseDir, customEnvi
 		or 	category == "FRONTLOADERVEHICLES" or category == "TELELOADERVEHICLES" or category == "SKIDSTEERVEHICLES" or category == "WHEELLOADERVEHICLES"
 		or 	category == "CARS" 				 or category == "TRUCKS" 			 or category == "MISC"
 		or 	category == "FORKLIFTS" 		 or category == "BEETHARVESTERS" 	 or category == "MISCDRIVABLES" 	or 	category == "HANDTOOLSMISC"
-		or 	category == "FORESTRYMISC"		or 	category == "WOODCHIPPERS"		or 	category == "FORESTRYEXCAVATORS" or category == ""
+		or 	category == "FORESTRYMISC"		or 	category == "WOODCHIPPERS"		or 	category == "FORESTRYEXCAVATORS" 
 		or 	category == "FORESTRYFORWARDERS" or category == "FORESTRYHARVESTERS" or category == "FORAGEMIXERS"		or 	category == "GRAPEHARVESTERS"
 		or 	category == "COTTONHARVESTERS"	or 	category == "SUGARCANEHARVESTERS"	or 	category == "RICEHARVESTERS" or category == "RICEPLANTERS"
 		or 	category == "PEAHARVESTERS"		or 	category == "GREENBEANHARVESTERS"	or 	category == "POTATOHARVESTING"
 		or 	category == "BEETLOADING"
 
 		--DLCs
-
+		or category == "COMBINEWINDROWER" or category == "SLURRYTANKS" or category == "SPRAYERS" 
 
 		-- Hof Bergmann etc.
 		or category == "MINIAGRICULTUREEQUIPMENT"	or category == "FM_VEHICLES"
 
 		-- mods
-		or 	category == "LSFM"	or 	category == "TRANSPORTCARS"
+		or 	category == "LSFM"	or 	category == "TRANSPORTCARS" or category == "MBPACK"
 
 		or category == "FENDTPACKCATEGORY"	or category == "FD_CASEPACKCATEGORY"	or category == "SDFCORE2"	or category == "SDFCORE3"
 		or category == "SDFCORE4"	or category == "SDFCORE4H"	or category == "SDFCORE4L"	or category == "SDFCORE4S"	or category == "SDFCORE5"
@@ -210,7 +210,6 @@ function CVTaddon.initSpecialization()
 
 	schemaSavegame:register(XMLValueType.BOOL, "vehicles.vehicle(?)."..key..".cvtconfigured", "CVTa configured", false)
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#HSTshuttle", "HST Shuttle1 or Clutch2", 2)
-    schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#needClutchToStart", "Need cpressed clutch to start engine", 2) -- DL
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#vOne", "Driving level", 2) -- DL
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#cvtDL", "Driving level count", 2) -- DLcount
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#cvtAR", "accRamps count", 4) -- AccRampsCount
@@ -232,7 +231,8 @@ function CVTaddon.initSpecialization()
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#HUDpos", "CVT hud position", 1)
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#HUDvis", "CVT hud visibility", 1)
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#VCAantiSlip", "CVT has automatic anti slip function", 1)
-    schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#VCApullInTurn", "CVT has pull in turn like by fendt", 1)
+	schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#VCApullInTurn", "CVT has pull in turn like by fendt", 1)
+	schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#needClutchToStart", "Need pressed clutch to start engine", 1) -- DL
 
 	-- new config add fs25
 	if g_vehicleConfigurationManager.configurations["CVTaddon"] == nil then
@@ -288,6 +288,7 @@ function CVTaddon:onRegisterActionEvents()
 		spec.maxRpmOrigin = tostring(self.spec_motorized.motor.maxRpm)
 		
 		if self.getIsEntered ~= nil and self:getIsEntered() then
+			CVTaddon.actionEventsVPipe = {}
 			CVTaddon.actionEventsV1 = {}
 			CVTaddon.actionEventsV2 = {}
 			CVTaddon.actionEventsV23 = {}
@@ -313,10 +314,18 @@ function CVTaddon:onRegisterActionEvents()
 			CVTaddon.actionEventsV10 = {}
 			CVTaddon.actionEventsGUI = {}
 			CVTaddon.actionEventsARWL = {}
+			CVTaddon.actionEventsVCA1 = {}
+			CVTaddon.actionEventsVCA2 = {}
+			CVTaddon.actionEventsVCA3 = {}
+			CVTaddon.actionIdPipeLight = {}
 			CVTaddon.actionEventsGL = {}
 			local actionEventIdGui
 			local actionEventIdARwL
 			local actionEventIdGL
+			local eventIdVCA1
+			local eventIdVCA2
+			local eventIdVCA3
+			local eventIdPipeLight
 			local storeItem = g_storeManager:getItemByXMLFilename(self.configFileName)
 			if cvtaDebugCVTon then
 				print("storeItem.categoryName: " .. tostring(storeItem.categoryName)) -- debug
@@ -333,7 +342,10 @@ function CVTaddon:onRegisterActionEvents()
 				print("CVTaddon: onRegisterActionEvents eventActiveV3toggle: ".. tostring(CVTaddon.eventActiveV3toggle))
 				print("CVTaddon: onRegisterActionEvents eventActiveV4: ".. tostring(CVTaddon.eventActiveV4))
 			end
-
+			-- Pipe light
+			_, CVTaddon.eventIdVPipe = self:addActionEvent(CVTaddon.actionEventsVPipe, 'SETPIPELIGHT', self, CVTaddon.TogglePipeLight, false, true, false, true)
+			g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdVPipe, GS_PRIO_NORMAL)
+			g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdVPipe, false)
 			-- D1
 			_, CVTaddon.eventIdV1 = self:addActionEvent(CVTaddon.actionEventsV1, 'SETVARIOONE', self, CVTaddon.VarioOne, false, true, false, true)
 			g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdV1, GS_PRIO_NORMAL)
@@ -407,6 +419,7 @@ function CVTaddon:onRegisterActionEvents()
 			end
 
 			-- Fernlicht / Lichthupe
+			-- _, CVTaddon.eventIdVL = self:addActionEvent(CVTaddon.actionEventsVL, 'SIGNAL_HOLD_BEAM', self, CVTaddon.TogglePipeLight, true, true, false, true)
 			_, CVTaddon.eventIdVL = self:addActionEvent(CVTaddon.actionEventsVL, 'SIGNAL_HOLD_BEAM', self, CVTaddon.onHighBeamPressed, true, true, false, true)
 			g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdVL, GS_PRIO_NORMAL)
 			g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdVL, false)
@@ -443,15 +456,15 @@ function CVTaddon:onRegisterActionEvents()
 			end
 			if self.spec_vca ~= nil then
 				-- additional for vca
-				_, CVTaddon.eventIdVCA1 = self:addActionEvent(CVTaddon.actionEventsVCA1, 'SETVCAAWD', self, CVTaddon.VCAawd, false, true, false, true)
+				_, eventIdVCA1 = self:addActionEvent(CVTaddon.actionEventsVCA1, 'SETVCAAWD', self, CVTaddon.VCAawd, false, true, false, true)
 				g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdVCA1, GS_PRIO_NORMAL)
 				g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdVCA1, false)
 
-				_, CVTaddon.eventIdVCA2 = self:addActionEvent(CVTaddon.actionEventsVCA2, 'SETVCAREARDIFF', self, CVTaddon.VCArearDiff, false, true, false, true)
+				_, eventIdVCA2 = self:addActionEvent(CVTaddon.actionEventsVCA2, 'SETVCAREARDIFF', self, CVTaddon.VCArearDiff, false, true, false, true)
 				g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdVCA2, GS_PRIO_NORMAL)
 				g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdVCA1, false)
 
-				_, CVTaddon.eventIdVCA3 = self:addActionEvent(CVTaddon.actionEventsVCA3, 'SETVCAFRONTDIFF', self, CVTaddon.VCAfrontDiff, false, true, false, true)
+				_, eventIdVCA3 = self:addActionEvent(CVTaddon.actionEventsVCA3, 'SETVCAFRONTDIFF', self, CVTaddon.VCAfrontDiff, false, true, false, true)
 				g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdVCA3, GS_PRIO_NORMAL)
 				g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdVCA3, false)
 			end
@@ -554,7 +567,7 @@ function CVTaddon:onLoad(savegame)
 	spec.HUDpos = 1
 	spec.HUDvis = 1
 	spec.DTadd = 0
-	spec.needClutchToStart = 1	-- 1 Shuttle or 2 Clutch
+	spec.needClutchToStart = 1	-- 2 no or 1 yes
 	spec.HSTshuttle = 2			-- 1 Shuttle or 2 Clutch
 	spec.vOne = 2				-- DrivingLevel
 	spec.cvtDL = 2				-- DrivingLevel count
@@ -648,29 +661,32 @@ function CVTaddon:onLoad(savegame)
 
 	if spec.vOne ~= nil then
 		if not spec.isVarioTM then
-			spec.forDBL_drivinglevel = tostring(" ")
+			spec.forDBL_drivinglevel = (7)
 		else
-			spec.forDBL_drivinglevel = tostring(spec.vOne)
+			spec.forDBL_drivinglevel = (spec.vOne)
 		end
 	end
 	if spec.cvtDL ~= nil then
-		spec.forDBL_drivinglevelcount = tostring(spec.cvtDL)
+		spec.forDBL_drivinglevelcount = (spec.cvtDL)
 	end
 	if spec.cvtAR ~= nil then
-		spec.forDBL_accrampcount = tostring(spec.cvtAR)
+		spec.forDBL_accrampcount = (spec.cvtAR)
 	end
 	
 	
 	spec.forDBL_digitalhandgasstep = tostring(spec.vFive)
 	if spec.vTwo ~= nil then
 		if spec.vTwo == 4 then
-			spec.forDBL_accramp = tostring(4)
+			spec.forDBL_accramp = (4)
 		elseif spec.vTwo == 1 then
-			spec.forDBL_accramp = tostring(1)
+			spec.forDBL_accramp = (1)
 		elseif spec.vTwo == 2 then
-			spec.forDBL_accramp = tostring(2)
+			spec.forDBL_accramp = (2)
 		elseif spec.vTwo == 3 then
-			spec.forDBL_accramp = tostring(3)
+			spec.forDBL_accramp = (3)
+		elseif spec.vTwo == 5 then
+			spec.forDBL_accramp = (5)
+			
 		end
 	end
 	spec.forDBL_rpmdmax = tostring(spec.rpmDmax)
@@ -713,6 +729,7 @@ function CVTaddon:onLoad(savegame)
 	CVTaddon.eventActiveV8 = true
 	CVTaddon.eventActiveV9 = true
 	CVTaddon.eventActiveV10 = true
+	CVTaddon.eventIdVPipe = nil
 	CVTaddon.eventIdV1 = nil
 	CVTaddon.eventIdV2 = nil
 	CVTaddon.eventIdV23 = nil
@@ -733,6 +750,7 @@ function CVTaddon:onLoad(savegame)
 	CVTaddon.eventIdV12 = nil
 	CVTaddon.eventIdV13 = nil
 	CVTaddon.eventIdVL = nil
+	CVTaddon.eventIdPipeLight = nil
 	CVTaddon.eventIdV8 = nil
 	CVTaddon.eventIdV9 = nil
 	CVTaddon.eventIdV10 = nil
@@ -801,6 +819,7 @@ function CVTaddon:onPostLoad(savegame)
 		spec.HUDvis = xmlFile:getValue(key.."#HUDvis", spec.HUDvis)
 		spec.VCAantiSlip = xmlFile:getValue(key.."#VCAantiSlip", spec.VCAantiSlip)
 		spec.VCApullInTurn = xmlFile:getValue(key.."#VCApullInTurn", spec.VCAantiSlip)
+		spec.needClutchToStart = xmlFile:getValue(key.."#needClutchToStart", spec.needClutchToStart)
 
 		if spec.CVTcfgExists then
 			print("CVT_Addon: personal adjustments loaded for "..self:getName())
@@ -872,24 +891,26 @@ function CVTaddon:onPostLoad(savegame)
 
 	if spec.vOne ~= nil then
 		if not spec.isVarioTM then
-			spec.forDBL_drivinglevel = tostring(" ")
+			spec.forDBL_drivinglevel = (7)
+			-- spec.forDBL_drivinglevel = tostring(" ")
 		else
-			spec.forDBL_drivinglevel = tostring(spec.vOne)
+			spec.forDBL_drivinglevel = (spec.vOne)
 		end
 	end
 	if spec.cvtDL ~= nil then
-		spec.forDBL_drivinglevelcount = tostring(spec.cvtDL)
+		spec.forDBL_drivinglevelcount = (spec.cvtDL)
 	end
 	if spec.cvtAR ~= nil then
-		spec.forDBL_accrampcount = tostring(spec.cvtAR)
+		spec.forDBL_accrampcount = (spec.cvtAR)
 	end
 	
-	spec.forDBL_digitalhandgasstep = tostring(spec.vFive)
+	spec.forDBL_digitalhandgasstep = (spec.vFive)
 	if spec.vTwo ~= nil then
 		if not spec.isVarioTM then
-			spec.forDBL_accramp = tostring(" ")
+			spec.forDBL_accramp = (7)
+			-- spec.forDBL_accramp = tostring(" ")
 		else
-			spec.forDBL_accramp = tostring(spec.vTwo)
+			spec.forDBL_accramp = (spec.vTwo)
 		end
 	end
 	-- spec.forDBL_rpmdmax = tostring(spec.rpmDmax)
@@ -959,8 +980,9 @@ function CVTaddon:saveToXMLFile(xmlFile, key, usedModNames)
 	xmlFile:setValue(key.."#HUDvis", spec.HUDvis)
 	xmlFile:setValue(key.."#VCAantiSlip", spec.VCAantiSlip)
 	xmlFile:setValue(key.."#VCApullInTurn", spec.VCApullInTurn)
+	xmlFile:setValue(key.."#needClutchToStart", spec.needClutchToStart)
 	if not cvtsaved then
-		print("CVT_Addon: 22 values saved.")
+		print("CVT_Addon: 24 values saved.")
 		cvtsaved = true
 	end
 end
@@ -988,9 +1010,9 @@ function CVTaddon:guiCallback(changes, debug, showKeys)
 	end
 	self:raiseDirtyFlags(spec.dirtyFlag)
 	if g_server ~= nil then
-		g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+		g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 	else
-		g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+		g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 	end
 end
 
@@ -1056,9 +1078,9 @@ function CVTaddon:BrakeRamps() -- BREMSRAMPEN - Ab kmh X wird die Betriebsbremse
 		end
 		self:raiseDirtyFlags(spec.dirtyFlag)
 		if g_server ~= nil then
-			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 		else
-			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 		end
 		if debug_for_DBL then
 			print("CVTa BR event: " .. spec.vThree)		
@@ -1103,12 +1125,27 @@ function CVTaddon:ToggleARWL() -- reverseLightsState toggle
 
 		self:raiseDirtyFlags(spec.dirtyFlag)
 		if g_server ~= nil then
-			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 		else
-			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 		end
 	end -- g_client
 end -- ToggleARWL Toggle
+
+function CVTaddon:TogglePipeLight() -- pipe light toggle
+	-- local spec = self.spec_CVTaddon
+	-- print("PipeLight TASTE: " .. tostring(self:getLightsTypesMask(bitOR(mask, bit3))) )
+	local spec = self.spec_CVTaddon
+
+	local bit3 = 2 ^ 4
+	local mask = self.spec_lights.lightsTypesMask or 0
+
+		if bitAND(mask, bit3) == 0 then
+			self:setLightsTypesMask(bitOR(mask, bit3))
+		else
+			self:setLightsTypesMask(bitAND(mask, bitNOT(bit3)))
+		end
+end -- TogglePipeLight Toggle
 
 function CVTaddon:AccRampsToggle() -- BESCHLEUNIGUNGSRAMPEN
 	local spec = self.spec_CVTaddon
@@ -1129,7 +1166,7 @@ function CVTaddon:AccRampsToggle() -- BESCHLEUNIGUNGSRAMPEN
 			spec.vTwo = spec.vTwo + 1
 		end
 		-- DBL convert
-			spec.forDBL_accramp = tostring(spec.vTwo)
+			spec.forDBL_accramp = (spec.vTwo)
 				
 		if (spec.vTwo == 1) then -- Ramp 1 +1
 			if cvtaDebugCVTon then
@@ -1166,9 +1203,9 @@ function CVTaddon:AccRampsToggle() -- BESCHLEUNIGUNGSRAMPEN
 		
 		self:raiseDirtyFlags(spec.dirtyFlag)
 		if g_server ~= nil then
-			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 		else
-			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 		end
 		spec.forDBL_vmaxforward = tostring(self.spec_motorized.motor.maxForwardSpeed * 3.6)
 		spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed * 3.6)
@@ -1187,7 +1224,7 @@ function CVTaddon:AccRampsSet1() -- BESCHLEUNIGUNGSRAMPEN I
 			end
 			spec.vTwo = 1
 			-- DBL convert
-			spec.forDBL_accramp = tostring(1)
+			spec.forDBL_accramp = (1)
 
 			if cvtaDebugCVTon then
 				print("AccRamp1 Taste gedrückt vTwo: "..tostring(spec.vTwo))
@@ -1195,9 +1232,9 @@ function CVTaddon:AccRampsSet1() -- BESCHLEUNIGUNGSRAMPEN I
 			end
 			self:raiseDirtyFlags(spec.dirtyFlag)
 			if g_server ~= nil then
-				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 			else
-				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 			end
 			spec.forDBL_vmaxforward = tostring(self.spec_motorized.motor.maxForwardSpeed * 3.6)
 			spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed * 3.6)
@@ -1217,7 +1254,7 @@ function CVTaddon:AccRampsSet2() -- BESCHLEUNIGUNGSRAMPEN II
 			end
 			spec.vTwo = 2
 			-- DBL convert
-			spec.forDBL_accramp = tostring(2)
+			spec.forDBL_accramp = (2)
 
 			if cvtaDebugCVTon then
 				print("AccRamp2 Taste gedrückt vTwo: "..tostring(spec.vTwo))
@@ -1225,9 +1262,9 @@ function CVTaddon:AccRampsSet2() -- BESCHLEUNIGUNGSRAMPEN II
 			end
 			self:raiseDirtyFlags(spec.dirtyFlag)
 			if g_server ~= nil then
-				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 			else
-				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 			end
 			spec.forDBL_vmaxforward = tostring(self.spec_motorized.motor.maxForwardSpeed * 3.6)
 			spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed * 3.6)
@@ -1247,7 +1284,7 @@ function CVTaddon:AccRampsSet3() -- BESCHLEUNIGUNGSRAMPEN III
 			end
 			spec.vTwo = 3
 			-- DBL convert
-			spec.forDBL_accramp = tostring(3)
+			spec.forDBL_accramp = (3)
 
 			if cvtaDebugCVTon then
 				print("AccRamp3 Taste gedrückt vTwo: "..tostring(spec.vTwo))
@@ -1255,9 +1292,9 @@ function CVTaddon:AccRampsSet3() -- BESCHLEUNIGUNGSRAMPEN III
 			end
 			self:raiseDirtyFlags(spec.dirtyFlag)
 			if g_server ~= nil then
-				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 			else
-				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 			end
 			spec.forDBL_vmaxforward = tostring(self.spec_motorized.motor.maxForwardSpeed * 3.6)
 			spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed * 3.6)
@@ -1277,7 +1314,7 @@ function CVTaddon:AccRampsSet4() -- BESCHLEUNIGUNGSRAMPEN IV
 			end
 			spec.vTwo = 4
 			-- DBL convert
-			spec.forDBL_accramp = tostring(4)
+			spec.forDBL_accramp = (4)
 
 			if cvtaDebugCVTon then
 				print("AccRamp4 Taste gedrückt vTwo: "..tostring(spec.vTwo))
@@ -1285,9 +1322,9 @@ function CVTaddon:AccRampsSet4() -- BESCHLEUNIGUNGSRAMPEN IV
 			end
 			self:raiseDirtyFlags(spec.dirtyFlag)
 			if g_server ~= nil then
-				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 			else
-				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 			end
 			spec.forDBL_vmaxforward = tostring(self.spec_motorized.motor.maxForwardSpeed * 3.6)
 			spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed * 3.6)
@@ -1307,7 +1344,7 @@ function CVTaddon:AccRampsSet5() -- BESCHLEUNIGUNGSRAMPEN V
 			end
 			spec.vTwo = 5
 			-- DBL convert
-			spec.forDBL_accramp = tostring(4)
+			spec.forDBL_accramp = (5)
 
 			if cvtaDebugCVTon then
 				print("AccRamp4 Taste gedrückt vTwo: "..tostring(spec.vTwo))
@@ -1315,9 +1352,9 @@ function CVTaddon:AccRampsSet5() -- BESCHLEUNIGUNGSRAMPEN V
 			end
 			self:raiseDirtyFlags(spec.dirtyFlag)
 			if g_server ~= nil then
-				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 			else
-				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 			end
 			spec.forDBL_vmaxforward = tostring(self.spec_motorized.motor.maxForwardSpeed * 3.6)
 			spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed * 3.6)
@@ -1352,13 +1389,16 @@ function CVTaddon:AccRamps() -- BESCHLEUNIGUNGSRAMPEN - Motorbremswirkung wird k
 		end
 		-- DBL convert
 		if spec.vTwo == 4 then
-			spec.forDBL_accramp = tostring(4)
+			spec.forDBL_accramp = (4)
 		elseif spec.vTwo == 1 then
-			spec.forDBL_accramp = tostring(1)
+			spec.forDBL_accramp = (1)
 		elseif spec.vTwo == 2 then
-			spec.forDBL_accramp = tostring(2)
+			spec.forDBL_accramp = (2)
 		elseif spec.vTwo == 3 then
-			spec.forDBL_accramp = tostring(3)
+			spec.forDBL_accramp = (3)
+		elseif spec.vTwo == 5 then
+			spec.forDBL_accramp = (5)
+			
 		end
 		
 		if (spec.vTwo == 1) then -- Ramp 1 +1
@@ -1392,9 +1432,9 @@ function CVTaddon:AccRamps() -- BESCHLEUNIGUNGSRAMPEN - Motorbremswirkung wird k
 		
 		self:raiseDirtyFlags(spec.dirtyFlag)
 		if g_server ~= nil then
-			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 		else
-			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 		end
 		spec.forDBL_vmaxforward = tostring(self.spec_motorized.motor.maxForwardSpeed * 3.6)
 		spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed * 3.6)
@@ -1427,13 +1467,16 @@ function CVTaddon:AccRampsD()
 		end
 		-- DBL convert
 		if spec.vTwo == 4 then
-			spec.forDBL_accramp = tostring(4)
+			spec.forDBL_accramp = (4)
 		elseif spec.vTwo == 1 then
-			spec.forDBL_accramp = tostring(1)
+			spec.forDBL_accramp = (1)
 		elseif spec.vTwo == 2 then
-			spec.forDBL_accramp = tostring(2)
+			spec.forDBL_accramp = (2)
 		elseif spec.vTwo == 3 then
-			spec.forDBL_accramp = tostring(3)
+			spec.forDBL_accramp = (3)
+		elseif spec.vTwo == 5 then
+			spec.forDBL_accramp = (5)
+			
 		end
 		
 		if (spec.vTwo == 1) then -- Ramp 1 +1
@@ -1465,9 +1508,9 @@ function CVTaddon:AccRampsD()
 				
 		self:raiseDirtyFlags(spec.dirtyFlag)
 		if g_server ~= nil then
-			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 		else
-			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 		end
 		spec.forDBL_vmaxforward = tostring(self.spec_motorized.motor.maxForwardSpeed * 3.6)
 		spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed * 3.6)
@@ -1497,9 +1540,9 @@ function CVTaddon:VarioRpmAxis(actionName, inputValue)
 		-- print("CVTa HandgasPercent: " .. tostring(spec.HandgasPercent))
 		self:raiseDirtyFlags(spec.dirtyFlag)
 		if g_server ~= nil then
-			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 		else
-			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 		end
 	end
 end
@@ -1539,9 +1582,9 @@ function CVTaddon:VarioClutchAxis(actionName, inputValue)
 		-- print("(f)ClutchInputValue: " .. tostring(spec.ClutchInputValue))
 		self:raiseDirtyFlags(spec.dirtyFlag)
 		if g_server ~= nil then
-			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 		else
-			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 		end
 	end
 end
@@ -1644,9 +1687,9 @@ function CVTaddon:VarioOne() -- FAHRSTUFE 1 field
 			
 			self:raiseDirtyFlags(spec.dirtyFlag)
 			if g_server ~= nil then
-			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+			g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 		else
-			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+			g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 		end
 		end -- g_client
 	end
@@ -1724,9 +1767,9 @@ function CVTaddon:VarioTwo() -- FAHRSTUFE 2
 			
 			self:raiseDirtyFlags(spec.dirtyFlag)
 			if g_server ~= nil then
-				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 			else
-				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 			end
 		end -- g_client
 	end
@@ -1804,9 +1847,9 @@ function CVTaddon:Vario3() -- FAHRSTUFE 3
 			
 			self:raiseDirtyFlags(spec.dirtyFlag)
 			if g_server ~= nil then
-				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 			else
-				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 			end
 		end -- g_client
 	end
@@ -1884,9 +1927,9 @@ function CVTaddon:Vario4() -- FAHRSTUFE 4
 			
 			self:raiseDirtyFlags(spec.dirtyFlag)
 			if g_server ~= nil then
-				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 			else
-				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 			end
 		end -- g_client
 	end
@@ -1983,9 +2026,9 @@ function CVTaddon:VarioToggle() -- FAHRSTUFEN WECHSELN
 			
 			self:raiseDirtyFlags(spec.dirtyFlag)
 			if g_server ~= nil then
-				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 			else
-				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 			end
 		end -- g_client
 	end
@@ -2035,9 +2078,9 @@ function CVTaddon:VarioADiffs() -- autoDiffs
 			end
 			self:raiseDirtyFlags(spec.dirtyFlag)
 			if g_server ~= nil then
-				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 			else
-				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 			end
 		end
 	end
@@ -2073,9 +2116,9 @@ function CVTaddon:VarioPedalRes() -- Pedal Resolution TMS like
 			end
 			self:raiseDirtyFlags(spec.dirtyFlag)
 			if g_server ~= nil then
-				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos), nil, nil, self)
+				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
 			else
-				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos))
+				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
 			end
 		end
 	end
@@ -2359,9 +2402,13 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						if spec.isVarioTM == true then
 							if spec.CVTconfig ~= 7 and spec.CVTcfgExists then
 								if spec.CVTconfig ~= 9 and spec.CVTconfig ~= 10 and spec.CVTconfig ~= 11 and spec.CVTconfig ~= 7 then
-									if spec.ClutchInputValue < 0.6 or spec.HandgasPercent > 0.05 then
+									if (spec.ClutchInputValue < 0.6 or spec.HandgasPercent > 0.05) then
 										if spec.ClutchInputValue < 0.6 then
-											spec.CVTCanStart = false
+											if spec.needClutchToStart == 1 then
+												spec.CVTCanStart = false
+											elseif spec.needClutchToStart == 2 then
+												spec.CVTCanStart = true
+											end
 											-- if g_client ~= nil and isActiveForInputIgnoreSelection and self:getCanMotorRun() == false then
 											if g_client ~= nil and isActiveForInputIgnoreSelection == false then
 												if not self.spec_RealisticDamageSystemEngineDied.EngineDied then
@@ -2382,7 +2429,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 											if cvtaDebugCVTcanStartOn then print("CVTa Hgas [E]: " .. tostring(spec.HandgasPercent)) end
 										end
 										
-									elseif spec.ClutchInputValue >= 0.6 or spec.HandgasPercent <= 0.05 then
+									elseif (spec.ClutchInputValue >= 0.6 or spec.HandgasPercent <= 0.05) then
 										if spec.ClutchInputValue >= 0.6 then
 											spec.CVTCanStart = true
 											if cvtaDebugCVTcanStartOn then print("CVTa Clutch [B]: " .. tostring(spec.ClutchInputValue)) end
@@ -2392,6 +2439,11 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 											if cvtaDebugCVTcanStartOn then print("CVTa Hgas [F]: " .. tostring(spec.HandgasPercent)) end
 										else
 											spec.CVTCanStart = false
+											-- if spec.needClutchToStart == 1 then
+											-- 	spec.CVTCanStart = false
+											-- elseif spec.needClutchToStart == 2 then
+											-- 	spec.CVTCanStart = true
+											-- end
 										end
 									end
 								end
@@ -2495,7 +2547,11 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							if spec.ClutchInputValue < 0.6 or spec.HandgasPercent > 0.05 then
 							
 								if spec.ClutchInputValue < 0.6 then
-									spec.CVTCanStart = false
+									if spec.needClutchToStart == 1 then
+										spec.CVTCanStart = false
+									elseif spec.needClutchToStart == 2 then
+										spec.CVTCanStart = true
+									end
 									
 									if g_client ~= nil and self:getCanMotorRun() == false then
 										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needClutch2start"), 75)
@@ -2524,6 +2580,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 									if cvtaDebugCVTcanStartOn then print("CVTa Hgas [F]: " .. tostring(spec.HandgasPercent)) end
 								else
 									spec.CVTCanStart = false
+									-- end
 								end
 							end
 						elseif spec.CVTconfig == 7 then
@@ -2623,7 +2680,11 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 								if spec.ClutchInputValue < 0.6 or spec.HandgasPercent > 0.05 then
 								
 									if spec.ClutchInputValue < 0.6 then
-										spec.CVTCanStart = false
+										if spec.needClutchToStart == 1 then
+											spec.CVTCanStart = false
+										elseif spec.needClutchToStart == 2 then
+											spec.CVTCanStart = true
+										end
 										-- if g_client ~= nil and isActiveForInputIgnoreSelection and self:getCanMotorRun() == false then
 										if g_client ~= nil and isActiveForInputIgnoreSelection == false then
 											if not self.spec_RealisticDamageSystemEngineDied.EngineDied then
@@ -2748,12 +2809,17 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					spec.CVTCanStart = true
 				end
 			elseif not self.spec_cpAIWorker then -- ad
+				-- print("no CP")
 				if not self:getIsMotorStarted() then
 					if spec.isVarioTM == true then
-						if spec.CVTconfig ~= 7 and spec.CVTconfig ~= 8 then
+						if spec.CVTconfig ~= 7 and spec.CVTconfig ~= 8 then -- all exclusive HSTs & disabled
 							if spec.ClutchInputValue < 0.6 or spec.HandgasPercent > 0.05 then
 								if spec.ClutchInputValue < 0.6 then
-									spec.CVTCanStart = false
+									if spec.needClutchToStart == 1 then
+										spec.CVTCanStart = false
+									elseif spec.needClutchToStart == 2 then
+										spec.CVTCanStart = true
+									end
 									-- if g_client ~= nil and isActiveForInputIgnoreSelection and self:getCanMotorRun() == false then
 									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
 										if not self.spec_RealisticDamageSystemEngineDied.EngineDied then
@@ -2773,7 +2839,6 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 									end
 									if cvtaDebugCVTcanStartOn then print("CVTa Hgas [E]: " .. tostring(spec.HandgasPercent)) end
 								end
-								
 							elseif spec.ClutchInputValue >= 0.6 or spec.HandgasPercent <= 0.05 then
 								if spec.ClutchInputValue >= 0.6 then
 									spec.CVTCanStart = true
@@ -2786,7 +2851,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 									spec.CVTCanStart = false
 								end
 							end
-						elseif spec.CVTconfig == 7 then
+						elseif spec.CVTconfig == 7 then -- HSTs
 							-- if self.spec_motorized.motor.vehicle.wheelsUtilSmoothedBrakePedal == 1 or self.spec_motorized.motor.vehicle.wheelsUtilSmoothedBrakePedal <= 0.1 then
 							if self.spec_vca ~= nil and self.spec_vca.handbrake ~= nil then
 								if self.spec_vca.handbrake == false or spec.HandgasPercent > 0.05 then
@@ -2836,41 +2901,43 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 
 						if spec.CVTCanStart == true and airTemp <= 6 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 100 then
 							if spec.preGlow == 0 then 
-									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
-										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-									end
+								if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
 								end
+							end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= 2 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 250 then
 							if spec.preGlow == 0 then 
-									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
-										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-									end
+								if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
 								end
+							end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= -1 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 350 then
 							if spec.preGlow == 0 then 
-									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
-										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-									end
+								if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
 								end
+							end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= -4 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 480 then
 							if spec.preGlow == 0 then 
-									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
-										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-									end
+								if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
 								end
+							end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
 							spec.CVTCanStart = true
-							-- print("CHECKPOINT 3b ###############")
+							print("CHECKPOINT 3b ###############")
 						else
-							-- spec.CVTCanStart = true
-							-- print("CHECKPOINT 3a ###############")
+							spec.CVTCanStart = true
+							print("CHECKPOINT 3a ###############")
 						end
 					end
 				end
+			else
+				print("else")
 				if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
 					if self.spec_motorized.motor.lastMotorRpm >= ( self.spec_motorized.motor.minRpm - 10 ) and spec.CVTconfig ~= 9 then
 						-- if spec.forDBL_pregluefinished then -- new gluefinish fail!
@@ -2897,14 +2964,18 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 		if spec.forDBL_pregluefinished and spec.preGlow > 99 and self:getMotorState() == 1 then -- motor off
 			spec.preGlow = 0
 			spec.forDBL_pregluefinished = false
-			print("Part 1")
+			print("preGlow = 0")
+			print("pregluefinished = false")
 		end
 
 		if not spec.forDBL_pregluefinished and spec.preGlow > 99 and spec.forDBL_glowingstate == 1 and self:getMotorState() >= 3 then -- motor on
 			-- spec.preGlow = 0
 			spec.forDBL_pregluefinished = true
-			print("Part 2")
+			print("pregluefinished = true")
 		end
+
+		-- print("state: " .. tostring(self:getMotorState()))
+		-- print("zs: " .. tostring(g_ignitionLockManager:getIsAvailable() )) 
 
 		-- rebuild hst, hvst can starting
 		if spec.CVTconfig == 8 or spec.CVTconfig == 0 or spec.CVTconfig == 10 or spec.CVTconfig == 11 or spec.CVTcfgExists ~= true then
@@ -2915,7 +2986,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 		end
 
 		-- print(spec.CVTCanStart)
-		local changeFlag = false
+		-- local changeFlag = false
 		local motor = nil
 
 		-- Anbaugeräte ermitteln und prüfen ob abgesenkt Front/Back
@@ -2968,165 +3039,165 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 		
 		-- FRONTLADER HYDRAULIK RPM - make wheelloader hydraulic assign to rpm
 		-- if spec.CVTconfig == 7 or isLoader or isWoodWorker or isTractor then
-			local i = 0
-			local RPMforHydraulics = 1
-			if spec.CVTconfig == 10 then
-				RPMforHydraulics = math.min( math.max(spec.HandgasPercent, 0.05), 0.8)
-			else
-				RPMforHydraulics = math.min( math.max((self.spec_motorized.motor:getLastModulatedMotorRpm()/self.spec_motorized.motor:getMaxRpm())*0.7, 0.05), 0.8)
-			end
-			-- local KGforHydraulics = math.min( math.max((self.spec_motorized.motor:getLastModulatedMotorRpm()/self.spec_motorized.motor:getMaxRpm())*0.7, 0.05), 0.8)
-			if self:getTotalMass() - self:getTotalMass(true) > 1.2 then
-				RPMforHydraulics = RPMforHydraulics * 0.5
-				-- RPMforHydraulics = RPMforHydraulics * (  1-(self:getTotalMass() - self:getTotalMass(true))/self:getTotalMass(true)  )
-			end
+		local i = 0
+		local RPMforHydraulics = 1
+		if spec.CVTconfig == 10 then
+			RPMforHydraulics = math.min( math.max(spec.HandgasPercent, 0.05), 0.8)
+		else
+			RPMforHydraulics = math.min( math.max((self.spec_motorized.motor:getLastModulatedMotorRpm()/self.spec_motorized.motor:getMaxRpm())*0.7, 0.05), 0.8)
+		end
+		-- local KGforHydraulics = math.min( math.max((self.spec_motorized.motor:getLastModulatedMotorRpm()/self.spec_motorized.motor:getMaxRpm())*0.7, 0.05), 0.8)
+		if self:getTotalMass() - self:getTotalMass(true) > 1.2 then
+			RPMforHydraulics = RPMforHydraulics * 0.5
+			-- RPMforHydraulics = RPMforHydraulics * (  1-(self:getTotalMass() - self:getTotalMass(true))/self:getTotalMass(true)  )
+		end
 
-			if spec.CVTconfig ~= 10 and spec.CVTconfig ~= 8 and spec.CVTcfgExists then
-				for i=1, #self.spec_cylindered.movingTools do
-					local tool = self.spec_cylindered.movingTools[i]
-					local isSelectedGroup = tool.controlGroupIndex == 0 or tool.controlGroupIndex == self.spec_cylindered.currentControlGroupIndex
-					local easyArmControlActive = false
-					if self.spec_cylindered.easyArmControl ~= nil then
-						easyArmControlActive = self.spec_cylindered.easyArmControl.state
+		if spec.CVTconfig ~= 10 and spec.CVTconfig ~= 8 and spec.CVTcfgExists then
+			for i=1, #self.spec_cylindered.movingTools do
+				local tool = self.spec_cylindered.movingTools[i]
+				local isSelectedGroup = tool.controlGroupIndex == 0 or tool.controlGroupIndex == self.spec_cylindered.currentControlGroupIndex
+				local easyArmControlActive = false
+				if self.spec_cylindered.easyArmControl ~= nil then
+					easyArmControlActive = self.spec_cylindered.easyArmControl.state
+				end
+				local canBeControlled = (easyArmControlActive and tool.easyArmControlActive) or (not easyArmControlActive and not tool.isEasyControlTarget)
+				local tool = self.spec_cylindered.movingTools[i]
+				local rotSpeed = 0
+				local transSpeed = 0
+				local animSpeed = 0
+				local move = self:getMovingToolMoveValue(tool)
+
+				if math.abs(move) > 0 then
+					if move < 0 then
+						move = move * 0.8
 					end
-					local canBeControlled = (easyArmControlActive and tool.easyArmControlActive) or (not easyArmControlActive and not tool.isEasyControlTarget)
-					local tool = self.spec_cylindered.movingTools[i]
-					local rotSpeed = 0
-					local transSpeed = 0
-					local animSpeed = 0
-					local move = self:getMovingToolMoveValue(tool)
-
-					if math.abs(move) > 0 then
-						if move < 0 then
-							move = move * 0.8
-						end
-						
-						if move < -0.5 then
-							self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.lastMotorRpm - (math.abs(move)*10)
-							self.spec_motorized.motor.smoothedLoadPercentage = math.min(self.spec_motorized.motor.smoothedLoadPercentage + (math.abs(move)), .9)
-							if self.spec_motorized.motor.lastMotorRpm < self.spec_motorized.motor.minRpm * 0.89 and self.spec_motorized.motor.smoothedLoadPercentage > 0.8 and self.spec_motorized.motorTemperature.value < 50 then
-								move = 0
-								RPMforHydraulics = 0
-								-- Motor abwürgen
-								self:stopMotor();
-								-- break;
-								move = 0
-								self:startMotor(true)
-								if self.spec_vca ~= nil and self.spec_vca.handbrake ~= nil then
-									self.spec_vca.handbrake = true
-									-- self.spec_vca.handbrake = false
-								end
-								-- self:stopMotor()
-								-- tool.rotSpeed = movingBU
+					
+					if move < -0.5 then
+						self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.lastMotorRpm - (math.abs(move)*10)
+						self.spec_motorized.motor.smoothedLoadPercentage = math.min(self.spec_motorized.motor.smoothedLoadPercentage + (math.abs(move)), .9)
+						if self.spec_motorized.motor.lastMotorRpm < self.spec_motorized.motor.minRpm * 0.89 and self.spec_motorized.motor.smoothedLoadPercentage > 0.8 and self.spec_motorized.motorTemperature.value < 50 then
+							move = 0
+							RPMforHydraulics = 0
+							-- Motor abwürgen
+							self:stopMotor();
+							-- break;
+							move = 0
+							self:startMotor(true)
+							if self.spec_vca ~= nil and self.spec_vca.handbrake ~= nil then
+								self.spec_vca.handbrake = true
+								-- self.spec_vca.handbrake = false
 							end
-						elseif move < 0  and move >= -0.5 then
-							self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.lastMotorRpm - (math.abs(move)*10)
-							self.spec_motorized.motor.smoothedLoadPercentage = math.min(self.spec_motorized.motor.smoothedLoadPercentage + (math.abs(move)), .9)
-						elseif move > 0 then
-							self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.lastMotorRpm - (math.abs(move)*5)
-							self.spec_motorized.motor.smoothedLoadPercentage = math.min(self.spec_motorized.motor.smoothedLoadPercentage + (math.abs(move)), .4)
+							-- self:stopMotor()
+							-- tool.rotSpeed = movingBU
 						end
-						
-						
-						-- print("move: " .. move) -- 0 - 1
-						tool.externalMove = 0
-						-- spec.moveRpmL = 1
-
-						if tool.rotSpeed ~= nil then
-							-- rotSpeed = move*tool.rotSpeed * (MathUtil.clamp(RPMforHydraulics, 0.01, 0.7))
-							rotSpeed = move*tool.rotSpeed * RPMforHydraulics
-							-- rotSpeed = move*tool.rotSpeed * (math.max(spec.HandgasPercent, 0.1))
-							if tool.rotAcceleration ~= nil and math.abs(rotSpeed - tool.lastRotSpeed) >= tool.rotAcceleration*dt then
-								if rotSpeed > tool.lastRotSpeed then
-									rotSpeed = (tool.lastRotSpeed*0.8 ) + tool.rotAcceleration*dt
-								else
-									rotSpeed = (tool.lastRotSpeed ) - tool.rotAcceleration*dt
-								end
-							end
-						end
-						if tool.transSpeed ~= nil then
-							-- transSpeed = move*tool.transSpeed * (MathUtil.clamp(RPMforHydraulics, 0.01, 0.7))
-							transSpeed = move*tool.transSpeed * RPMforHydraulics
-							if tool.transAcceleration ~= nil and math.abs(transSpeed - tool.lastTransSpeed) >= tool.transAcceleration*dt then
-								if transSpeed > tool.lastTransSpeed then
-									transSpeed = (tool.lastTransSpeed*0.8 ) + tool.transAcceleration*dt
-								else
-									transSpeed = (tool.lastTransSpeed ) - tool.transAcceleration*dt
-								end
-							end
-						end
-						if tool.animSpeed ~= nil then
-							-- animSpeed = move*tool.animSpeed * (MathUtil.clamp(RPMforHydraulics, 0.01, 0.7))
-							animSpeed = move*tool.animSpeed * RPMforHydraulics
-							if tool.animAcceleration ~= nil and math.abs(animSpeed - tool.lastAnimSpeed) >= tool.animAcceleration*dt then
-								if animSpeed > tool.lastAnimSpeed then
-									animSpeed = (tool.lastAnimSpeed*0.8 ) + tool.animAcceleration*dt
-								else
-									animSpeed = (tool.lastAnimSpeed) - tool.animAcceleration*dt
-								end
-							end
-						end
-						-- set rpm here
-					else
-						if tool.rotAcceleration ~= nil then
-							if tool.lastRotSpeed < 0 then
-								rotSpeed = math.min(tool.lastRotSpeed + tool.rotAcceleration*dt, 0)
-							else
-								rotSpeed = math.max(tool.lastRotSpeed - tool.rotAcceleration*dt, 0)
-							end
-						end
-						if tool.transAcceleration ~= nil then
-							if tool.lastTransSpeed < 0 then
-								transSpeed = math.min(tool.lastTransSpeed + tool.transAcceleration*dt, 0)
-							else
-								transSpeed = math.max(tool.lastTransSpeed - tool.transAcceleration*dt, 0)
-							end
-						end
-						if tool.animAcceleration ~= nil then
-							if tool.lastAnimSpeed < 0 then
-								animSpeed = math.min(tool.lastAnimSpeed + tool.animAcceleration*dt, 0)
-							else
-								animSpeed = math.max(tool.lastAnimSpeed - tool.animAcceleration*dt, 0)
-							end
-						end
+					elseif move < 0  and move >= -0.5 then
+						self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.lastMotorRpm - (math.abs(move)*10)
+						self.spec_motorized.motor.smoothedLoadPercentage = math.min(self.spec_motorized.motor.smoothedLoadPercentage + (math.abs(move)), .9)
+					elseif move > 0 then
+						self.spec_motorized.motor.lastMotorRpm = self.spec_motorized.motor.lastMotorRpm - (math.abs(move)*5)
+						self.spec_motorized.motor.smoothedLoadPercentage = math.min(self.spec_motorized.motor.smoothedLoadPercentage + (math.abs(move)), .4)
 					end
 					
 					
-					
-					local changed = false
-					if rotSpeed ~= nil and rotSpeed ~= 0 then
-						changed = changed or Cylindered.setToolRotation(self, tool, rotSpeed, dt)
-					else
-						tool.lastRotSpeed = 0
-					end
-					if transSpeed ~= nil and transSpeed ~= 0 then
-						changed = changed or Cylindered.setToolTranslation(self, tool, transSpeed, dt)
-					else
-						tool.lastTransSpeed = 0
-					end
-					if animSpeed ~= nil and animSpeed ~= 0 then
-						changed = changed or Cylindered.setToolAnimation(self, tool, animSpeed, dt)
-					else
-						tool.lastAnimSpeed = 0
-					end
-					for _, dependentTool in pairs(tool.dependentMovingTools) do
-						if dependentTool.speedScale ~= nil then
-							local isAllowed = true
-							if dependentTool.requiresMovement then
-								if not changed then
-									isAllowed = false
-								end
-							end
+					-- print("move: " .. move) -- 0 - 1
+					tool.externalMove = 0
+					-- spec.moveRpmL = 1
 
-							if isAllowed then
-								dependentTool.movingTool.externalMove = dependentTool.speedScale * tool.move
+					if tool.rotSpeed ~= nil then
+						-- rotSpeed = move*tool.rotSpeed * (MathUtil.clamp(RPMforHydraulics, 0.01, 0.7))
+						rotSpeed = move*tool.rotSpeed * RPMforHydraulics
+						-- rotSpeed = move*tool.rotSpeed * (math.max(spec.HandgasPercent, 0.1))
+						if tool.rotAcceleration ~= nil and math.abs(rotSpeed - tool.lastRotSpeed) >= tool.rotAcceleration*dt then
+							if rotSpeed > tool.lastRotSpeed then
+								rotSpeed = (tool.lastRotSpeed*0.8 ) + tool.rotAcceleration*dt
+							else
+								rotSpeed = (tool.lastRotSpeed ) - tool.rotAcceleration*dt
 							end
 						end
-						Cylindered.updateRotationBasedLimits(self, tool, dependentTool)
-						self:updateDependentToolLimits(tool, dependentTool)
+					end
+					if tool.transSpeed ~= nil then
+						-- transSpeed = move*tool.transSpeed * (MathUtil.clamp(RPMforHydraulics, 0.01, 0.7))
+						transSpeed = move*tool.transSpeed * RPMforHydraulics
+						if tool.transAcceleration ~= nil and math.abs(transSpeed - tool.lastTransSpeed) >= tool.transAcceleration*dt then
+							if transSpeed > tool.lastTransSpeed then
+								transSpeed = (tool.lastTransSpeed*0.8 ) + tool.transAcceleration*dt
+							else
+								transSpeed = (tool.lastTransSpeed ) - tool.transAcceleration*dt
+							end
+						end
+					end
+					if tool.animSpeed ~= nil then
+						-- animSpeed = move*tool.animSpeed * (MathUtil.clamp(RPMforHydraulics, 0.01, 0.7))
+						animSpeed = move*tool.animSpeed * RPMforHydraulics
+						if tool.animAcceleration ~= nil and math.abs(animSpeed - tool.lastAnimSpeed) >= tool.animAcceleration*dt then
+							if animSpeed > tool.lastAnimSpeed then
+								animSpeed = (tool.lastAnimSpeed*0.8 ) + tool.animAcceleration*dt
+							else
+								animSpeed = (tool.lastAnimSpeed) - tool.animAcceleration*dt
+							end
+						end
+					end
+					-- set rpm here
+				else
+					if tool.rotAcceleration ~= nil then
+						if tool.lastRotSpeed < 0 then
+							rotSpeed = math.min(tool.lastRotSpeed + tool.rotAcceleration*dt, 0)
+						else
+							rotSpeed = math.max(tool.lastRotSpeed - tool.rotAcceleration*dt, 0)
+						end
+					end
+					if tool.transAcceleration ~= nil then
+						if tool.lastTransSpeed < 0 then
+							transSpeed = math.min(tool.lastTransSpeed + tool.transAcceleration*dt, 0)
+						else
+							transSpeed = math.max(tool.lastTransSpeed - tool.transAcceleration*dt, 0)
+						end
+					end
+					if tool.animAcceleration ~= nil then
+						if tool.lastAnimSpeed < 0 then
+							animSpeed = math.min(tool.lastAnimSpeed + tool.animAcceleration*dt, 0)
+						else
+							animSpeed = math.max(tool.lastAnimSpeed - tool.animAcceleration*dt, 0)
+						end
 					end
 				end
+				
+				
+				
+				local changed = false
+				if rotSpeed ~= nil and rotSpeed ~= 0 then
+					changed = changed or Cylindered.setToolRotation(self, tool, rotSpeed, dt)
+				else
+					tool.lastRotSpeed = 0
+				end
+				if transSpeed ~= nil and transSpeed ~= 0 then
+					changed = changed or Cylindered.setToolTranslation(self, tool, transSpeed, dt)
+				else
+					tool.lastTransSpeed = 0
+				end
+				if animSpeed ~= nil and animSpeed ~= 0 then
+					changed = changed or Cylindered.setToolAnimation(self, tool, animSpeed, dt)
+				else
+					tool.lastAnimSpeed = 0
+				end
+				for _, dependentTool in pairs(tool.dependentMovingTools) do
+					if dependentTool.speedScale ~= nil then
+						local isAllowed = true
+						if dependentTool.requiresMovement then
+							if not changed then
+								isAllowed = false
+							end
+						end
+
+						if isAllowed then
+							dependentTool.movingTool.externalMove = dependentTool.speedScale * tool.move
+						end
+					end
+					Cylindered.updateRotationBasedLimits(self, tool, dependentTool)
+					self:updateDependentToolLimits(tool, dependentTool)
+				end
 			end
+		end
 		-- end -- FRONTLADER HYDRAULIK RPM END
 
 		-- BEGIN OF THE MAIN SCRIPT	
@@ -3870,25 +3941,14 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					    local activePedal = 0
 
 					    -- Nur eine Richtung aktiv (anti-Stotter)
-					    -- if math.abs(motor.lastAcceleratorPedal) < 0.01 then
-					        -- motor.currentDirection = -1
-					        -- direction = -1
-					        -- activePedal = spec.ClutchInputValue
-					    -- elseif math.abs(motor.lastAcceleratorPedal) > 0.01 and spec.ClutchInputValue < 0.01 then
-					        -- motor.currentDirection = 1
-					        -- direction = 1
-				        activePedal = math.abs(motor.lastAcceleratorPedal)
-					    -- else
-					        -- motor.currentDirection = 0
-					        -- direction = 0
-					        -- activePedal = 0
-					    -- end
-						if spec.ClutchInputValue > 0.1 then
-							motor.currentDirection = -1
-						else
-							motor.currentDirection = 1
+						activePedal = math.abs(motor.lastAcceleratorPedal)
+						if spec.HSTshuttle == 2 then
+							if spec.ClutchInputValue > 0.2 then
+								motor.currentDirection = -1
+							else
+								motor.currentDirection = 1
+							end
 						end
-
 					    -- Richtung setzen (nur wenn aktiv)
 					    -- if motor.currentDirection ~= 0 then
 					        -- motor.currentDirection = direction
@@ -4145,8 +4205,8 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * (spec.drivingLevelValue) * 0.4)
 							self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * (spec.drivingLevelValue) * 0.4)
 						elseif spec.forDBL_critdamage == 0 and spec.isTMSpedal == 0 then 																						-- Normalbetrieb
-							self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne * spec.drivingLevelValue )*(1.01-spec.ClutchInputValue)
-							self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue )*(1.01-spec.ClutchInputValue)
+							self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne * spec.drivingLevelValue )
+							self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue )
 							-- motor.motorLimitSpeed = math.abs(axis) * (motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01))
 							self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * (motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue * math.max((1-spec.ClutchInputValue), 0.01))
 					        if dir == -1 then
@@ -4521,16 +4581,16 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							if self.spec_motorized.motor ~= nil then
 								-- if self:getDamageAmount() > 0.7 and spec.forDBL_critdamage == 1 and spec.forDBL_critheat == 1 then
 								if spec.forDBL_critdamage == 1 and spec.forDBL_critheat == 1 then 		-- Notlauf
-									self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue / (2.5*spec.drivingLevelValue))*(1.01-spec.ClutchInputValue) * 0.3
-									self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue / (2.5*spec.drivingLevelValue))*(1.01-spec.ClutchInputValue) * 0.4
+									self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue / (2.5*spec.drivingLevelValue)) * 0.3
+									self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue / (2.5*spec.drivingLevelValue))* 0.4
 								elseif spec.forDBL_critdamage == 0 then 								-- Normalbetrieb
 									-- Setze die maxSpeed proportional zum Pedal
 									if spec.vOne == spec.cvtDL then
-										self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne )*(1.01-spec.ClutchInputValue)
-										self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne )*(1.01-spec.ClutchInputValue)
+										self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne )
+										self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne )
 									else
-								        self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne * spec.drivingLevelValue )*(1.01-spec.ClutchInputValue)
-										self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue )*(1.01-spec.ClutchInputValue)
+								        self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin  / spec.cvtDL * spec.vOne * spec.drivingLevelValue )
+										self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin / spec.cvtDL * spec.vOne * spec.drivingLevelValue )
 									end
 							        if spec.vOne == spec.cvtDL then
 										self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
@@ -4927,7 +4987,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					    motor.lastMotorRpm = currentRpm + (targetRpm - currentRpm) * lerpFactor
 					end -- FSII.
 					
-	-- MODERN CURVES =====================================
+					-- MODERN CURVES =====================================
 					if spec.isVarioTM and spec.CVTconfig ~= 7 and ( spec.CVTconfig == 4 or spec.CVTconfig == 5 or spec.CVTconfig == 6 ) then
 						local motor = self.spec_motorized.motor
 					    local axis = self.spec_drivable.axisForward or 0
@@ -4971,12 +5031,12 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 							if self.spec_motorized.motor ~= nil then
 								-- if self:getDamageAmount() > 0.7 and spec.forDBL_critdamage == 1 and spec.forDBL_critheat == 1 then
 								if spec.forDBL_critdamage == 1 and spec.forDBL_critheat == 1 then 																					-- Notlauf
-									self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin * math.max((1-spec.ClutchInputValue), 0.02) / 2.8 * math.max((1-spec.ClutchInputValue), 0.01)
-									self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin * math.max((1-spec.ClutchInputValue), 0.02) / 2.8 * math.max((1-spec.ClutchInputValue), 0.01)
+									self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin * math.max((1-spec.ClutchInputValue), 0.02) / 2.8   
+									self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin * math.max((1-spec.ClutchInputValue), 0.02) / 2.8 
 									-- self.spec_motorized.motor.accelerationLimit = 0.25
 								elseif spec.forDBL_critdamage == 0 then 																											-- Normalbetrieb
-									self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin )*(1.01-spec.ClutchInputValue)
-									self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin )*(1.01-spec.ClutchInputValue)
+									self.spec_motorized.motor.maxForwardSpeed =  (self.spec_motorized.motor.maxForwardSpeedOrigin ) 
+									self.spec_motorized.motor.maxBackwardSpeed = (self.spec_motorized.motor.maxBackwardSpeedOrigin )
 									-- Setze die maxSpeed proportional zum Pedal
 									self.spec_motorized.motor.motorLimitSpeed = math.abs(axis) * motor.maxForwardSpeedOrigin / spec.cvtDL * spec.vOne * math.max((1-spec.ClutchInputValue), 0.01)
 							        if dir == -1 then
@@ -5204,7 +5264,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						end
 					end -- Modern Curves.
 
-	-- MOTORDREHZAHL (Handgas-digital)
+					-- MOTORDREHZAHL (Handgas-digital)
 					local maxRpm = self.spec_motorized.motor.maxRpm
 					local minRpm = self.spec_motorized.motor.minRpm
 
@@ -5227,7 +5287,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						spec.vFive = 0
 					end -- Handgas
 
-				-- Elektro Stapler
+					-- Elektro Stapler
 					if spec.CVTconfig == 10 then
 						-- print("vTwo: " .. tostring(spec.vTwo))
 						-- print("cvtAR: " .. tostring(spec.cvtAR))
@@ -5291,7 +5351,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					    self.prevRpm = rpmSmoothed
 					end
 					
-				-- HARVESTER config Erntemaschine
+					-- HARVESTER config Erntemaschine
 					if spec.isVarioTM and spec.CVTconfig == 11 then
 						
 						local combineLeaver = math.abs(self.spec_motorized.motor.lastAcceleratorPedal)
@@ -5310,7 +5370,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 									self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin / 3
 									self.spec_motorized.motor.maxBackwardSpeed=self.spec_motorized.motor.maxBackwardSpeedOrigin / 1.2
 									-- self.spec_motorized.motor.accelerationLimit = 0.25
-									self.spec_motorized.motor.lowBrakeForceScale = math.max(self.spec_motorized.motor.lowBrakeForceScale * (1 - spec.ClutchInputValue),0.02)
+									self.spec_motorized.motor.lowBrakeForceScale = math.max(self.spec_motorized.motor.lowBrakeForceScale * (1 - spec.ClutchInputValue),0.01)
 									-- self.spec_motorized.motor.accelerationLimit = math.min(self.spec_motorized.motor.accelerationLimit * (1 - spec.ClutchInputValue),0.25)
 								elseif spec.forDBL_critdamage == 0 then -- Normalbetrieb
 									if spec.vOne == 1 then 																-- FIELDMODE
@@ -5492,8 +5552,8 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						end
 					end
 				end
-				spec.forDBL_vmaxforward = tostring(self.spec_motorized.motor.maxForwardSpeed * 3.6)
-				spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed * 3.6)
+				spec.forDBL_vmaxforward = tostring(self.spec_motorized.motor.maxForwardSpeed  / 3.6)
+				spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed / 3.6)
 				-- spec.groupsSecondSet.currentGroup
 				if spec.autoDiffs == 1 then
 					if spec.CVTconfig == 1 or spec.CVTconfig == 2 or spec.CVTconfig == 3 or spec.CVTconfig == 11 then
@@ -5653,7 +5713,14 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 				print("spec.forDBL_rpmrange: " .. spec.forDBL_rpmrange)
 				print("EOD_________________________________________________________________________")
 			end -- isVarioTM
-			
+			spec.forDBL_digitalhandgasstep = (spec.vFive)
+			if spec.cvtDL ~= nil then
+				spec.forDBL_drivinglevelcount = tostring(spec.cvtDL)
+			end
+			if spec.cvtAR ~= nil then
+				spec.forDBL_accrampcount = tostring(spec.cvtAR)
+			end
+
 			if spec.CVTCanStart == true then
 				spec.forDBL_motorcanstart = 1
 			else
@@ -5671,11 +5738,28 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					spec.forDBL_motorcoldlamp = 0
 				end
 			end
+		-- main end
 	else
 		-- set Acceleration of CVT-Addon deactivated vehicle, so that they don't cheating faster than others
 		self.spec_motorized.motor.accelerationLimit = 1.6
 	end -- if spec.CVTconfig deactivated
-
+	
+	if spec.vOne ~= nil then
+		if not spec.isVarioTM then
+			spec.forDBL_drivinglevel = tostring("n")
+			-- spec.forDBL_drivinglevel = tostring(" ")
+		else
+			spec.forDBL_drivinglevel = tostring(spec.vOne)
+		end
+	end
+	if spec.vTwo ~= nil then
+		if not spec.isVarioTM then
+			-- spec.forDBL_accramp = tostring(7)
+			spec.forDBL_accramp = tostring("n")
+		else
+			spec.forDBL_accramp = tostring(spec.vTwo)
+		end
+	end
 	-- Telemetrie
 	if self.FStelemetryAddonData == nil then
 		self.FStelemetryAddonData = {} -- set the table if not exist
@@ -6652,7 +6736,7 @@ end
 ----------------------------------------------------------------------------------------------------------------------			
 
 -- ----------------   Server Sync   --------------------------------
-function CVTaddon.SyncClientServer(vehicle, HSTshuttle, vOne, vTwo, vThree, CVTCanStart, vFive, autoDiffs, isVarioTM, isTMSpedal, CVTconfig, warnHeat, critHeat, warnDamage, critDamage, CVTdamage, HandgasPercent, ClutchInputValue, cvtDL, cvtAR, VCAantiSlip, VCApullInTurn, CVTcfgExists, reverseLightsState, reverseLightsDurationState, brakeForceCorrectionState, brakeForceCorrectionValue, drivingLevelState, drivingLevelValue, HSTstate, preGlow, forDBL_pregluefinished, forDBL_glowingstate, forDBL_preglowing, HUDpos)
+function CVTaddon.SyncClientServer(vehicle, HSTshuttle, vOne, vTwo, vThree, CVTCanStart, vFive, autoDiffs, isVarioTM, isTMSpedal, CVTconfig, warnHeat, critHeat, warnDamage, critDamage, CVTdamage, HandgasPercent, ClutchInputValue, cvtDL, cvtAR, VCAantiSlip, VCApullInTurn, CVTcfgExists, reverseLightsState, reverseLightsDurationState, brakeForceCorrectionState, brakeForceCorrectionValue, drivingLevelState, drivingLevelValue, HSTstate, preGlow, forDBL_pregluefinished, forDBL_glowingstate, forDBL_preglowing, HUDpos, needClutchToStart)
 	local spec = vehicle.spec_CVTaddon
 	spec.HSTshuttle = HSTshuttle
 	spec.vOne = vOne
@@ -6687,6 +6771,7 @@ function CVTaddon.SyncClientServer(vehicle, HSTshuttle, vOne, vTwo, vThree, CVTC
 	spec.forDBL_pregluefinished = forDBL_pregluefinished
 	spec.forDBL_glowingstate = forDBL_glowingstate
 	spec.forDBL_preglowing = forDBL_preglowing
+	spec.needClutchToStart = needClutchToStart
 end								
 function CVTaddon:onReadStream(streamId, connection)
 	local spec = self.spec_CVTaddon
@@ -6711,6 +6796,7 @@ function CVTaddon:onReadStream(streamId, connection)
 	spec.cvtAR = streamReadInt32(streamId) -- AR count
 	spec.VCAantiSlip = streamReadInt32(streamId) -- AR count
 	spec.VCApullInTurn = streamReadInt32(streamId) -- AR count
+	spec.needClutchToStart = streamReadInt32(streamId) -- AR count
 	spec.CVTcfgExists = streamReadBool(streamId) -- CVT Kupplung (new inputAction like origin)
 
 	spec.reverseLightsState = streamReadInt32(streamId) -- Setting auto on/off
@@ -6751,16 +6837,16 @@ function CVTaddon:onReadStream(streamId, connection)
 
 	if spec.vOne ~= nil then
 		if not spec.isVarioTM then
-			spec.forDBL_drivinglevel = tostring(" ")
+			spec.forDBL_drivinglevel = (7)
 		else
-			spec.forDBL_drivinglevel = tostring(spec.vOne)
+			spec.forDBL_drivinglevel = (spec.vOne)
 		end
 	end
 	spec.forDBL_digitalhandgasstep = tostring(spec.vFive)
 	if spec.vTwo ~= nil then
-		spec.forDBL_accramp = tostring(spec.vTwo)
+		spec.forDBL_accramp = (spec.vTwo)
 	end
-	spec.forDBL_rpmdmax = tostring(spec.rpmDmax)
+	spec.forDBL_rpmdmax = (spec.rpmDmax)
 	if spec.vThree ~= nil then
 		if (spec.vThree == 1) then -- BRamp 1
 			spec.forDBL_brakeramp = tostring(17) -- off
@@ -6817,6 +6903,7 @@ function CVTaddon:onWriteStream(streamId, connection)
 	streamWriteInt32(streamId, spec.cvtAR)
 	streamWriteInt32(streamId, spec.VCAantiSlip) -- error?
 	streamWriteInt32(streamId, spec.VCApullInTurn)
+	streamWriteInt32(streamId, spec.needClutchToStart)
 	streamWriteBool(streamId, spec.CVTcfgExists)
 
 	streamWriteInt32(streamId, spec.reverseLightsState)
@@ -6861,6 +6948,7 @@ function CVTaddon:onReadUpdateStream(streamId, timestamp, connection)
 			spec.cvtAR = streamReadInt32(streamId)
 			spec.VCAantiSlip = streamReadInt32(streamId)
 			spec.VCApullInTurn = streamReadInt32(streamId)
+			spec.needClutchToStart = streamReadInt32(streamId)
 			spec.CVTcfgExists = streamReadBool(streamId)
 
 			spec.reverseLightsState = streamReadInt32(streamId)
@@ -6907,6 +6995,7 @@ function CVTaddon:onWriteUpdateStream(streamId, connection, dirtyMask)
 			streamWriteInt32(streamId, spec.cvtAR)
 			streamWriteInt32(streamId, spec.VCAantiSlip)
 			streamWriteInt32(streamId, spec.VCApullInTurn)
+			streamWriteInt32(streamId, spec.needClutchToStart)
 			streamWriteBool(streamId, spec.CVTcfgExists)
 
 			streamWriteInt32(streamId, spec.reverseLightsState)

@@ -51,6 +51,12 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	-- if g_currentMission.isMasterUser ~= nil then if g_currentMission.isMasterUser then
 			
 	self.variantSetting.onClickCallback 					= CVTaddonGui.logicalCheck
+	self.variantSetting.onHighlightCallback 				= CVTaddonGui.logicalCheck
+	self.variantSetting.onFocusCallback 					= CVTaddonGui.logicalCheck
+
+	self.startWithClutchSetting.onClickCallback 			= CVTaddonGui.logicalCheck
+	self.startWithClutchSetting.onHighlightCallback 		= CVTaddonGui.logicalCheck
+	-- self.startWithClutchSetting.onFocusCallback 			= CVTaddonGui.logicalCheck
 	
 	self.CvtHUDSetting.onClickCallback 						= CVTaddonGui.logicalCheck
 	self.CvtHUDSetting.onHighlightCallback 					= CVTaddonGui.logicalCheck
@@ -78,10 +84,13 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.brakeForceCorrectionSetting.onHighlightCallback 	= CVTaddonGui.logicalCheck
 	self.drivingLevelStateSetting.onClickCallback 			= CVTaddonGui.logicalCheck
 	self.drivingLevelStateSetting.onHighlightCallback 		= CVTaddonGui.logicalCheck
+	self.HSTshuttleStateSetting.onClickCallback 			= CVTaddonGui.logicalCheck
+	self.HSTshuttleStateSetting.onHighlightCallback 		= CVTaddonGui.logicalCheck
 
 		
 	-- Tool Tips
 	self.variantTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("variantTT") .. "  State: "..tostring(self.spec.CVTconfig))
+	self.startWithClutchSettingTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("startWithClutchTT"))
 	self.CvthudTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CvthudTT"))
 	self.ipmTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("ipmTT"))
 	self.CvthudPOSTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CvthudPOSTT"))
@@ -94,6 +103,7 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.reverseLightsTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("reverseLightsTT"))
 	self.reverseLightsDurationTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("reverseLightsDurationTT"))
 	self.drivingLevelStateTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("drivingLevelStateTT"))
+	self.HSTshuttleStateSettingTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("HSTshuttleStateSettingTT"))
 	if FS25_EngineBrakeforceCompensation ~= nil and FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil then
 		self.brakeForceCorrectionTT:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("brakeForceCorrectionTT"))
 	else
@@ -118,25 +128,27 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.guiModBuild:setText("build. " .. hasNothing) -- Undertitle header
 	-- Title Texte
 	self.variant:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_Variant"))		-- SubHeader
+	self.startWithClutchSettingTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_startWithClutchSettingTitle"))		-- SubHeader
 	self.additionalFuncs:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_additionalFuncs"))		-- SubHeader
 	self.ipmTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("text_ipmTitle"))		-- SubHeader
 	self.Cvthud:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_Hud"))			-- SubHeader
 	self.CvthudPos:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_CvthudPos"))	-- XsubHeader
 	self.drivinglevelTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_drivinglevelT"))	-- XsubHeader
 	self.accRampTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_accRampT"))	-- XsubHeader
-	if self.spec_vca ~= nil then
+	if FS25_VehicleControlAddon ~= nil then
 		self.antiSlipTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_antiSlipT"))	-- XsubHeader
 		self.pitTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_pitT"))	-- XsubHeader
 	else
 		self.antiSlipTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_antiSlipT2"))	-- XsubHeader
 		self.pitTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_pitT2"))	-- XsubHeader
 	end
-
+	
 	self.HSTTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_HstTitle"))	-- XsubHeader
 	self.inchingTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_inchingTitle"))	-- Inching
 	self.reverseLightsTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_reverseLightsTitle"))	-- rl
 	self.reverseLightsDurationTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_reverseLightsDurationTitle"))
 	self.drivingLevelStateTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_drivingLevelStateTitle"))
+	self.HSTshuttleStateSettingTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("CVTAgui_HSTshuttleT"))	-- HSTshuttle
 	if FS25_EngineBrakeforceCompensation ~= nil and FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil then
 		self.brakeForceCorrectionTitle:setText(g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("brakeForceCorrectionTitle"))
 	else
@@ -264,6 +276,17 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_DLC_00010"),
 		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_DLC_00001")
 	}
+	
+	-- drivingLevelCompension
+	local HSTshuttleStateSettingv15 = {																-- Options
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_shuttle_shift"),
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_shuttle_clutch")
+	}
+	-- startWithClutchSetting
+	local stwCv15 = {																-- Options
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_withCluth"),
+		g_i18n.modEnvironments[CVTaddon.MOD_NAME]:getText("selection_noClutch")
+	}
 
 	-- Set Settings Texte
 	if self.spec.isVarioTM then
@@ -271,6 +294,7 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	else
 		self.variantSetting:setTexts(VARv15m)
 	end
+	self.startWithClutchSetting:setTexts(stwCv15)
 	self.ipmSetting:setTexts(IPMv15)
 	self.CvtHUDSetting:setTexts(HUDSETv15)
 	self.CvthudPosSetting:setTexts(HUDPOSv15)
@@ -284,6 +308,7 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.reverseLightsDurationSetting:setTexts(reverseLightsDurationv15)
 	self.brakeForceCorrectionSetting:setTexts(brakeForceCorrectionSettingv15)
 	self.drivingLevelStateSetting:setTexts(drivingLevelStateSettingv15)
+	self.HSTshuttleStateSetting:setTexts(HSTshuttleStateSettingv15)
 	
 	-- States Abfragen
 		-- Configs
@@ -291,22 +316,29 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	local variantstateSet = 1
 	-- if variant and self.spec.isVarioTM then
 	if self.spec.isVarioTM == true then
-		if FS25_EngineBrakeforceCompensation ~= nil and FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil and self.variantSetting:getState() ~= 8 then
+		if FS25_EngineBrakeforceCompensation ~= nil and FS25_EngineBrakeforceCompensation.MotorBrakeforceCorrection ~= nil and self.variantSetting:getState() ~= 4 then
 			self.brakeForceCorrectionSetting:setDisabled(false)
 		else
 			self.brakeForceCorrectionSetting:setDisabled(true)
 		end
-		if self.spec.CVTconfig == 1 or self.spec.CVTconfig == 2 or self.spec.CVTconfig == 3 then
+		-- self.HSTshuttleStateSetting:setVisible(true)
+		-- self.startWithClutchSetting:setVisible(true)
+		-- self.HSTshuttleStateSettingTitle:setVisible(true)
+		-- self.startWithClutchSettingTitle:setVisible(true)
+		
+		if self.spec.CVTconfig == 1 or self.spec.CVTconfig == 2 or self.spec.CVTconfig == 3 then -- classic
 			variantstateSet = 1
 			self.HSTTitle:setVisible(false)
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
-			self.inchingSetting:setDisabled(true)
+			self.inchingSetting:setDisabled(false)
+			self.startWithClutchSetting:setDisabled(false)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
-			self.drivingLevelStateSetting:setDisabled(false)
+			self.drivingLevelStateSetting:setDisabled(true)
+			self.HSTshuttleStateSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(false)
 			self.drivinglevelTitle:setVisible(true)
 			self.accRampSetting:setDisabled(false)
@@ -317,17 +349,19 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.pitTitle:setVisible(false)
 			self.ipmSetting:setDisabled(false)
 			self.ipmTitle:setVisible(true)
-		elseif self.spec.CVTconfig == 4 or self.spec.CVTconfig == 5 or self.spec.CVTconfig == 6 then
+		elseif self.spec.CVTconfig == 4 or self.spec.CVTconfig == 5 or self.spec.CVTconfig == 6 then -- modern
 			variantstateSet = 2
 			self.HSTTitle:setVisible(false)
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
-			self.inchingSetting:setDisabled(true)
+			self.inchingSetting:setDisabled(false)
+			self.startWithClutchSetting:setDisabled(false)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivingLevelStateSetting:setDisabled(true)
+			self.HSTshuttleStateSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(false)
@@ -339,16 +373,18 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.ipmSetting:setDisabled(false)
 			self.ipmTitle:setVisible(true)
 		elseif self.spec.CVTconfig == 7 then
-			variantstateSet = 3
+			variantstateSet = 3 -- hst
 			self.HSTTitle:setVisible(true)
 			self.HSTSetting:setDisabled(false)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.startWithClutchSetting:setDisabled(true)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivingLevelStateSetting:setDisabled(false)
+			self.HSTshuttleStateSetting:setDisabled(false)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -360,16 +396,18 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.ipmSetting:setDisabled(true)
 			self.ipmTitle:setVisible(false)
 		elseif self.spec.CVTconfig == 8 then
-			variantstateSet = 4
+			variantstateSet = 4 -- off
 			self.HSTTitle:setVisible(false)
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.startWithClutchSetting:setDisabled(true)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivingLevelStateSetting:setDisabled(true)
+			self.HSTshuttleStateSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -381,16 +419,18 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.ipmSetting:setDisabled(true)
 			self.ipmTitle:setVisible(false)
 		elseif self.spec.CVTconfig == 10 then
-			variantstateSet = 5
+			variantstateSet = 5 -- elektro
 			self.HSTTitle:setVisible(false)
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.startWithClutchSetting:setDisabled(true)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivingLevelStateSetting:setDisabled(false)
+			self.HSTshuttleStateSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -402,16 +442,18 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.ipmSetting:setDisabled(true)
 			self.ipmTitle:setVisible(false)
 		elseif self.spec.CVTconfig == 11 then
-			variantstateSet = 6
+			variantstateSet = 6 -- combine
 			self.HSTTitle:setVisible(false)
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(true)
 			self.inchingSetting:setDisabled(false)
+			self.startWithClutchSetting:setDisabled(true)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivingLevelStateSetting:setDisabled(false)
+			self.HSTshuttleStateSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -426,16 +468,18 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	-- MANUAL
 	elseif self.spec.isVarioTM == false then
 		if self.spec.CVTconfig == 8 and self.spec.CVTconfig ~= 9 then
-			variantstateSet = 1
+			variantstateSet = 1 -- off
 			self.HSTTitle:setVisible(false)
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.startWithClutchSetting:setDisabled(true)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivingLevelStateSetting:setDisabled(true)
+			self.HSTshuttleStateSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -452,11 +496,13 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.startWithClutchSetting:setDisabled(true)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivingLevelStateSetting:setDisabled(true)
+			self.HSTshuttleStateSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -474,6 +520,7 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 
 		-- set other states
 	self.variantSetting:setState(variantstateSet)
+	self.startWithClutchSetting:setState(self.spec.needClutchToStart)
 	self.CvtHUDSetting:setState(self.spec.HUDvis)
 	self.CvthudPosSetting:setState(self.spec.HUDpos)
 	self.ipmSetting:setState(self.spec.CVTipm)
@@ -487,6 +534,7 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 	self.reverseLightsDurationSetting:setState(self.spec.reverseLightsDurationState)
 	self.brakeForceCorrectionSetting:setState(self.spec.brakeForceCorrectionState)
 	self.drivingLevelStateSetting:setState(self.spec.drivingLevelState)
+	self.HSTshuttleStateSetting:setState(self.spec.HSTshuttle)
 
 	-- require logged in as admin
 	if g_currentMission.isMasterUser ~= nil then if g_currentMission.isMasterUser == false then
@@ -540,7 +588,7 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 		if g_currentMission.isMasterUser == false then
 			self.variantSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
-			if self.spec.CVTdamage > 0.1 then
+			if self.spec.CVTdamage > 0.01 then
 				self.repairButton:setVisible(true)
 				-- self.repairButton:setDisabled(false)
 			else
@@ -548,7 +596,7 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 				-- self.repairButton:setDisabled(true)
 			end
 		else
-			if self.spec.CVTdamage > 0.1 then
+			if self.spec.CVTdamage > 0.01 then
 				-- self.repairButton:setVisible(true)
 				self.repairButton:setDisabled(false)
 			else
@@ -558,6 +606,20 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 			self.variantSetting:setDisabled(false)
 			self.drivinglevelSetting:setDisabled(false)
 		end
+	end
+	if self.variantSetting:getState() == 3 then
+		self.HSTshuttleStateSetting:setDisabled(false)
+		self.HSTshuttleStateSettingTitle:setVisible(true)
+	else
+		self.HSTshuttleStateSetting:setDisabled(true)
+		self.HSTshuttleStateSettingTitle:setVisible(false)
+	end
+	if self.variantSetting:getState() == 1 or self.variantSetting:getState() == 2 then
+		self.startWithClutchSetting:setDisabled(false)
+		self.startWithClutchSettingTitle:setVisible(true)
+	else
+		self.startWithClutchSetting:setDisabled(true)
+		self.startWithClutchSettingTitle:setVisible(false)
 	end
 end
 
@@ -629,6 +691,7 @@ function CVTaddonGui:logicalCheck()
 	
 	if self.spec.isVarioTM == true then
 		hasAS = (self.variantSetting:getState() >= 1 and self.variantSetting:getState() <= 3 ) or self.variantSetting:getState() == 6
+		-- hasAS = (self.variantSetting:getState() >= 1 and self.variantSetting:getState() >= 1 and self.variantSetting:getState() <= 3 ) or self.variantSetting:getState() == 6
 	else
 		hasAS = self.variantSetting:getState() == 2
 	end
@@ -679,6 +742,21 @@ function CVTaddonGui:logicalCheck()
 	self.reverseLightsSetting:setDisabled(false)
 	self.reverseLightsDurationTitle:setVisible(true)
 	self.reverseLightsDurationSetting:setDisabled(not reverseLightsDuration)
+
+	if self.variantSetting:getState() == 3 then
+		self.HSTshuttleStateSetting:setDisabled(false)
+		self.HSTshuttleStateSettingTitle:setVisible(true)
+	else
+		self.HSTshuttleStateSetting:setDisabled(true)
+		self.HSTshuttleStateSettingTitle:setVisible(false)
+	end
+	if self.variantSetting:getState() == 1 or self.variantSetting:getState() == 2 then
+		self.startWithClutchSetting:setDisabled(false)
+		self.startWithClutchSettingTitle:setVisible(true)
+	else
+		self.startWithClutchSetting:setDisabled(true)
+		self.startWithClutchSettingTitle:setVisible(false)
+	end
 
 	if self.variantSetting:getState() == 1 or self.variantSetting:getState() == 3 or self.variantSetting:getState() == 5 or self.variantSetting:getState() == 6 then
 		self.drivingLevelStateSetting:setDisabled(false)
@@ -813,7 +891,8 @@ function CVTaddonGui:onClickOk()
 		self.spec.drivingLevelValue = 1.0
 	end
 	
-	
+	self.spec.needClutchToStart = self.startWithClutchSetting:getState()
+	self.spec.HSTshuttle = self.HSTshuttleStateSetting:getState()
 	
 	-- hud
 	local Cvthud = self.CvtHUDSetting:getState() > 0
@@ -869,17 +948,21 @@ function CVTaddonGui:onButtonLoad()
 		else
 			self.brakeForceCorrectionSetting:setDisabled(true)
 		end
-		if self.spec.CVTconfig == 1 or self.spec.CVTconfig == 2 or self.spec.CVTconfig == 3 then
+		self.HSTshuttleStateSetting:setVisible(true)
+		self.startWithClutchSetting:setVisible(true)
+		if self.spec.CVTconfig == 1 or self.spec.CVTconfig == 2 or self.spec.CVTconfig == 3 then -- classic
 			variantstateSet = 1
 			self.HSTTitle:setVisible(false)
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
-			self.inchingSetting:setDisabled(true)
+			self.inchingSetting:setDisabled(false)
+			self.startWithClutchSetting:setDisabled(false)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
-			self.drivingLevelStateSetting:setDisabled(false)
+			self.drivingLevelStateSetting:setDisabled(true)
+			self.HSTshuttleStateSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(false)
 			self.drivinglevelTitle:setVisible(true)
 			self.accRampSetting:setDisabled(false)
@@ -890,17 +973,19 @@ function CVTaddonGui:onButtonLoad()
 			self.pitTitle:setVisible(false)
 			self.ipmSetting:setDisabled(false)
 			self.ipmTitle:setVisible(true)
-		elseif self.spec.CVTconfig == 4 or self.spec.CVTconfig == 5 or self.spec.CVTconfig == 6 then
+		elseif self.spec.CVTconfig == 4 or self.spec.CVTconfig == 5 or self.spec.CVTconfig == 6 then -- modern
 			variantstateSet = 2
 			self.HSTTitle:setVisible(false)
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
-			self.inchingSetting:setDisabled(true)
+			self.inchingSetting:setDisabled(false)
+			self.startWithClutchSetting:setDisabled(false)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivingLevelStateSetting:setDisabled(true)
+			self.HSTshuttleStateSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(false)
@@ -912,16 +997,18 @@ function CVTaddonGui:onButtonLoad()
 			self.ipmSetting:setDisabled(false)
 			self.ipmTitle:setVisible(true)
 		elseif self.spec.CVTconfig == 7 then
-			variantstateSet = 3
+			variantstateSet = 3 -- hst
 			self.HSTTitle:setVisible(true)
 			self.HSTSetting:setDisabled(false)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.startWithClutchSetting:setDisabled(true)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivingLevelStateSetting:setDisabled(false)
+			self.HSTshuttleStateSetting:setDisabled(false)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -933,16 +1020,18 @@ function CVTaddonGui:onButtonLoad()
 			self.ipmSetting:setDisabled(true)
 			self.ipmTitle:setVisible(false)
 		elseif self.spec.CVTconfig == 8 then
-			variantstateSet = 4
+			variantstateSet = 4 -- off
 			self.HSTTitle:setVisible(false)
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.startWithClutchSetting:setDisabled(true)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivingLevelStateSetting:setDisabled(true)
+			self.HSTshuttleStateSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -954,16 +1043,18 @@ function CVTaddonGui:onButtonLoad()
 			self.ipmSetting:setDisabled(true)
 			self.ipmTitle:setVisible(false)
 		elseif self.spec.CVTconfig == 10 then
-			variantstateSet = 5
+			variantstateSet = 5 -- elektro
 			self.HSTTitle:setVisible(false)
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.startWithClutchSetting:setDisabled(true)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivingLevelStateSetting:setDisabled(false)
+			self.HSTshuttleStateSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -975,16 +1066,18 @@ function CVTaddonGui:onButtonLoad()
 			self.ipmSetting:setDisabled(true)
 			self.ipmTitle:setVisible(false)
 		elseif self.spec.CVTconfig == 11 then
-			variantstateSet = 6
+			variantstateSet = 6 -- combine
 			self.HSTTitle:setVisible(false)
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(true)
 			self.inchingSetting:setDisabled(false)
+			self.startWithClutchSetting:setDisabled(true)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivingLevelStateSetting:setDisabled(false)
+			self.HSTshuttleStateSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -999,16 +1092,18 @@ function CVTaddonGui:onButtonLoad()
 	-- MANUAL
 	elseif self.spec.isVarioTM == false then
 		if self.spec.CVTconfig == 8 and self.spec.CVTconfig ~= 9 then
-			variantstateSet = 1
+			variantstateSet = 1 -- off
 			self.HSTTitle:setVisible(false)
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.startWithClutchSetting:setDisabled(true)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivingLevelStateSetting:setDisabled(true)
+			self.HSTshuttleStateSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -1025,11 +1120,13 @@ function CVTaddonGui:onButtonLoad()
 			self.HSTSetting:setDisabled(true)
 			self.inchingTitle:setVisible(false)
 			self.inchingSetting:setDisabled(true)
+			self.startWithClutchSetting:setDisabled(true)
 			self.reverseLightsTitle:setDisabled(false)
 			self.reverseLightsDurationTitle:setDisabled(false)
 			self.reverseLightsSetting:setDisabled(false)
 			self.reverseLightsDurationSetting:setDisabled(false)
 			self.drivingLevelStateSetting:setDisabled(true)
+			self.HSTshuttleStateSetting:setDisabled(true)
 			self.drivinglevelSetting:setDisabled(true)
 			self.drivinglevelTitle:setVisible(false)
 			self.accRampSetting:setDisabled(true)
@@ -1047,6 +1144,8 @@ function CVTaddonGui:onButtonLoad()
 
 		-- set other states
 	self.variantSetting:setState(variantstateSet)
+	self.startWithClutchSetting:setState(self.spec.needClutchToStart)
+	self.HSTshuttleStateSetting:setState(self.spec.HSTshuttle)
 	self.CvtHUDSetting:setState(self.spec.HUDvis)
 	self.CvthudPosSetting:setState(self.spec.HUDpos)
 	self.ipmSetting:setState(self.spec.CVTipm)

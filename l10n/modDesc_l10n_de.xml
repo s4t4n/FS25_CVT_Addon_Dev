@@ -18,6 +18,9 @@
 		<text name="cvtgui_Cvthud" text="Sichtbarkeit" />
 		<text name="CVTAgui_CvthudPos" text="Position" />
 		<text name="variantTT" text="Getriebevariante wählen, es gibt eine vielzahl an unterschiedlichen Stufenlosen Getriebe." />
+		<text name="HSTshuttleStateSettingTT" text="Fahrzeuge mir Pedalwippe oder 2 Pedalsystem können alternativ mit der Kupplung den Richtungswechseln vornehmen.
+Modernere Maschinen z.B. Hoflader haben u.a. am Joystick einen Taster für diese Funktion." />
+		<text name="startWithClutchTT" text="Das treten des Kupplungspedales wird vorrausgesetzt, wie es bei einigen Fahrzeugen auch in RL ist - und bei anderen widerrum nicht." />
 		<text name="CvthudTT" text="HUD Anzeige sichtbar oder deaktivieren." />
 		<text name="CvthudPOSTT" text="HUD Anzeige Positionieren." />
 		<text name="CVTAguiHUD_on" text="an" />
@@ -69,7 +72,7 @@ je nach Hersteller sogar Einzelrad-Hydromotoren." />
 		<text name="selection_drivinglevel_2" text="2" />
 		<text name="selection_drivinglevel_3" text="3" />
 		<text name="selection_drivinglevel_4" text="4" />
-		<text name="selection_accRamp_1" text="0" />
+		<text name="selection_accRamp_1" text="Automatisch" />
 		<text name="selection_accRamp_2" text="2" />
 		<text name="selection_accRamp_3" text="3" />
 		<text name="selection_accRamp_4" text="4" />
@@ -103,13 +106,15 @@ je nach Hersteller sogar Einzelrad-Hydromotoren." />
 		<text name="selection_BF_200" text="200%" />
 		<text name="brakeForceCorrectionNotTT" text="FS25_EngineBrakeforceCompensation nicht aktiv" />
 		<text name="brakeForceCorrectionTitle" text="Motorbremse Kompensation" />
-		<text name="brakeForceCorrectionModReq" text="Motorbremse Kompensation (EBC nötig)" />
+		<text name="brakeForceCorrectionModReq" text="(FS25_EngineBrakeforceCompensation nötig)" />
 		<text name="brakeForceCorrectionTT" text="Die Wirkung der Motorbremse wird durch das CVT-Addon dynamisch und in Abhängigkeit verschiedener Faktoren berechnet.
 Mit dieser Einstellung lässt sich die resultierende Berechnung gezielt beeinflussen und wahlweise in Richtung einer stärkeren oder schwächeren Bremswirkung ausgleichen." />
 		<text name="drivingLevelStateTT" text="Die maximale Geschwindigkeit für niedrigere Fahrbereiche oder beim HST und Erntemaschinen die Limit-Rampen,
 werden hiermit reduziert oder erhöht. Zum Beispiel ein Stufenloses Fahrzeug mit 2 Fahrbereichen fährt in 2 die volle Geschwindigkeit (50km/h), in 1 die hälfte (25km/h).
 Stellt man diesen Wert nun auf geringe, wären es 22 km/h, sehr gering dann 15.5 km/h. Das selbe gilt nach oben. höher, 28 km/h und sehr hoch 31 km/h." />
 		<text name="CVTAgui_drivingLevelStateTitle" text="Geschw. Anpassung" />
+		<text name="CVTAgui_HSTshuttleT" text="Richtungswechselart" />
+		<text name="CVTAgui_startWithClutchSettingTitle" text="Kupplung zum starten" />
 		<text name="selection_DLC_10000" text="sehr gering" />
 		<text name="selection_DLC_01000" text="geringer" />
 		<text name="selection_DLC_00100" text="Normal" />
@@ -120,6 +125,10 @@ Stellt man diesen Wert nun auf geringe, wären es 22 km/h, sehr gering dann 15.5
 		<text name="selection_hst_hst" text="HST" />
 		<text name="selection_hst_hydrostat" text="Hydrostat" />
 		<text name="selection_hst_brake" text="Einzel Fahrpedal" />
+		<text name="selection_noClutch" text="Keine Kupplung" />
+		<text name="selection_withCluth" text="Mit Kupplung" />
+		<text name="selection_shuttle_shift" text="Wechseltaster" />
+		<text name="selection_shuttle_clutch" text="Kupplungspedal" />
 		<text name="text_HST_installed_short" text="HST Hydrostat" />
 		<text name="text_CVT_Installed_short" text="Aktiv" />
 		<text name="text_CVT_Installed_desc" text="CVT-Addon aktiv und im GUI konfigurierbar." />
@@ -143,6 +152,10 @@ Stellt man diesen Wert nun auf geringe, wären es 22 km/h, sehr gering dann 15.5
 		<text name="input_SETPREGLOW" text="CVTa: Kerzen Vorglühen" />
 		<text name="input_SIGNAL_HIGH_BEAM" text="CVTa: Fernlicht Lichthupe" />
 		<text name="input_SIGNAL_HOLD_BEAM" text="CVTa: Fernlicht Lichthupe" />
+		<text name="input_SETVCAAWD" text="VCA: Allrad umschalten" />
+		<text name="input_SETVCAFRONTDIFF" text="VCA: Differentialsperre Vorne" />
+		<text name="input_SETPIPELIGHT" text="CVT: Pipelicht umschalten" />
+		<text name="input_SETVCAREARDIFF" text="VCA: Differentialsperre Hinten" />
 		<text name="input_LMBF_TOGGLE_RAMP" text="CVTa: Beschleunigungsrampe erhöhen" />
 		<text name="input_LMBF_TOGGLE_RAMPT" text="CVTa: Beschleunigungsrampe wechseln" />
 		<text name="input_LMBF_TOGGLE_RAMPS1" text="CVTa: Beschleunigungsrampe 1 schalten" />

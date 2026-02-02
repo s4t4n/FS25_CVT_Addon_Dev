@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="104" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://validation.gdn.giants-software.com/xml/fs25/modDesc.xsd">
+<modDesc descVersion="105">
     <author>SbSh</author>
 	<contributor>Glowin</contributor>
-	<version>2.c.0.5</version>
+	<version>2.c.1.0</version>
 	<title>
         <en>CVT Addon</en>
     </title>
@@ -125,7 +125,7 @@ Likewise, telemetry output for telemetry from Upsidedown.
 e.g., automatic work lights currently active.
 Further information in the Wiki.
 
-Feedback and bug reports (and Wiki) are welcome at: <a href="https://github.com/s4t4n/FS25_CVT_Addon" target="_blank">Github: FS25_CVT_Addon</a> please.
+Feedback and bug reports (and Wiki) are welcome at: https://github.com/s4t4n/FS25_CVT_Addon please.
 ]]></en>
         <de>
 <![CDATA[
@@ -247,7 +247,18 @@ z.B. Automatische Arbeitsscheinwerfer gerade aktiv.
 Weitere Infos im Wiki.
 
 Feedback und Fehlerberichte (und Wiki) gerne unter:
-<a href="https://github.com/s4t4n/FS25_CVT_Addon" target="_blank">GitHub: FS25_CVT_Addon</a>
+https://github.com/s4t4n/FS25_CVT_Addon
+
+- Changelog: 2.1.0.0
+ - Textmeldung daß man vorgrlühen muß war für alle clients sichtbar
+ - HST sync Fehler im Multiplayer behoben.
+ - HST/Hydrostat kann nun auch per Taste die Fahrtrichtung wechseln,
+  was bei manchen Fahrzeugen in RL vorhanden wäre.
+ - Kupplung treten benötigt zum starten ist nun einstellbar.
+ - EV-Unterstützung wegen Multiplayer inkompatibilitäten entfernt.
+ - Differential Tastenbelegung für VCA hinzugefügt.
+ - DLC Fahrzeuge im Shop hinzugefügt.
+ - Tastenbelegung für das Rohrlicht einzeln.
 ]]></de>
     </description> 
 
@@ -281,6 +292,10 @@ Feedback und Fehlerberichte (und Wiki) gerne unter:
         <action name="SETPEDALTMS" />
         <action name="SETPREGLOW" />
         <action name="SIGNAL_HOLD_BEAM" />
+        <action name="SETVCAAWD" />
+        <action name="SETVCAREARDIFF" />
+        <action name="SETVCAFRONTDIFF" />
+        <action name="SETPIPELIGHT" />
     </actions>
 	<inputBinding>
 		<actionBinding action="SETVARIOONE">
@@ -319,7 +334,6 @@ Feedback und Fehlerberichte (und Wiki) gerne unter:
 		<actionBinding action="LMBF_TOGGLE_RAMPS5">
 			<binding device="KB_MOUSE_DEFAULT" input="" />
 		</actionBinding>
-		
 		<actionBinding action="LMBF_TOGGLE_RAMPD">
 			<binding device="KB_MOUSE_DEFAULT" input="" />
 		</actionBinding>
@@ -344,8 +358,21 @@ Feedback und Fehlerberichte (und Wiki) gerne unter:
 		<actionBinding action="SETPREGLOW">
 			<binding device="KB_MOUSE_DEFAULT" input="" />
 		</actionBinding>
-        <actionBinding action="SIGNAL_HOLD_BEAM">
+		<actionBinding action="SIGNAL_HOLD_BEAM">
 			<binding device="KB_MOUSE_DEFAULT" input="" />
 		</actionBinding>
+        <actionBinding action="SETVCAAWD">
+			<binding device="KB_MOUSE_DEFAULT" input="" />
+		</actionBinding>
+		<actionBinding action="SETVCAREARDIFF">
+			<binding device="KB_MOUSE_DEFAULT" input="" />
+		</actionBinding>
+		<actionBinding action="SETVCAFRONTDIFF">
+			<binding device="KB_MOUSE_DEFAULT" input="" />
+		</actionBinding>
+		<actionBinding action="SETPIPELIGHT">
+			<binding device="KB_MOUSE_DEFAULT" input="" />
+		</actionBinding>
+		
 	</inputBinding>
 </modDesc>
