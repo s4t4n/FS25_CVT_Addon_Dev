@@ -106,7 +106,7 @@ je nach Hersteller sogar Einzelrad-Hydromotoren." />
 		<text name="selection_BF_200" text="200%" />
 		<text name="brakeForceCorrectionNotTT" text="FS25_EngineBrakeforceCompensation nicht aktiv" />
 		<text name="brakeForceCorrectionTitle" text="Motorbremse Kompensation" />
-		<text name="brakeForceCorrectionModReq" text="Motorbremse Kompensation (EBC nötig)" />
+		<text name="brakeForceCorrectionModReq" text="(FS25_EngineBrakeforceCompensation nötig)" />
 		<text name="brakeForceCorrectionTT" text="Die Wirkung der Motorbremse wird durch das CVT-Addon dynamisch und in Abhängigkeit verschiedener Faktoren berechnet.
 Mit dieser Einstellung lässt sich die resultierende Berechnung gezielt beeinflussen und wahlweise in Richtung einer stärkeren oder schwächeren Bremswirkung ausgleichen." />
 		<text name="drivingLevelStateTT" text="Die maximale Geschwindigkeit für niedrigere Fahrbereiche oder beim HST und Erntemaschinen die Limit-Rampen,
@@ -154,6 +154,7 @@ Stellt man diesen Wert nun auf geringe, wären es 22 km/h, sehr gering dann 15.5
 		<text name="input_SIGNAL_HOLD_BEAM" text="CVTa: Fernlicht Lichthupe" />
 		<text name="input_SETVCAAWD" text="VCA: Allrad umschalten" />
 		<text name="input_SETVCAFRONTDIFF" text="VCA: Differentialsperre Vorne" />
+		<text name="input_SETPIPELIGHT" text="CVT: Pipelicht umschalten" />
 		<text name="input_SETVCAREARDIFF" text="VCA: Differentialsperre Hinten" />
 		<text name="input_LMBF_TOGGLE_RAMP" text="CVTa: Beschleunigungsrampe erhöhen" />
 		<text name="input_LMBF_TOGGLE_RAMPT" text="CVTa: Beschleunigungsrampe wechseln" />

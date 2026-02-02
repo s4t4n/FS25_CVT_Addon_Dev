@@ -87,10 +87,10 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.9.9.25";
-local lastupdate = "8.1.2026"
-local timestamp = "1767889517491";
-local savetime = "17:25:17";
+local scrversion = "0.9.9.87";
+local lastupdate = "31.1.2026"
+local timestamp = "1769855374453";
+local savetime = "11:29:34";
 local modversion = CVTaddon.modversion; -- moddesc
 CVTaddon.build = scrversion
 
@@ -110,7 +110,7 @@ cvtaDebugCVTcanStartOn = false
 cvtsaved = false 
 
 CVTaddon.debug = false
-CVTaddon.showKeys = true
+	CVTaddon.showKeys = true
 
 printLMBF = false
 VcvtaResetWear = false
@@ -147,7 +147,7 @@ function addCVTconfig(self, superfunc, xmlFile, baseXMLName, baseDir, customEnvi
 		or category == "MINIAGRICULTUREEQUIPMENT"	or category == "FM_VEHICLES"
 
 		-- mods
-		or 	category == "LSFM"	or 	category == "TRANSPORTCARS"
+		or 	category == "LSFM"	or 	category == "TRANSPORTCARS" or category == "MBPACK"
 
 		or category == "FENDTPACKCATEGORY"	or category == "FD_CASEPACKCATEGORY"	or category == "SDFCORE2"	or category == "SDFCORE3"
 		or category == "SDFCORE4"	or category == "SDFCORE4H"	or category == "SDFCORE4L"	or category == "SDFCORE4S"	or category == "SDFCORE5"
@@ -288,6 +288,7 @@ function CVTaddon:onRegisterActionEvents()
 		spec.maxRpmOrigin = tostring(self.spec_motorized.motor.maxRpm)
 		
 		if self.getIsEntered ~= nil and self:getIsEntered() then
+			CVTaddon.actionEventsVPipe = {}
 			CVTaddon.actionEventsV1 = {}
 			CVTaddon.actionEventsV2 = {}
 			CVTaddon.actionEventsV23 = {}
@@ -316,6 +317,7 @@ function CVTaddon:onRegisterActionEvents()
 			CVTaddon.actionEventsVCA1 = {}
 			CVTaddon.actionEventsVCA2 = {}
 			CVTaddon.actionEventsVCA3 = {}
+			CVTaddon.actionIdPipeLight = {}
 			CVTaddon.actionEventsGL = {}
 			local actionEventIdGui
 			local actionEventIdARwL
@@ -323,6 +325,7 @@ function CVTaddon:onRegisterActionEvents()
 			local eventIdVCA1
 			local eventIdVCA2
 			local eventIdVCA3
+			local eventIdPipeLight
 			local storeItem = g_storeManager:getItemByXMLFilename(self.configFileName)
 			if cvtaDebugCVTon then
 				print("storeItem.categoryName: " .. tostring(storeItem.categoryName)) -- debug
@@ -339,7 +342,10 @@ function CVTaddon:onRegisterActionEvents()
 				print("CVTaddon: onRegisterActionEvents eventActiveV3toggle: ".. tostring(CVTaddon.eventActiveV3toggle))
 				print("CVTaddon: onRegisterActionEvents eventActiveV4: ".. tostring(CVTaddon.eventActiveV4))
 			end
-
+			-- Pipe light
+			_, CVTaddon.eventIdVPipe = self:addActionEvent(CVTaddon.actionEventsVPipe, 'SETPIPELIGHT', self, CVTaddon.TogglePipeLight, false, true, false, true)
+			g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdVPipe, GS_PRIO_NORMAL)
+			g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdVPipe, false)
 			-- D1
 			_, CVTaddon.eventIdV1 = self:addActionEvent(CVTaddon.actionEventsV1, 'SETVARIOONE', self, CVTaddon.VarioOne, false, true, false, true)
 			g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdV1, GS_PRIO_NORMAL)
@@ -413,6 +419,7 @@ function CVTaddon:onRegisterActionEvents()
 			end
 
 			-- Fernlicht / Lichthupe
+			-- _, CVTaddon.eventIdVL = self:addActionEvent(CVTaddon.actionEventsVL, 'SIGNAL_HOLD_BEAM', self, CVTaddon.TogglePipeLight, true, true, false, true)
 			_, CVTaddon.eventIdVL = self:addActionEvent(CVTaddon.actionEventsVL, 'SIGNAL_HOLD_BEAM', self, CVTaddon.onHighBeamPressed, true, true, false, true)
 			g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdVL, GS_PRIO_NORMAL)
 			g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdVL, false)
@@ -654,29 +661,32 @@ function CVTaddon:onLoad(savegame)
 
 	if spec.vOne ~= nil then
 		if not spec.isVarioTM then
-			spec.forDBL_drivinglevel = tostring(" ")
+			spec.forDBL_drivinglevel = (7)
 		else
-			spec.forDBL_drivinglevel = tostring(spec.vOne)
+			spec.forDBL_drivinglevel = (spec.vOne)
 		end
 	end
 	if spec.cvtDL ~= nil then
-		spec.forDBL_drivinglevelcount = tostring(spec.cvtDL)
+		spec.forDBL_drivinglevelcount = (spec.cvtDL)
 	end
 	if spec.cvtAR ~= nil then
-		spec.forDBL_accrampcount = tostring(spec.cvtAR)
+		spec.forDBL_accrampcount = (spec.cvtAR)
 	end
 	
 	
 	spec.forDBL_digitalhandgasstep = tostring(spec.vFive)
 	if spec.vTwo ~= nil then
 		if spec.vTwo == 4 then
-			spec.forDBL_accramp = tostring(4)
+			spec.forDBL_accramp = (4)
 		elseif spec.vTwo == 1 then
-			spec.forDBL_accramp = tostring(1)
+			spec.forDBL_accramp = (1)
 		elseif spec.vTwo == 2 then
-			spec.forDBL_accramp = tostring(2)
+			spec.forDBL_accramp = (2)
 		elseif spec.vTwo == 3 then
-			spec.forDBL_accramp = tostring(3)
+			spec.forDBL_accramp = (3)
+		elseif spec.vTwo == 5 then
+			spec.forDBL_accramp = (5)
+			
 		end
 	end
 	spec.forDBL_rpmdmax = tostring(spec.rpmDmax)
@@ -719,6 +729,7 @@ function CVTaddon:onLoad(savegame)
 	CVTaddon.eventActiveV8 = true
 	CVTaddon.eventActiveV9 = true
 	CVTaddon.eventActiveV10 = true
+	CVTaddon.eventIdVPipe = nil
 	CVTaddon.eventIdV1 = nil
 	CVTaddon.eventIdV2 = nil
 	CVTaddon.eventIdV23 = nil
@@ -739,6 +750,7 @@ function CVTaddon:onLoad(savegame)
 	CVTaddon.eventIdV12 = nil
 	CVTaddon.eventIdV13 = nil
 	CVTaddon.eventIdVL = nil
+	CVTaddon.eventIdPipeLight = nil
 	CVTaddon.eventIdV8 = nil
 	CVTaddon.eventIdV9 = nil
 	CVTaddon.eventIdV10 = nil
@@ -879,24 +891,26 @@ function CVTaddon:onPostLoad(savegame)
 
 	if spec.vOne ~= nil then
 		if not spec.isVarioTM then
-			spec.forDBL_drivinglevel = tostring(" ")
+			spec.forDBL_drivinglevel = (7)
+			-- spec.forDBL_drivinglevel = tostring(" ")
 		else
-			spec.forDBL_drivinglevel = tostring(spec.vOne)
+			spec.forDBL_drivinglevel = (spec.vOne)
 		end
 	end
 	if spec.cvtDL ~= nil then
-		spec.forDBL_drivinglevelcount = tostring(spec.cvtDL)
+		spec.forDBL_drivinglevelcount = (spec.cvtDL)
 	end
 	if spec.cvtAR ~= nil then
-		spec.forDBL_accrampcount = tostring(spec.cvtAR)
+		spec.forDBL_accrampcount = (spec.cvtAR)
 	end
 	
-	spec.forDBL_digitalhandgasstep = tostring(spec.vFive)
+	spec.forDBL_digitalhandgasstep = (spec.vFive)
 	if spec.vTwo ~= nil then
 		if not spec.isVarioTM then
-			spec.forDBL_accramp = tostring(" ")
+			spec.forDBL_accramp = (7)
+			-- spec.forDBL_accramp = tostring(" ")
 		else
-			spec.forDBL_accramp = tostring(spec.vTwo)
+			spec.forDBL_accramp = (spec.vTwo)
 		end
 	end
 	-- spec.forDBL_rpmdmax = tostring(spec.rpmDmax)
@@ -1118,6 +1132,21 @@ function CVTaddon:ToggleARWL() -- reverseLightsState toggle
 	end -- g_client
 end -- ToggleARWL Toggle
 
+function CVTaddon:TogglePipeLight() -- pipe light toggle
+	-- local spec = self.spec_CVTaddon
+	-- print("PipeLight TASTE: " .. tostring(self:getLightsTypesMask(bitOR(mask, bit3))) )
+	local spec = self.spec_CVTaddon
+
+	local bit3 = 2 ^ 4
+	local mask = self.spec_lights.lightsTypesMask or 0
+
+		if bitAND(mask, bit3) == 0 then
+			self:setLightsTypesMask(bitOR(mask, bit3))
+		else
+			self:setLightsTypesMask(bitAND(mask, bitNOT(bit3)))
+		end
+end -- TogglePipeLight Toggle
+
 function CVTaddon:AccRampsToggle() -- BESCHLEUNIGUNGSRAMPEN
 	local spec = self.spec_CVTaddon
 	if g_client ~= nil then
@@ -1137,7 +1166,7 @@ function CVTaddon:AccRampsToggle() -- BESCHLEUNIGUNGSRAMPEN
 			spec.vTwo = spec.vTwo + 1
 		end
 		-- DBL convert
-			spec.forDBL_accramp = tostring(spec.vTwo)
+			spec.forDBL_accramp = (spec.vTwo)
 				
 		if (spec.vTwo == 1) then -- Ramp 1 +1
 			if cvtaDebugCVTon then
@@ -1195,7 +1224,7 @@ function CVTaddon:AccRampsSet1() -- BESCHLEUNIGUNGSRAMPEN I
 			end
 			spec.vTwo = 1
 			-- DBL convert
-			spec.forDBL_accramp = tostring(1)
+			spec.forDBL_accramp = (1)
 
 			if cvtaDebugCVTon then
 				print("AccRamp1 Taste gedrückt vTwo: "..tostring(spec.vTwo))
@@ -1225,7 +1254,7 @@ function CVTaddon:AccRampsSet2() -- BESCHLEUNIGUNGSRAMPEN II
 			end
 			spec.vTwo = 2
 			-- DBL convert
-			spec.forDBL_accramp = tostring(2)
+			spec.forDBL_accramp = (2)
 
 			if cvtaDebugCVTon then
 				print("AccRamp2 Taste gedrückt vTwo: "..tostring(spec.vTwo))
@@ -1255,7 +1284,7 @@ function CVTaddon:AccRampsSet3() -- BESCHLEUNIGUNGSRAMPEN III
 			end
 			spec.vTwo = 3
 			-- DBL convert
-			spec.forDBL_accramp = tostring(3)
+			spec.forDBL_accramp = (3)
 
 			if cvtaDebugCVTon then
 				print("AccRamp3 Taste gedrückt vTwo: "..tostring(spec.vTwo))
@@ -1285,7 +1314,7 @@ function CVTaddon:AccRampsSet4() -- BESCHLEUNIGUNGSRAMPEN IV
 			end
 			spec.vTwo = 4
 			-- DBL convert
-			spec.forDBL_accramp = tostring(4)
+			spec.forDBL_accramp = (4)
 
 			if cvtaDebugCVTon then
 				print("AccRamp4 Taste gedrückt vTwo: "..tostring(spec.vTwo))
@@ -1315,7 +1344,7 @@ function CVTaddon:AccRampsSet5() -- BESCHLEUNIGUNGSRAMPEN V
 			end
 			spec.vTwo = 5
 			-- DBL convert
-			spec.forDBL_accramp = tostring(4)
+			spec.forDBL_accramp = (5)
 
 			if cvtaDebugCVTon then
 				print("AccRamp4 Taste gedrückt vTwo: "..tostring(spec.vTwo))
@@ -1360,13 +1389,16 @@ function CVTaddon:AccRamps() -- BESCHLEUNIGUNGSRAMPEN - Motorbremswirkung wird k
 		end
 		-- DBL convert
 		if spec.vTwo == 4 then
-			spec.forDBL_accramp = tostring(4)
+			spec.forDBL_accramp = (4)
 		elseif spec.vTwo == 1 then
-			spec.forDBL_accramp = tostring(1)
+			spec.forDBL_accramp = (1)
 		elseif spec.vTwo == 2 then
-			spec.forDBL_accramp = tostring(2)
+			spec.forDBL_accramp = (2)
 		elseif spec.vTwo == 3 then
-			spec.forDBL_accramp = tostring(3)
+			spec.forDBL_accramp = (3)
+		elseif spec.vTwo == 5 then
+			spec.forDBL_accramp = (5)
+			
 		end
 		
 		if (spec.vTwo == 1) then -- Ramp 1 +1
@@ -1435,13 +1467,16 @@ function CVTaddon:AccRampsD()
 		end
 		-- DBL convert
 		if spec.vTwo == 4 then
-			spec.forDBL_accramp = tostring(4)
+			spec.forDBL_accramp = (4)
 		elseif spec.vTwo == 1 then
-			spec.forDBL_accramp = tostring(1)
+			spec.forDBL_accramp = (1)
 		elseif spec.vTwo == 2 then
-			spec.forDBL_accramp = tostring(2)
+			spec.forDBL_accramp = (2)
 		elseif spec.vTwo == 3 then
-			spec.forDBL_accramp = tostring(3)
+			spec.forDBL_accramp = (3)
+		elseif spec.vTwo == 5 then
+			spec.forDBL_accramp = (5)
+			
 		end
 		
 		if (spec.vTwo == 1) then -- Ramp 1 +1
@@ -2774,9 +2809,10 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					spec.CVTCanStart = true
 				end
 			elseif not self.spec_cpAIWorker then -- ad
+				-- print("no CP")
 				if not self:getIsMotorStarted() then
 					if spec.isVarioTM == true then
-						if spec.CVTconfig ~= 7 and spec.CVTconfig ~= 8 then
+						if spec.CVTconfig ~= 7 and spec.CVTconfig ~= 8 then -- all exclusive HSTs & disabled
 							if spec.ClutchInputValue < 0.6 or spec.HandgasPercent > 0.05 then
 								if spec.ClutchInputValue < 0.6 then
 									if spec.needClutchToStart == 1 then
@@ -2803,7 +2839,6 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 									end
 									if cvtaDebugCVTcanStartOn then print("CVTa Hgas [E]: " .. tostring(spec.HandgasPercent)) end
 								end
-								
 							elseif spec.ClutchInputValue >= 0.6 or spec.HandgasPercent <= 0.05 then
 								if spec.ClutchInputValue >= 0.6 then
 									spec.CVTCanStart = true
@@ -2816,7 +2851,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 									spec.CVTCanStart = false
 								end
 							end
-						elseif spec.CVTconfig == 7 then
+						elseif spec.CVTconfig == 7 then -- HSTs
 							-- if self.spec_motorized.motor.vehicle.wheelsUtilSmoothedBrakePedal == 1 or self.spec_motorized.motor.vehicle.wheelsUtilSmoothedBrakePedal <= 0.1 then
 							if self.spec_vca ~= nil and self.spec_vca.handbrake ~= nil then
 								if self.spec_vca.handbrake == false or spec.HandgasPercent > 0.05 then
@@ -2866,41 +2901,43 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 
 						if spec.CVTCanStart == true and airTemp <= 6 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 100 then
 							if spec.preGlow == 0 then 
-									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
-										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-									end
+								if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
 								end
+							end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= 2 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 250 then
 							if spec.preGlow == 0 then 
-									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
-										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-									end
+								if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
 								end
+							end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= -1 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 350 then
 							if spec.preGlow == 0 then 
-									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
-										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-									end
+								if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
 								end
+							end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and airTemp <= -4 and self.spec_motorized.motorTemperature.value < 40 and spec.preGlow < 480 then
 							if spec.preGlow == 0 then 
-									if g_client ~= nil and isActiveForInputIgnoreSelection == false then
-										g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
-									end
+								if g_client ~= nil and isActiveForInputIgnoreSelection == false then
+									g_currentMission:showBlinkingWarning(g_i18n:getText("txt_needpreGlow"), 75)
 								end
+							end
 							spec.CVTCanStart = false
 						elseif spec.CVTCanStart == true and (airTemp > 6 or self.spec_motorized.motorTemperature.value >= 40 ) then
 							spec.CVTCanStart = true
-							-- print("CHECKPOINT 3b ###############")
+							print("CHECKPOINT 3b ###############")
 						else
-							-- spec.CVTCanStart = true
-							-- print("CHECKPOINT 3a ###############")
+							spec.CVTCanStart = true
+							print("CHECKPOINT 3a ###############")
 						end
 					end
 				end
+			else
+				print("else")
 				if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
 					if self.spec_motorized.motor.lastMotorRpm >= ( self.spec_motorized.motor.minRpm - 10 ) and spec.CVTconfig ~= 9 then
 						-- if spec.forDBL_pregluefinished then -- new gluefinish fail!
@@ -2927,14 +2964,18 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 		if spec.forDBL_pregluefinished and spec.preGlow > 99 and self:getMotorState() == 1 then -- motor off
 			spec.preGlow = 0
 			spec.forDBL_pregluefinished = false
-			print("Part 1")
+			print("preGlow = 0")
+			print("pregluefinished = false")
 		end
 
 		if not spec.forDBL_pregluefinished and spec.preGlow > 99 and spec.forDBL_glowingstate == 1 and self:getMotorState() >= 3 then -- motor on
 			-- spec.preGlow = 0
 			spec.forDBL_pregluefinished = true
-			print("Part 2")
+			print("pregluefinished = true")
 		end
+
+		-- print("state: " .. tostring(self:getMotorState()))
+		-- print("zs: " .. tostring(g_ignitionLockManager:getIsAvailable() )) 
 
 		-- rebuild hst, hvst can starting
 		if spec.CVTconfig == 8 or spec.CVTconfig == 0 or spec.CVTconfig == 10 or spec.CVTconfig == 11 or spec.CVTcfgExists ~= true then
@@ -2945,7 +2986,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 		end
 
 		-- print(spec.CVTCanStart)
-		local changeFlag = false
+		-- local changeFlag = false
 		local motor = nil
 
 		-- Anbaugeräte ermitteln und prüfen ob abgesenkt Front/Back
@@ -5511,8 +5552,8 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 						end
 					end
 				end
-				spec.forDBL_vmaxforward = tostring(self.spec_motorized.motor.maxForwardSpeed * 3.6)
-				spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed * 3.6)
+				spec.forDBL_vmaxforward = tostring(self.spec_motorized.motor.maxForwardSpeed  / 3.6)
+				spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed / 3.6)
 				-- spec.groupsSecondSet.currentGroup
 				if spec.autoDiffs == 1 then
 					if spec.CVTconfig == 1 or spec.CVTconfig == 2 or spec.CVTconfig == 3 or spec.CVTconfig == 11 then
@@ -5672,7 +5713,14 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 				print("spec.forDBL_rpmrange: " .. spec.forDBL_rpmrange)
 				print("EOD_________________________________________________________________________")
 			end -- isVarioTM
-			
+			spec.forDBL_digitalhandgasstep = (spec.vFive)
+			if spec.cvtDL ~= nil then
+				spec.forDBL_drivinglevelcount = tostring(spec.cvtDL)
+			end
+			if spec.cvtAR ~= nil then
+				spec.forDBL_accrampcount = tostring(spec.cvtAR)
+			end
+
 			if spec.CVTCanStart == true then
 				spec.forDBL_motorcanstart = 1
 			else
@@ -5690,12 +5738,28 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					spec.forDBL_motorcoldlamp = 0
 				end
 			end
-		
+		-- main end
 	else
 		-- set Acceleration of CVT-Addon deactivated vehicle, so that they don't cheating faster than others
 		self.spec_motorized.motor.accelerationLimit = 1.6
 	end -- if spec.CVTconfig deactivated
-
+	
+	if spec.vOne ~= nil then
+		if not spec.isVarioTM then
+			spec.forDBL_drivinglevel = tostring("n")
+			-- spec.forDBL_drivinglevel = tostring(" ")
+		else
+			spec.forDBL_drivinglevel = tostring(spec.vOne)
+		end
+	end
+	if spec.vTwo ~= nil then
+		if not spec.isVarioTM then
+			-- spec.forDBL_accramp = tostring(7)
+			spec.forDBL_accramp = tostring("n")
+		else
+			spec.forDBL_accramp = tostring(spec.vTwo)
+		end
+	end
 	-- Telemetrie
 	if self.FStelemetryAddonData == nil then
 		self.FStelemetryAddonData = {} -- set the table if not exist
@@ -6773,16 +6837,16 @@ function CVTaddon:onReadStream(streamId, connection)
 
 	if spec.vOne ~= nil then
 		if not spec.isVarioTM then
-			spec.forDBL_drivinglevel = tostring(" ")
+			spec.forDBL_drivinglevel = (7)
 		else
-			spec.forDBL_drivinglevel = tostring(spec.vOne)
+			spec.forDBL_drivinglevel = (spec.vOne)
 		end
 	end
 	spec.forDBL_digitalhandgasstep = tostring(spec.vFive)
 	if spec.vTwo ~= nil then
-		spec.forDBL_accramp = tostring(spec.vTwo)
+		spec.forDBL_accramp = (spec.vTwo)
 	end
-	spec.forDBL_rpmdmax = tostring(spec.rpmDmax)
+	spec.forDBL_rpmdmax = (spec.rpmDmax)
 	if spec.vThree ~= nil then
 		if (spec.vThree == 1) then -- BRamp 1
 			spec.forDBL_brakeramp = tostring(17) -- off
