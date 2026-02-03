@@ -87,10 +87,10 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.9.9.87";
-local lastupdate = "31.1.2026"
-local timestamp = "1769855374453";
-local savetime = "11:29:34";
+local scrversion = "0.9.9.106";
+local lastupdate = "3.2.2026"
+local timestamp = "1770084916162";
+local savetime = "03:15:16";
 local modversion = CVTaddon.modversion; -- moddesc
 CVTaddon.build = scrversion
 
@@ -110,7 +110,7 @@ cvtaDebugCVTcanStartOn = false
 cvtsaved = false 
 
 CVTaddon.debug = false
-	CVTaddon.showKeys = true
+CVTaddon.showKeys = true
 
 printLMBF = false
 VcvtaResetWear = false
@@ -208,7 +208,7 @@ function CVTaddon.initSpecialization()
 	local schemaSavegame = Vehicle.xmlSchemaSavegame
 	local key = CVTaddon.MOD_NAME..".CVTaddon"
 
-	schemaSavegame:register(XMLValueType.BOOL, "vehicles.vehicle(?)."..key..".cvtconfigured", "CVTa configured", false)
+	schemaSavegame:register(XMLValueType.BOOL, "vehicles.vehicle(?)."..key..".cvtconfigured", "CVTa configured", true)
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#HSTshuttle", "HST Shuttle1 or Clutch2", 2)
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#vOne", "Driving level", 2) -- DL
     schemaSavegame:register(XMLValueType.INT, "vehicles.vehicle(?)."..key.."#cvtDL", "Driving level count", 2) -- DLcount
@@ -293,6 +293,8 @@ function CVTaddon:onRegisterActionEvents()
 			CVTaddon.actionEventsV2 = {}
 			CVTaddon.actionEventsV23 = {}
 			CVTaddon.actionEventsV24 = {}
+			CVTaddon.actionEventsVUP = {}
+			CVTaddon.actionEventsVDN = {}
 			CVTaddon.actionEventsVt = {}
 			CVTaddon.actionEventsV3 = {}
 			CVTaddon.actionEventsV3toggle = {}
@@ -362,6 +364,14 @@ function CVTaddon:onRegisterActionEvents()
 			_, CVTaddon.eventIdV24 = self:addActionEvent(CVTaddon.actionEventsV24, 'SETVARIO4', self, CVTaddon.Vario4, false, true, false, true)
 			g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdV24, GS_PRIO_NORMAL)
 			g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdV24, false)
+
+			_, CVTaddon.eventIdVUP = self:addActionEvent(CVTaddon.actionEventsVUP, 'SETVARIOUP', self, CVTaddon.VarioUp, false, true, false, true)
+			g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdVUP, GS_PRIO_NORMAL)
+			g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdVUP, false)
+			
+			_, CVTaddon.eventIdVDN = self:addActionEvent(CVTaddon.actionEventsVDN, 'SETVARIODN', self, CVTaddon.VarioDn, false, true, false, true)
+			g_inputBinding:setActionEventTextPriority(CVTaddon.eventIdVDN, GS_PRIO_NORMAL)
+			g_inputBinding:setActionEventTextVisibility(CVTaddon.eventIdVDN, false)
 			
 			-- D toggle
 			_, CVTaddon.eventIdVt = self:addActionEvent(CVTaddon.actionEventsVt, 'SETVARIOTOGGLE', self, CVTaddon.VarioToggle, false, true, false, true)
@@ -609,7 +619,7 @@ function CVTaddon:onLoad(savegame)
 	-- if spec.CVTcfgActive == nil then
 		-- spec.CVTcfgActive = 1	-- shop configuration en- or disabled 1off 2on
 	-- end
-	spec.CVTcfgExists = false
+	spec.CVTcfgExists = true
 	spec.CVTdamage = 0.000			-- cvt transmission wear percent
 	
  -- to make it easier read with dashbord-live
@@ -734,6 +744,8 @@ function CVTaddon:onLoad(savegame)
 	CVTaddon.eventIdV2 = nil
 	CVTaddon.eventIdV23 = nil
 	CVTaddon.eventIdV24 = nil
+	CVTaddon.eventIdVUP = nil
+	CVTaddon.eventIdVDN = nil
 	CVTaddon.eventIdVt = nil
 	CVTaddon.eventIdV3 = nil
 	CVTaddon.eventIdV3toggle = nil
@@ -1922,7 +1934,7 @@ function CVTaddon:Vario4() -- FAHRSTUFE 4
 			end
 			
 			if cvtaDebugCVTon then
-				print("VarioOne Taste losgelassen vOne: ".. tostring(spec.vOne))
+				print("VarioOne4 Taste losgelassen vOne: ".. tostring(spec.vOne))
 			end
 			
 			self:raiseDirtyFlags(spec.dirtyFlag)
@@ -1939,6 +1951,154 @@ function CVTaddon:Vario4() -- FAHRSTUFE 4
 	spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed * 3.6)
 end -- Vario4
 
+function CVTaddon:VarioDn() -- FAHRSTUFE Down
+	local spec = self.spec_CVTaddon
+	spec.BlinkTimer = -1
+	spec.Counter = 0
+	if spec.CVTconfig ~= 4 or spec.CVTconfig ~= 5 or spec.CVTconfig ~= 6 or spec.CVTconfig ~= 8 or spec.CVTconfig ~= 9 or spec.CVTconfig ~= 10 or spec.CVTconfig ~= 11 or spec.CVTconfig ~= 7 then
+		if g_client ~= nil then
+			if cvtaDebugCVTon then
+				print("VarioOne Taste gedrückt vOneDn: ".. tostring(spec.vOne))
+			end
+			-- if self.CVTaddon == nil then
+			-- 	return
+			-- end
+			-- if not CVTaddon.eventActiveVDN or not CVTaddon.eventActiveVDN then
+			-- 	return
+			-- end
+			if spec.vOne > 1 then
+				spec.vOne = spec.vOne - 1
+				if cvtaDebugCVTon then
+					print("vOne Downed: ".. tostring(spec.vOne))
+				end
+			end
+
+			if self:getIsEntered() and self:getIsMotorStarted() then
+				-- if spec.vOne > 1 then
+				-- 	spec.vOne = spec.vOne - 1
+				-- 	if cvtaDebugCVTon then
+				-- 		print("vOne Downed: ".. tostring(spec.vOne))
+				-- 	end
+				-- end
+				if spec.vOne < spec.cvtDL then
+					if self:getLastSpeed() <=10 then
+						if self:getLastSpeed() > 1 and spec.CVTconfig ~= 10 and spec.CVTconfig ~= 11 then
+							spec.CVTdamage = math.min(spec.CVTdamage + math.min(0.00008*(self:getOperatingTime()/1000000)+(self.spec_motorized.motor.lastMotorRpm/10000)+(self:getLastSpeed()/100), 1))
+							-- if self.spec_RealisticDamageSystem == nil then
+								-- self:addDamageAmount(math.min(0.00008*(self:getOperatingTime()/1000000)+(self.spec_motorized.motor.lastMotorRpm/10000)+(self:getLastSpeed()/100), 1))
+							-- end
+							spec.forDBL_critdamage = 1
+							spec.forDBL_warndamage = 0
+							if cvtaDebugCVTxOn then
+								print("Damage: ".. (math.min(0.00008*(self:getOperatingTime()/1000000)+(self.spec_motorized.motor.lastMotorRpm/10000)+(self:getLastSpeed()/100), 1))  ) -- debug
+							end
+						end
+					end
+				elseif spec.vOne == 1 then
+					-- self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin
+					-- self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin
+					-- spec.autoDiffs = 0
+					-- spec.vOne = 1
+				end
+			end
+			
+			if cvtaDebugCVTon then
+				print("VarioOne Taste losgelassen vOneDn: ".. tostring(spec.vOne))
+			end
+			
+			self:raiseDirtyFlags(spec.dirtyFlag)
+			if g_server ~= nil then
+				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
+			else
+				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
+			end
+		end -- g_client
+	end
+	-- DBL convert
+	spec.forDBL_drivinglevel = tostring(spec.vOne)
+	spec.forDBL_vmaxforward = tostring(self.spec_motorized.motor.maxForwardSpeed * 3.6)
+	spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed * 3.6)
+end -- VarioDn
+
+function CVTaddon:VarioUp() -- FAHRSTUFE Up
+	local spec = self.spec_CVTaddon
+	spec.BlinkTimer = -1
+	spec.Counter = 0
+	if spec.CVTconfig ~= 4 or spec.CVTconfig ~= 5 or spec.CVTconfig ~= 6 or spec.CVTconfig ~= 8 or spec.CVTconfig ~= 9 or spec.CVTconfig ~= 10 or spec.CVTconfig ~= 11 or spec.CVTconfig ~= 7 then
+		if g_client ~= nil then
+			if cvtaDebugCVTon then
+				print("VarioOne Taste gedrückt vOneUp: ".. tostring(spec.vOne))
+			end
+			if self.CVTaddon == nil then
+				return
+			end
+			-- if not CVTaddon.eventActiveVUP or not CVTaddon.eventActiveVUP then
+			-- 	return
+			-- end
+			-- if spec.vOne <= spec.cvtDL then
+			-- 	spec.vOne = spec.vOne + 1
+			-- else
+			-- 	spec.vOne = spec.cvtDL
+			-- end
+			if spec.vOne < spec.cvtDL then
+				spec.vOne = spec.vOne + 1
+				if cvtaDebugCVTon then
+					print("vOne Upped: ".. tostring(spec.vOne))
+				end
+			end
+			if self:getIsEntered() and self:getIsMotorStarted() then
+				-- if spec.vOne < spec.cvtDL then
+				-- 	spec.vOne = spec.vOne + 1
+				-- 	if cvtaDebugCVTon then
+				-- 		print("vOne Upped: ".. tostring(spec.vOne))
+				-- 	end
+				-- end
+				
+				if spec.vOne < spec.cvtDL then
+					-- spec.vOne = spec.vOne + 1
+					if self:getLastSpeed() <=10 then
+						if self:getLastSpeed() > 1 and spec.CVTconfig ~= 10 and spec.CVTconfig ~= 11 then
+							spec.CVTdamage = math.min(spec.CVTdamage + math.min(0.00008*(self:getOperatingTime()/1000000)+(self.spec_motorized.motor.lastMotorRpm/10000)+(self:getLastSpeed()/100), 1))
+							-- if self.spec_RealisticDamageSystem == nil then
+								-- self:addDamageAmount(math.min(0.00008*(self:getOperatingTime()/1000000)+(self.spec_motorized.motor.lastMotorRpm/10000)+(self:getLastSpeed()/100), 1))
+							-- end
+							spec.forDBL_critdamage = 1
+							spec.forDBL_warndamage = 0
+							if cvtaDebugCVTxOn then
+								print("Damage: ".. (math.min(0.00008*(self:getOperatingTime()/1000000)+(self.spec_motorized.motor.lastMotorRpm/10000)+(self:getLastSpeed()/100), 1))  ) -- debug
+							end
+						end
+					end
+				elseif spec.vOne == spec.cvtDL then
+					self.spec_motorized.motor.maxForwardSpeed = self.spec_motorized.motor.maxForwardSpeedOrigin
+					self.spec_motorized.motor.maxBackwardSpeed = self.spec_motorized.motor.maxBackwardSpeedOrigin
+					spec.autoDiffs = 0
+					-- spec.vOne = spec.cvtDL
+					if self.spec_vca ~= nil then
+						self:vcaSetState("diffLockFront", false)
+						self:vcaSetState("diffLockBack", false)
+					end
+				end
+			end
+			
+			if cvtaDebugCVTon then
+				print("VarioOne Taste losgelassen vOneUp: ".. tostring(spec.vOne))
+			end
+			
+			self:raiseDirtyFlags(spec.dirtyFlag)
+			if g_server ~= nil then
+				g_server:broadcastEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart), nil, nil, self)
+			else
+				g_client:getServerConnection():sendEvent(SyncClientServerEvent.new(self, spec.HSTshuttle, spec.vOne, spec.vTwo, spec.vThree, spec.CVTCanStart, spec.vFive, spec.autoDiffs, spec.isVarioTM, spec.isTMSpedal, spec.CVTconfig, spec.forDBL_warnheat, spec.forDBL_critheat, spec.forDBL_warndamage, spec.forDBL_critdamage, spec.CVTdamage, spec.HandgasPercent, spec.ClutchInputValue, spec.cvtDL, spec.cvtAR, spec.VCAantiSlip, spec.VCApullInTurn, spec.CVTcfgExists, spec.reverseLightsState, spec.reverseLightsDurationState, spec.brakeForceCorrectionState, spec.brakeForceCorrectionValue, spec.drivingLevelState, spec.drivingLevelValue, spec.HSTstate, spec.preGlow, spec.forDBL_pregluefinished, spec.forDBL_glowingstate, spec.forDBL_preglowing, spec.HUDpos, spec.needClutchToStart))
+			end
+		end -- g_client
+	end
+	-- DBL convert
+	spec.forDBL_drivinglevel = tostring(spec.vOne)
+	spec.forDBL_vmaxforward = tostring(self.spec_motorized.motor.maxForwardSpeed * 3.6)
+	spec.forDBL_vmaxbackward = tostring(self.spec_motorized.motor.maxBackwardSpeed * 3.6)
+end -- VarioUp
+
 function CVTaddon:VarioToggle() -- FAHRSTUFEN WECHSELN
 	-- changeFlag = true -- tryout
 	local spec = self.spec_CVTaddon
@@ -1947,7 +2107,7 @@ function CVTaddon:VarioToggle() -- FAHRSTUFEN WECHSELN
 	if spec.CVTconfig ~= 4 or spec.CVTconfig ~= 5 or spec.CVTconfig ~= 6 or spec.CVTconfig ~= 8 or spec.CVTconfig ~= 9 or spec.CVTconfig ~= 7 then
 		if g_client ~= nil then
 			if cvtaDebugCVTon then
-				print("VarioOne Taste gedrückt vOne: ".. tostring(spec.vOne))
+				print("VarioOne Taste gedrückt vOneToggle: ".. tostring(spec.vOne))
 				print("Entered: " .. tostring(self:getIsEntered()))
 				print("Started: " .. tostring(self:getIsMotorStarted()))
 				print("VarioOne : FwS/BwS/lBFS/cBF:"..self.spec_motorized.motor.maxForwardSpeed.."/"..self.spec_motorized.motor.maxBackwardSpeed.."/"..self.spec_motorized.motor.lowBrakeForceScale.."/"..spec.calcBrakeForce)
@@ -3522,7 +3682,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 
 				-- ODB V
 				if cvtaDebugCVTon then
-					print("weather curTemp: " .. tostring( (math.floor(tonumber(g_currentMission.environment.weather:getCurrentTemperature()) * 100)/100) ))
+					-- print("weather curTemp: " .. tostring( (math.floor(tonumber(g_currentMission.environment.weather:getCurrentTemperature()) * 100)/100) ))
 					
 					-- print("getCanMotorRun(): " .. tostring(self:getCanMotorRun()))
 				end
@@ -7019,4 +7179,4 @@ end
 -- Drivable = true
 -- addModEventListener(CVTaddon)
 -- Player.registerActionEvents = Utils.appendedFunction(Player.registerActionEvents, CVTaddon.registerActionEvents)
--- Drivable.onUpdate  = Utils.appendedFunction(Drivable.onUpdate, CVTaddon.onUpdate);;
+-- Drivable.onUpdate  = Utils.appendedFunction(Drivable.onUpdate, CVTaddon.onUpdate);

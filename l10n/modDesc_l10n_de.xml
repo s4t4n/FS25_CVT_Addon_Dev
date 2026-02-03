@@ -139,6 +139,8 @@ Stellt man diesen Wert nun auf geringe, wären es 22 km/h, sehr gering dann 15.5
 		<text name="input_SETVARIOTWO" text="CVTa: Fahrbereich 2" />
 		<text name="input_SETVARIO3" text="CVTa: Fahrbereich 3" />
 		<text name="input_SETVARIO4" text="CVTa: Fahrbereich 4" />
+		<text name="input_SETVARIOUP" text="CVTa: Fahrbereich erhöhen" />
+		<text name="input_SETVARIODN" text="CVTa: Fahrbereich verringern" />
 		<text name="input_SETVARIOTOGGLE" text="CVTa: Fahrbereiche wechseln" />
 		<text name="input_SETVARION" text="CVTa: Neutral" />
 		<text name="input_SETVARIOADIFFS" text="CVTa: AWD und DIFF Automatik" />
