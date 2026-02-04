@@ -87,10 +87,10 @@ source(CVTaddon.modDirectory.."events/SyncClientServerEvent.lua")
 source(g_currentModDirectory.."gui/CVTaddonGui.lua")
 g_gui:loadGui(g_currentModDirectory.."gui/CVTaddonGui.xml", "CVTaddonGui", CVTaddonGui:new())
 
-local scrversion = "0.9.9.106";
-local lastupdate = "3.2.2026"
-local timestamp = "1770084916162";
-local savetime = "03:15:16";
+local scrversion = "0.9.9.109";
+local lastupdate = "4.2.2026"
+local timestamp = "1770209242126";
+local savetime = "13:47:22";
 local modversion = CVTaddon.modversion; -- moddesc
 CVTaddon.build = scrversion
 
@@ -3097,7 +3097,7 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					end
 				end
 			else
-				print("else")
+				print("CHECKPOINT else")
 				if ((g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 1) or (not g_ignitionLockManager:getIsAvailable() and self:getMotorState() == 4)) and spec.preGlow ~= 0 then
 					if self.spec_motorized.motor.lastMotorRpm >= ( self.spec_motorized.motor.minRpm - 10 ) and spec.CVTconfig ~= 9 then
 						-- if spec.forDBL_pregluefinished then -- new gluefinish fail!
@@ -3114,6 +3114,12 @@ function CVTaddon:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelec
 					end
 					spec.forDBL_glowingstate = 0
 					-- print("CHECKPOINT 3 ###############")
+				elseif ((not g_ignitionLockManager:getIsAvailable() and self:getMotorState() >= 3)) and spec.preGlow ~= 0 then
+					-- spec.forDBL_pregluefinished = false
+					-- print("CHECKPOINT 4 ###############")
+					if spec.forDBL_pregluefinished then
+						spec.CVTCanStart = true
+					end
 				end
 			end -- secure AD
 		end
