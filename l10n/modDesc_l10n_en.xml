@@ -18,6 +18,9 @@
 		<text name="cvtgui_Cvthud" text="Visibility" />
 		<text name="CVTAgui_CvthudPos" text="Position" />
 		<text name="variantTT" text="Select gear variant, there are a variety of different stepless gears." />
+		<text name="HSTshuttleStateSettingTT" text="Vehicles with a pedal rocker or a two-pedal system can alternatively use the clutch to change direction.
+More modern machines, such as wheel loaders, have a button for this function on the joystick, among other things." />
+		<text name="startWithClutchTT" text="Pressing the clutch pedal is required, as is the case with some vehicles in real life - and not with others." />
 		<text name="CvthudTT" text="HUD Visible or deactivate display." />
 		<text name="CvthudPOSTT" text="HUD Position." />
 		<text name="CVTAguiHUD_on" text="on" />
@@ -110,6 +113,9 @@ With this setting, the resulting calculation can be influenced in a targeted man
 are hereby reduced or increased.For example, a stepless vehicle with 2 driving areas drives the full speed (50kph) in 2, in 1 half (25kph).
 If you place this value on low, it would be 22 kph, very little then 15.5 kph.The same applies.Higher, 28 kph and very high 31 kph." />
 		<text name="CVTAgui_drivingLevelStateTitle" text="Speed adaptation" />
+		<text name="CVTAgui_HSTshuttleT" text="How change Drivedirection" />
+		<text name="CVTAgui_startWithClutchSettingTitle" text="Kupplung zum starten" />
+		
 		<text name="selection_DLC_10000" text="very low" />
 		<text name="selection_DLC_01000" text="less" />
 		<text name="selection_DLC_00100" text="Normal" />
@@ -120,6 +126,11 @@ If you place this value on low, it would be 22 kph, very little then 15.5 kph.Th
 		<text name="selection_hst_hst" text="HST" />
 		<text name="selection_hst_hydrostat" text="Hydrostat" />
 		<text name="selection_hst_brake" text="Single driving pedal" />
+		<text name="selection_noClutch" text="No clutch" />
+		<text name="selection_withCluth" text="With clutch" />
+		<text name="selection_shuttle_shift" text="Shuttle" />
+		<text name="selection_shuttle_clutch" text="Clutchpedal" />
+		
 		<text name="text_HST_installed_short" text="HST Hydrostat" />
 		<text name="text_CVT_Installed_short" text="Active" />
 		<text name="text_CVT_Installed_desc" text="CVT-Addon active and configurable in the GUI." />
@@ -130,11 +141,13 @@ If you place this value on low, it would be 22 kph, very little then 15.5 kph.Th
 		<text name="input_SETVARIOTWO" text="CVTa: Drivinglevel 2" />
 		<text name="input_SETVARIO3" text="CVTa: Drivinglevel 3" />
 		<text name="input_SETVARIO4" text="CVTa: Drivinglevel 4" />
+		<text name="input_SETVARIOUP" text="CVTa: Drivinglevel increase" />
+		<text name="input_SETVARIODN" text="CVTa: Drivinglevel decrease" />
 		<text name="input_SETVARIOTOGGLE" text="CVTa: Drivinglevel toggle" />
 		<text name="input_SETVARION" text="CVTa: Neutral" />
 		<text name="input_SETVARIOADIFFS" text="CVTa: AWD and DIFF Automatic" />
 		<text name="input_CVT_SHOWGUI" text="CVTa: Open settings menu" />
-		<text name="CVT_TOGGLEARWL" text="CVTa: Toggle Auto-Worklight reversedrive" />
+		<text name="input_CVT_TOGGLEARWL" text="CVTa: Toggle Auto-Worklight reversedrive" />
 		<text name="input_SETVARIORPM_AXIS" text="CVTa: Handgas axis" />
 		<text name="input_SETVARIORPMP" text="CVTa: Increase the engine speed" />
 		<text name="input_SETVARIORPMM" text="CVTa: Reduce the engine speed" />
@@ -143,6 +156,11 @@ If you place this value on low, it would be 22 kph, very little then 15.5 kph.Th
 		<text name="input_SETPREGLOW" text="CVTa: Preheat glow plugs" />
 		<text name="input_SIGNAL_HIGH_BEAM" text="CVTa: High beam Flash" />
 		<text name="input_SIGNAL_HOLD_BEAM" text="CVTa: High beam Flash" />
+		<text name="input_SETVCAAWD" text="VCA: toggle 4wd" />
+		<text name="input_SETVCAFRONTDIFF" text="VCA: Difflock front" />
+		<text name="input_SETPIPELIGHT" text="CVT: Pipelight toogle" />
+		<text name="input_SETVCAREARDIFF" text="VCA: Difflock back" />
+		
 		<text name="input_LMBF_TOGGLE_RAMP" text="CVTa: Increase the acceleration ramp" />
 		<text name="input_LMBF_TOGGLE_RAMPT" text="CVTa: Toggle acceleration ramp" />
 		<text name="input_LMBF_TOGGLE_RAMPS1" text="CVTa: Switch the acceleration ramp 1" />

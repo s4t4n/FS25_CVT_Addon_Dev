@@ -2,7 +2,7 @@
 <modDesc descVersion="105">
     <author>SbSh</author>
 	<contributor>Glowin</contributor>
-	<version>2.c.1.0</version>
+	<version>2.c.1.4</version>
 	<title>
         <en>CVT Addon</en>
     </title>
@@ -259,6 +259,12 @@ https://github.com/s4t4n/FS25_CVT_Addon
  - Differential Tastenbelegung für VCA hinzugefügt.
  - DLC Fahrzeuge im Shop hinzugefügt.
  - Tastenbelegung für das Rohrlicht einzeln.
+ - Shopconfig ist standartmäßg aktiviert, Konfiguration bleibt aber auf inaktiv,
+  dadurch können nun Missionsfahrzeug eingestellt werden.
+ - Fahrbereiche Tasten für hoch- und runterschalten hinzugefügt.
+ - Sprachen um PT und ES aus der Communitiy erwitert.
+ - Vorglühen bei manuellen Fahrzeugen ging der Motor sofort wieder aus,
+   ist gefixt.
 ]]></de>
     </description> 
 
@@ -284,6 +290,8 @@ https://github.com/s4t4n/FS25_CVT_Addon
         <action name="SETVARIOTWO" />
         <action name="SETVARIO3" />
         <action name="SETVARIO4" />
+        <action name="SETVARIOUP" />
+        <action name="SETVARIODN" />
         <action name="SETVARIOTOGGLE" />
         <action name="SETVARIOADIFFS" />
 		<action name="CVT_SHOWGUI" categorie="VEHICLE" ignoreComboMask="false" />
@@ -308,6 +316,12 @@ https://github.com/s4t4n/FS25_CVT_Addon
 			<binding device="KB_MOUSE_DEFAULT" input="" />
 		</actionBinding>
 		<actionBinding action="SETVARIO4">
+			<binding device="KB_MOUSE_DEFAULT" input="" />
+		</actionBinding>
+		<actionBinding action="SETVARIOUP">
+			<binding device="KB_MOUSE_DEFAULT" input="" />
+		</actionBinding>
+		<actionBinding action="SETVARIODN">
 			<binding device="KB_MOUSE_DEFAULT" input="" />
 		</actionBinding>
 		<actionBinding action="SETVARIOTOGGLE">

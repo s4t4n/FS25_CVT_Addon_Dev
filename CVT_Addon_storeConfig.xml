@@ -3,7 +3,7 @@
 		<CvtAddon>
 			<cvtAddonConfigurations isYesNoOption="true">
 				<cvtAddonConfiguration name="CVT_not_installed" price="0"/>
-				<cvtAddonConfiguration name="CVT_installed" price="10"/>
+				<cvtAddonConfiguration name="CVT_installed" isDefault="true" price="10"/>
 			</cvtAddonConfigurations>
 		</CvtAddon>
 	</FS25_CVT_Addon>
