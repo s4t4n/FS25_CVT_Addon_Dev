@@ -614,13 +614,22 @@ function CVTaddonGui.setData(self, vehicleName, spec, hasNothing, debug, showKey
 		self.HSTshuttleStateSetting:setDisabled(true)
 		self.HSTshuttleStateSettingTitle:setVisible(false)
 	end
-	if self.variantSetting:getState() == 1 or self.variantSetting:getState() == 2 then
+
+	if (self.variantSetting:getState() == 1 or self.variantSetting:getState() == 2) and self.spec.isVarioTM == false then
+		self.startWithClutchSetting:setDisabled(true)
+		self.startWithClutchSettingTitle:setVisible(false)
+	else
+		self.startWithClutchSetting:setDisabled(false)
+		self.startWithClutchSettingTitle:setVisible(true)
+	end
+	if (self.variantSetting:getState() == 1 or self.variantSetting:getState() == 2) and self.spec.isVarioTM == true then
 		self.startWithClutchSetting:setDisabled(false)
 		self.startWithClutchSettingTitle:setVisible(true)
 	else
 		self.startWithClutchSetting:setDisabled(true)
 		self.startWithClutchSettingTitle:setVisible(false)
 	end
+	
 end
 
 function CVTaddonGui:onClickAdminLogin(element)
@@ -750,7 +759,15 @@ function CVTaddonGui:logicalCheck()
 		self.HSTshuttleStateSetting:setDisabled(true)
 		self.HSTshuttleStateSettingTitle:setVisible(false)
 	end
-	if self.variantSetting:getState() == 1 or self.variantSetting:getState() == 2 then
+	if (self.variantSetting:getState() == 1 or self.variantSetting:getState() == 2) and self.spec.isVarioTM == false then
+		self.startWithClutchSetting:setDisabled(true)
+		self.startWithClutchSettingTitle:setVisible(false)
+	else
+		self.startWithClutchSetting:setDisabled(false)
+		self.startWithClutchSettingTitle:setVisible(true)
+	end
+
+	if (self.variantSetting:getState() == 1 or self.variantSetting:getState() == 2) and self.spec.isVarioTM == true then
 		self.startWithClutchSetting:setDisabled(false)
 		self.startWithClutchSettingTitle:setVisible(true)
 	else
